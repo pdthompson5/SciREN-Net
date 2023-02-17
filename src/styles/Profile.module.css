@@ -1,0 +1,19 @@
+.main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    /* padding: 6rem; */
+    min-height: 100vh;
+}
+
+.topbar {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: left;
+    padding: 0.6rem;
+    min-height: 20vh;
+    min-width: 100vw;
+    background: rgb(40, 73, 150);
+}
