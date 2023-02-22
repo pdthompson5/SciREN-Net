@@ -1,3 +1,4 @@
+import React from "react";
 import Head from 'next/head'
 import Image from 'next/image'
 
@@ -7,7 +8,7 @@ import styles from '@/styles/Profile.module.css'
 import { MongoClient } from "mongodb";
 // const { MongoClient, ServerApiVersion } = require('mongodb');
 
-const inter = Inter({ subsets: ['cyrillic'] })
+// const inter = Inter({ subsets: ['cyrillic'] })
 
 /*
 Created by Stephen on 02/16/23
@@ -25,6 +26,8 @@ interface Props {
   userID: string;
   firstName: string;
   lastName: string;
+  email: string,
+  userType: string
 }
 
 
@@ -60,13 +63,16 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
     userID: "PLACEHOLDER_ID",
     firstName: "John",
     lastName: "Smith",
-    email: "jsmith@sciren.net"
+    email: "jsmith@sciren.net",
+    userType: "Researcher"
   }
 
   return { props: userProps };
 };
 
-export default function Profile() {
+const Profile: React.FC<Props> = (props) => {
+
+  // State-related code will go here.
   return (
     <>
       <Head>
@@ -75,16 +81,27 @@ export default function Profile() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main className={styles.main}>
-        <div className={styles.topbar}>
-          <h1>
-            YOU SHOULD NOT BE HERE.
-          </h1>
-          <p>
-            This is where we will display text stuff for the profile.
-          </p>
+      <div className={styles.profileBox}>
+        <h1 className="username">
+          <Image
+            height="36"
+            width="36"
+            alt="Profile Picture"
+            className="profile"
+            src="https://github.com/s-kirby.png"
+          />
+          {props.firstName} {props.lastName}
+        </h1>
+        <div>
+          <ul>
+            <li>Profile Type: {props.userType}</li>
+            <li>UserID: {props.userID}</li>
+            <li>Contact: {props.email}</li>        
+          </ul>
         </div>
-      </main>
+      </div>
     </>
   )
 }
+
+export default Profile;

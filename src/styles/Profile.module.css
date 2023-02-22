@@ -17,3 +17,22 @@
     min-width: 100vw;
     background: rgb(40, 73, 150);
 }
+
+.profileBox{
+    display: flex;
+    flex-direction: column;
+    /* justify-content: space-between; */
+    align-items: left;
+    padding: 0.6rem;
+    min-height: 100vh;
+    min-width: 100vw;
+    background: rgb(219, 225, 240);
+}
+
+.userName {
+
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+
+}
