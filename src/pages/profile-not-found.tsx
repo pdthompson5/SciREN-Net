@@ -14,8 +14,8 @@ export default function ProfileNotFound() {
   return (
     <>
       <Head>
-        <title>SciREN Profile Example</title>
-        <meta name="description" content="Created by Stephen Kirby" />
+        <title>SciREN Profile Not Found</title>
+        <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
