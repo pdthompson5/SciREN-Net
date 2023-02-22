@@ -16,7 +16,15 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
     // If we just load the ID, props will probably need to be retrieved in api/user.
     // Here, we only need to get the user ID
 
-    // Original Validation
+
+    // Possible strategy: 
+    // Only check uname/password here, add userid to returned JSON
+    // In api/user.ts, finish DB requests. 
+    
+
+    // Possible Strategy 2: 
+    // Get everything here. 
+    // Original user validation
     // const {
     //   data: { login, avatar_url },
     // } = await octokit.rest.users.getByUsername({ username });
