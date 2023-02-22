@@ -6,9 +6,6 @@ import { GetServerSideProps } from "next";
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Profile.module.css'
 import { MongoClient } from "mongodb";
-// const { MongoClient, ServerApiVersion } = require('mongodb');
-
-// const inter = Inter({ subsets: ['cyrillic'] })
 
 /*
 Created by Stephen on 02/16/23
