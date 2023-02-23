@@ -7,8 +7,7 @@ import { Inter } from '@next/font/google'
 import styles from '@/styles/Profile.module.css'
 import { MongoClient } from "mongodb";
 
-/*
-Created by Stephen on 02/16/23
+/* Placeholder Profile Page
 Skeleton of a profile page to re-learn tsx + css. 
 I added some notes below for the boys for creating a simple page and 
 
