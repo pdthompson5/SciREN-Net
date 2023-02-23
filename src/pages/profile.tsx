@@ -1,6 +1,12 @@
 import React from "react";
-import Head from 'next/head'
-import Image from 'next/image'
+import Head from 'next/head';
+import Link from "next/link";
+import Image from 'next/image';
+import fetchJson, { FetchError } from "@/lib/fetchJson";
+
+import { useRouter } from 'next/router';
+import useUser from "@/lib/useUser";
+
 
 import { GetServerSideProps } from "next";
 import { Inter } from '@next/font/google'
@@ -67,6 +73,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
 };
 
 const Profile: React.FC<Props> = (props) => {
+  const { user, mutateUser } = useUser();
+  const router = useRouter();
 
   // State-related code will go here.
   return (
@@ -88,6 +96,18 @@ const Profile: React.FC<Props> = (props) => {
           />
           {props.firstName} {props.lastName}
         </h1>
+        <Link href="/api/logout"
+          onClick={async (e) => {
+            e.preventDefault();
+            mutateUser(
+              await fetchJson("/api/logout", { method: "POST" }),
+              false,
+            );
+            router.push("/login");
+          }}
+        >
+          Logout
+        </Link>
         <div>
           <ul>
             <li>Profile Type: {props.userType}</li>
