@@ -8,69 +8,65 @@ import { MongoClient } from "mongodb";
 import { Octokit } from "octokit";
 const octokit = new Octokit();
 
+// Login API Endpoint
+// TODO: Add password authentication
+
 export default withIronSessionApiRoute(loginRoute, sessionOptions);
 
 async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
-  const { email } = await req.body;
 
+  
+  const { username } = await req.body;
   try {
-    // User validation here
-    // Not sure if we load the full user here or just the ID yet.
-    // If we just load the ID, props will probably need to be retrieved in api/user.
-    // Here, we only need to get the user ID
+    // User Validation
+    // Don't know if all user data or just user email is needed here.
+
+    const mongoURI = process.env.MONGO_URI;
+    if (!mongoURI) { // admin error, need to make sure this isn't displayed to user
+      throw new Error(
+        "Missing MongoDB connection string (MONGO_URI) in .env.local"
+      );
+    }
     
-    // Possible strategy: 
-    // Only check uname/password here, add userid to returned JSON
-    // In api/user.ts, finish DB requests. 
+    const client = new MongoClient(mongoURI);
+    const userCollection = client.db("sciren").collection("users");
+    const userCursor = await userCollection // TODO: Check if toArray() can be checked for no results 
+    .find({   // Filter
+      email: username 
+    }, {      // Projection
+      limit: 1,
+      projection: {
+        _id: 0,           // Hide mongo assigned ID from query
+        firstname: 1,
+        lastname: 1,
+        email: 1
+      },
+    });
+    const userDocNext = await userCursor.next();
+    const multipleMatches = await userCursor.hasNext()
+    if (userDocNext == null) {
+      throw new Error(
+        "No user associated with the provided email."
+      )
+    } else if (multipleMatches) {
+      throw new Error(
+        "Multiple users found for provided email. This is a bug, contact site administrator."
+      )
+    }
+    console.log("Cursor obtained: ")
+    console.log(userDocNext)
+    console.log("--------")
     
-    // Possible Strategy 2: 
-    // Get everything here. 
 
-    // DESIRED Login 
-    // const mongoURI = process.env.MONGO_URI;
-    // if (!mongoURI) { // admin error, need to make sure this isn't displayed to user
-    //   throw new Error(
-    //     "Missing MongoDB connection string (MONGO_URI) in .env.local"
-    //   );
-    // }
-    
-    // const client = new MongoClient(mongoURI);
-    // const userCollection = client.db("sciren").collection("users");
-    // const userCursor = await userCollection // TODO: Check if toArray() can be checked for no results 
-    // .find({   // Filter
-    //   email: { $eq: email } 
-    // }, {      // Projection
-    //   limit: 1,
-    //   projection: {
-    //     _id: 0,           // Hide mongo assigned ID from query
-    //     firstName: 1,
-    //     lastName: 1,
-    //     email: 1
-    //   },
-    // });
-
-    // const anyDocs = await userCursor.hasNext();
-    // if (!anyDocs) {
-    //   // No documents found
-    //   throw new Error(
-    //     "No user found from email!"
-    //   )
-    // }
-    // const userArray = await userCursor.toArray();
-    // const userDoc = userArray[0];
-    const { username } = await req.body;
-
-    const {
-      data: { login, avatar_url },
-    } = await octokit.rest.users.getByUsername({ username });
-    console.log("api/login : Completed profile retrieval for " + username);
-
+    const login = userDocNext.email;
     // Save retrieved user
+    console.log("api/login : Completed profile retrieval for " + username);
     const user = { isLoggedIn: true, email: login} as User;
     req.session.user = user;
     await req.session.save();
     res.json(user);
   } catch (error) {
-    res.status(500).json({ message: (error as Error).message });
+    // Respond with error
+    res.status(500).json({ message: (error as Error).message});
   }
 }

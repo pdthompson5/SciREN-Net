@@ -17,7 +17,7 @@ export default function Login() {
   async function handleSubmit(event: any) {
     // Handle form submit button trigger
     event.preventDefault();
-
+    console.log("Handling Submit. " + event.currentTarget.username.value)
     const body = {
       username: event.currentTarget.username.value,
     };
