@@ -5,9 +5,6 @@ import { sessionOptions } from "@/lib/session";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoClient } from "mongodb";
 
-import { Octokit } from "octokit";
-const octokit = new Octokit();
-
 // Login API Endpoint
 
 export default withIronSessionApiRoute(loginRoute, sessionOptions);

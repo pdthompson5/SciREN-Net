@@ -11,7 +11,7 @@ import styles from '@/styles/Profile.module.css'
 /* Signed-in user's Profile Page */
 // May implement User type checking
 
-const Profile: React.FC = (props) => {
+const Profile: React.FC = () => {
   const { user, mutateUser } = useUser({
     redirectTo: "/login",
   });
