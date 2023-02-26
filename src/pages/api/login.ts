@@ -16,10 +16,15 @@ export default withIronSessionApiRoute(loginRoute, sessionOptions);
 async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
 
   
-  const { username } = await req.body;
+  const { email, password } = await req.body;
   try {
     // User Validation
     // Don't know if all user data or just user email is needed here.
+
+    console.log("Running authentication with the following credentials: ")
+    console.log(email)
+    console.log(password)
+    console.log("--------")
 
     const mongoURI = process.env.MONGO_URI;
     if (!mongoURI) { // admin error, need to make sure this isn't displayed to user
@@ -32,14 +37,15 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
     const userCollection = client.db("sciren").collection("users");
     const userCursor = await userCollection // TODO: Check if toArray() can be checked for no results 
     .find({   // Filter
-      email: username 
+      email: email 
     }, {      // Projection
       limit: 1,
       projection: {
         _id: 0,           // Hide mongo assigned ID from query
         firstname: 1,
         lastname: 1,
-        email: 1
+        email: 1,
+        password: 1,
       },
     });
     const userDocNext = await userCursor.next();
@@ -53,15 +59,28 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
         "Multiple users found for provided email. This is a bug, contact site administrator."
       )
     }
-    console.log("Cursor obtained: ")
+    // Password validation 
+    // TODO: Replace with assertion?
+    if (userDocNext.password != password) {
+      throw new Error(
+        "Username / Password mismatch. Please try again."
+      )
+    }
+
+    console.log("Cursor obtained..........: ")
     console.log(userDocNext)
     console.log("--------")
+    console.log("api/login : Completed profile retrieval for " + email);
     
-
-    const login = userDocNext.email;
     // Save retrieved user
-    console.log("api/login : Completed profile retrieval for " + username);
-    const user = { isLoggedIn: true, email: login} as User;
+    
+    const user = { 
+      isLoggedIn: true, 
+      email: userDocNext.email,
+      password: userDocNext.password,
+      firstName: userDocNext.firstname,
+      lastName: userDocNext.lastname,
+    } as User;
     req.session.user = user;
     await req.session.save();
     res.json(user);

@@ -17,9 +17,10 @@ export default function Login() {
   async function handleSubmit(event: any) {
     // Handle form submit button trigger
     event.preventDefault();
-    console.log("Handling Submit. " + event.currentTarget.username.value)
+    console.log("Handling Submit. " + event.currentTarget.email.value)
     const body = {
-      username: event.currentTarget.username.value,
+      email: event.currentTarget.email.value,
+      password: event.currentTarget.password.value,
     };
 
     try {
@@ -61,8 +62,12 @@ export default function Login() {
       </div>
       <form onSubmit={handleSubmit}>
       <label>
-        <span>Type your GitHub username</span>
-        <input type="text" name="username" required />
+        <span>Enter your Email</span>
+        <input type="text" name="email" required />
+      </label>
+      <label>
+        <span>Enter your Password</span>
+        <input type="text" name="password" required />
       </label>
 
       <button type="submit">Login</button>
