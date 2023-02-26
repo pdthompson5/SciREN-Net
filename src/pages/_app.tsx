@@ -16,5 +16,4 @@ export default function App({ Component, pageProps }: AppProps) {
       <Component {...pageProps} />
     </SWRConfig>
   );
-  return <Component {...pageProps} />
 }
