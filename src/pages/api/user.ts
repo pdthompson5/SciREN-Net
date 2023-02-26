@@ -8,6 +8,8 @@ export type User = {
   password: string;
   firstName: string;
   lastName: string;
+  userType: string;
+  userID: string;
 };
 
 export default withIronSessionApiRoute(userRoute, sessionOptions);
@@ -36,6 +38,8 @@ async function userRoute(req: NextApiRequest, res: NextApiResponse<User>) {
       password: "",
       firstName: "",
       lastName: "",
+      userType: "",
+      userID: "",
     });
   }
 }

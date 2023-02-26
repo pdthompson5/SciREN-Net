@@ -41,11 +41,12 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
     }, {      // Projection
       limit: 1,
       projection: {
-        _id: 0,           // Hide mongo assigned ID from query
+        _id: 1,           // Hide mongo assigned ID from query
         firstname: 1,
         lastname: 1,
         email: 1,
         password: 1,
+        usertype: 1,
       },
     });
     const userDocNext = await userCursor.next();
@@ -80,6 +81,8 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
       password: userDocNext.password,
       firstName: userDocNext.firstname,
       lastName: userDocNext.lastname,
+      userType: userDocNext.usertype,
+      userID: userDocNext._id.toString(),
     } as User;
     req.session.user = user;
     await req.session.save();

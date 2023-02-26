@@ -3,7 +3,7 @@ import Head from 'next/head';
 import Link from "next/link";
 import Image from 'next/image';
 import fetchJson, { FetchError } from "@/lib/fetchJson";
-
+import type { User } from "@/pages/api/user";
 import { useRouter } from 'next/router';
 import useUser from "@/lib/useUser";
 
@@ -76,6 +76,11 @@ const Profile: React.FC<Props> = (props) => {
   const { user, mutateUser } = useUser();
   const router = useRouter();
 
+  if (!user) {
+    console.error("No user found!");
+    return null
+  }
+
   // State-related code will go here.
   return (
     <>
@@ -94,7 +99,7 @@ const Profile: React.FC<Props> = (props) => {
             className="profile"
             src="https://github.com/s-kirby.png"
           />
-          {props.firstName} {props.lastName}
+          {user.firstName} {user.lastName}
         </h1>
         <Link href="/api/logout"
           onClick={async (e) => {
@@ -110,9 +115,9 @@ const Profile: React.FC<Props> = (props) => {
         </Link>
         <div>
           <ul>
-            <li>Profile Type: {props.userType}</li>
-            <li>UserID: {props.userID}</li>
-            <li>Contact: {props.email}</li>        
+            <li>Profile Type: {user.userType}</li>
+            <li>UserID: {user.userID}</li>
+            <li>Contact: {user.email}</li>        
           </ul>
         </div>
       </div>
