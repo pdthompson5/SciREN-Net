@@ -9,7 +9,6 @@ import { Octokit } from "octokit";
 const octokit = new Octokit();
 
 // Login API Endpoint
-// TODO: Add password authentication
 
 export default withIronSessionApiRoute(loginRoute, sessionOptions);
 
@@ -19,39 +18,32 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
   const { email, password } = await req.body;
   try {
     // User Validation
-    // Don't know if all user data or just user email is needed here.
-
-    console.log("Running authentication with the following credentials: ")
-    console.log(email)
-    console.log(password)
-    console.log("--------")
-
     const mongoURI = process.env.MONGO_URI;
-    if (!mongoURI) { // admin error, need to make sure this isn't displayed to user
+    if (!mongoURI) {    // admin error, need to make sure this isn't displayed to user
       throw new Error(
-        "Missing MongoDB connection string (MONGO_URI) in .env.local"
+        "Missing MongoDB connection string (MONGO_URI). Update server parameters."
       );
     }
     
     const client = new MongoClient(mongoURI);
     const userCollection = client.db("sciren").collection("users");
-    const userCursor = await userCollection // TODO: Check if toArray() can be checked for no results 
+    const userCursor = await userCollection 
     .find({   // Filter
       email: email 
     }, {      // Projection
       limit: 1,
       projection: {
-        _id: 1,           // Hide mongo assigned ID from query
-        firstname: 1,
+        _id: 1,
+        firstname: 1,     
         lastname: 1,
         email: 1,
         password: 1,
         usertype: 1,
       },
     });
-    const userDocNext = await userCursor.next();
+    const userDoc = await userCursor.next();
     const multipleMatches = await userCursor.hasNext()
-    if (userDocNext == null) {
+    if (userDoc == null) {
       throw new Error(
         "No user associated with the provided email."
       )
@@ -61,28 +53,24 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
       )
     }
     // Password validation 
-    // TODO: Replace with assertion?
-    if (userDocNext.password != password) {
+    // Replace with assertion?
+    if (userDoc.password != password) {
       throw new Error(
         "Username / Password mismatch. Please try again."
       )
     }
 
-    console.log("Cursor obtained..........: ")
-    console.log(userDocNext)
-    console.log("--------")
     console.log("api/login : Completed profile retrieval for " + email);
     
-    // Save retrieved user
-    
+    // Save retrieved user    
     const user = { 
       isLoggedIn: true, 
-      email: userDocNext.email,
-      password: userDocNext.password,
-      firstName: userDocNext.firstname,
-      lastName: userDocNext.lastname,
-      userType: userDocNext.usertype,
-      userID: userDocNext._id.toString(),
+      email: userDoc.email,
+      password: userDoc.password,
+      firstName: userDoc.firstname,
+      lastName: userDoc.lastname,
+      userType: userDoc.usertype,
+      userID: userDoc._id.toString(),
     } as User;
     req.session.user = user;
     await req.session.save();
