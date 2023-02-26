@@ -42,6 +42,16 @@ const Profile: React.FC = () => {
           />
           {user.firstName} {user.lastName}
         </h1>
+
+        <div>
+          <ul>
+            <li>Profile Type: {user.userType}</li>
+            <li>UserID: {user.userID}</li>
+            <li>Contact: {user.email}</li>        
+          </ul>
+        </div>
+        <br></br>
+        {/* Logout button */}
         <Link href="/api/logout"
           onClick={async (e) => {
             e.preventDefault();
@@ -54,13 +64,6 @@ const Profile: React.FC = () => {
         >
           Logout
         </Link>
-        <div>
-          <ul>
-            <li>Profile Type: {user.userType}</li>
-            <li>UserID: {user.userID}</li>
-            <li>Contact: {user.email}</li>        
-          </ul>
-        </div>
       </div>
     </>
   )
