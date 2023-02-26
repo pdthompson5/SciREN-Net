@@ -21,7 +21,6 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
         "Missing MongoDB connection string (MONGO_URI). Update server parameters."
       );
     }
-    
     const client = new MongoClient(mongoURI);
     const userCollection = client.db("sciren").collection("users");
     const userCursor = await userCollection 

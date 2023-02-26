@@ -47,7 +47,7 @@ const Profile: React.FC = () => {
           <ul>
             <li>Profile Type: {user.userType}</li>
             <li>UserID: {user.userID}</li>
-            <li>Contact: {user.email}</li>        
+            <li>Contact: {user.email}</li>
           </ul>
         </div>
         <br></br>

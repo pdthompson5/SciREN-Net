@@ -67,7 +67,7 @@ export default function Login() {
       </label>
       <label>
         <span>Enter your Password</span>
-        <input type="text" name="password" required />
+        <input type="password" name="password" required />
       </label>
 
       <button type="submit">Login</button>
