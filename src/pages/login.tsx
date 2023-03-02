@@ -40,14 +40,6 @@ export default function Login() {
       }
     }
   }
-  async function handleClick() {
-    console.log("You pressed a button, now trying to login 'me@skirby.dev'")
-    await fetchJson("/api/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({email: "s-kirby"}),
-    });
-  };
   
   return (
     <>
