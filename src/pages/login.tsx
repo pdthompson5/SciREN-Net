@@ -50,7 +50,7 @@ export default function Login() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
+      <div className={styles.formLayout}>
         <div className={styles.loginTitle}>
           <h1> SCIRen - Login </h1>
         </div>
