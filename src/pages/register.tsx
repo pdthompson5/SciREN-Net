@@ -34,7 +34,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const mongoDB = process.env.DB_NAME;
   if (!mongoDB) {
     throw new Error(
-      "Please define the MONGODB_DB environment variable inside .env.local"
+      "Please define the DB_NAME environment variable inside .env.local"
     );
   }
 
