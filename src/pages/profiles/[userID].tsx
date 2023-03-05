@@ -2,19 +2,21 @@ import React from "react";
 import Head from 'next/head'
 import Link from "next/link";
 import Image from 'next/image';
+import useUser from "@/lib/useUser";
 import { ProfileInformation, getAllUserIDs, getProfileInformation, getUser } from "@/lib/database";
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, InferGetStaticPropsType } from "next";
 import styles from '@/styles/Profile.module.css'
 
-
-//TODO: Do we want to share this profile with /profile?
 const UserProfile: React.FC<ProfileInformation> = (props: ProfileInformation) => {
-  const title = `${props.firstName} ${props.lastName} SciREN Profile`
+  const { user } = useUser();
+
+  const title = `${props.firstName} ${props.lastName} | SciREN-Net`;
+  const isCurrentUser = user && user.isLoggedIn && user.email === props.email;
   return (
     <>
       <Head>
         <title>{title}</title>
-        <meta name="description" content="Created by Stephen Kirby" />
+        <meta name="description" content="" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -28,6 +30,15 @@ const UserProfile: React.FC<ProfileInformation> = (props: ProfileInformation) =>
             src="https://github.com/s-kirby.png"
           />
           {props.firstName} {props.lastName}
+          {isCurrentUser && <Link href="/edit-profile">
+              <Image
+                height="24"
+                width="24"
+                alt="Edit Profile"
+                className="profile"
+                src="/edit.svg">
+              </Image>
+            </Link>}
         </h1>
 
         <div>
