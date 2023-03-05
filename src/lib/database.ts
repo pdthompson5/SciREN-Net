@@ -14,7 +14,7 @@ export const establishMongoConnection = async () => {
         "Please define the MONGODB_DB environment variable inside .env.local"
       );
     }
-    
+
     // const client = await MongoClient.connect(mongoURI);
     return new MongoClient(mongoURI);
 }
@@ -41,6 +41,8 @@ export const getUser = async (userID: string)=> {
     const collection = getUserCollection(client);
     const userInfoCursor = collection.findOne({userid: userID}, {});
 
+    //TODO: There is probably a better way to translate the mongo response
+    //TODO: A significant issue is that we are strictly reliant on all fields being present in the DB
     const userInfo = (await userInfoCursor) as UserWithID
     //TODO: we probably don't want to return password here
     const userInfoSerializable = {
