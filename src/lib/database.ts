@@ -11,7 +11,7 @@ export const establishMongoConnection = async () => {
     const mongoDB = process.env.DB_NAME;
     if (!mongoDB) {
       throw new Error(
-        "Please define the MONGODB_DB environment variable inside .env.local"
+        "Please define the DB_NAME environment variable inside .env.local"
       );
     }
 
@@ -36,7 +36,7 @@ interface UserWithID extends WithId<Document> {
     academicinterest: Array<string>;
 }
 
-export const getUser = async (userID: string)=> {
+export const getMongoUser = async (userID: string)=> {
     const client = await establishMongoConnection();
     const collection = getUserCollection(client);
     const userInfoCursor = collection.findOne({userid: userID}, {});
@@ -66,7 +66,7 @@ export interface ProfileInformation {
 }
 
 export const getProfileInformation = async (userID: string): Promise<ProfileInformation> => {
-    const rawUser = await getUser(userID)
+    const rawUser = await getMongoUser(userID)
     return {
         userID: rawUser.userid,
         email: rawUser.email,

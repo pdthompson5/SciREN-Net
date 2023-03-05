@@ -3,7 +3,7 @@ import Head from 'next/head'
 import Link from "next/link";
 import Image from 'next/image';
 import useUser from "@/lib/useUser";
-import { ProfileInformation, getAllUserIDs, getProfileInformation, getUser } from "@/lib/database";
+import { ProfileInformation, getAllUserIDs, getProfileInformation, getMongoUser } from "@/lib/database";
 import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, InferGetStaticPropsType } from "next";
 import styles from '@/styles/Profile.module.css'
 
