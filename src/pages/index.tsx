@@ -29,9 +29,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <div className='App'>
-          {/* <body style={{backgroundColor: "lightblue"}}> */}
+      <main className={styles.bggradient}>
+        <div className={styles.App}>
+          <div>
             <p style={{color: "white", fontSize: 200, textAlign: "center"}}>
               Welcome
             </p>
@@ -47,39 +47,54 @@ export default function Home() {
                 priority
               />
             </div>
-          {/* </body> */}
+          </div>
+          <div ref={abt} className={styles.welcome}>
+          </div>
+  
           <div className={styles.App}>
             <ul>
-              <li onClick={() => scrollDown(abt)} className={styles.link}> About us</li>
+              <li onClick={() => scrollDown(abt)} className={styles.link}> About Us Page</li>
             </ul>
           </div>
           <div ref={abt} className={styles.about}>
           </div>
+          
 
           <div className={styles.App}>
             <ul>
-              <li onClick={() => scrollUp(abt)} className={styles.link}> Welcome</li>
+              <li onClick={() => scrollUp(abt)} className={styles.link}> Welcome Page</li>
             </ul>
           </div>
           <div ref={abt} className={styles.welcome}>
           </div>
-          {/* <body style={{backgroundColor: "lightblue"}}> */}
-            <p style={{color: "white", fontSize: 200, textAlign: "center"}}>
-              Welcome
+          <div className={styles.abouttext}>
+            <p style={{color: "white", fontSize: 40, textAlign: "center", padding: 20}}>
+            What is SciREN?
             </p>
-            <p style={{color: "white",fontSize: 200, textAlign: "center"}}>
-              To
+            <p style={{color: "white", fontSize: 20, textAlign: "center", padding: 8}}>
+            SciREN is a graduate student-led network that connects educators and researchers.  
+            The strength of the network builds on the passion of educators and researchers, 
+            the generosity of sponsors, and the commitment of the SciREN leadership team.  
             </p>
-            <div className={styles.center}>
-              <Image
-                src={logo}
-                alt="SciRen Logo"
-                width={1000}
-                height={320}
-                priority
-              />
-            </div>
-          {/* </body> */}
+            <p style={{color: "white", fontSize: 40, textAlign: "center", padding: 20}}>
+            Our Goals
+            </p>
+            <p style={{color: "white", fontSize: 20, textAlign: "center", padding: 8}}>
+            Establish a lasting network of researchers and educators.
+            Facilitate cooperation and collaboration between members of the network.
+            Bring current research and researchers into local communities and classrooms.
+            Support researchers in developing broader impacts, strengthening outreach efforts, and improving communication skills.
+            </p>
+            <p style={{color: "white", fontSize: 40, textAlign: "center", padding: 20}}>
+            Our Approach
+            </p>
+            <p style={{color: "white", fontSize: 20, textAlign: "center", padding: 8}}>
+            SciREN aims to achieve our goals and mission through annual networking events and lesson plan workshops. 
+            The networking events bring researchers and teachers to the table for face-to-face interaction and exchange of ideas and materials. 
+            The lesson plan workshops help researchers translate their work into classroom-ready exercises that meet state and national standards.
+            </p>
+        
+          </div>
         </div>
       </main>
     </>

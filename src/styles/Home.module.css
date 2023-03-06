@@ -250,20 +250,16 @@
   }
 }
 
+  .bggradient{
+    background-image: linear-gradient(rgba(89, 187, 190, 0.979), rgba(56, 170, 104, 0.849));
+  }
+
   .App{
     text-align: center;
   }
 
-  .hero{
-    height: 400px;
-    background: linear-gradient(
-      to bottom,
-      transparent 0%,
-      rgb(var(--background-end-rgb)) 40%
-    );
-  }
-
   .link{
+    color: white;
     text-decoration: none;
     display: inline;
     padding: 20px 20px;
@@ -273,19 +269,17 @@
   }
 
   .about {
-    height: 200px;
-    background: linear-gradient(
-      to bottom,
-      rgb(var(--background-end-rgb)) 40%
-    );
+    height: 150px;
   }
 
   .welcome {
-    height: 100px;
-    background: linear-gradient(
-      to bottom,
-      rgb(var(--background-end-rgb)) 40%
-    );
+    height: 50px;
+  }
+
+  .abouttext{
+    padding: 100px;
+    width: 950px;
+    text-align: justify
   }
 
 /* Tablet and Smaller Desktop */
