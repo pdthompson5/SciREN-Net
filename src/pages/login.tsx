@@ -3,15 +3,16 @@ import useUser from "@/lib/useUser";
 import fetchJson, { FetchError } from "@/lib/fetchJson";
 import Head from "next/head";
 import styles from "@/styles/Form.module.css";
+import Router from "next/router";
 
 /* Login Page */
 
 export default function Login() {
   // here we just check if user is already logged in and redirect to profile
-  const { mutateUser } = useUser({
-    redirectTo: "/profile",
-    redirectIfFound: true,
-  });
+  const { mutateUser } = useUser(
+    (user) => Router.push(`/profiles/${user.userID}`),
+    true,
+  );
 
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -33,6 +34,7 @@ export default function Login() {
         }),
         false,
       );
+      //TODO: Should we redirect to the user's profile here?
     } catch (error) {
       if (error instanceof FetchError) {
         setErrorMsg(error.data.message);

@@ -28,7 +28,7 @@ const Header: React.FC = () => {
       <Sticky enabled={true}>
         <div className={styles.header}>
             <Link href="/" className={styles.headerElement}>SciRenNet</Link>
-            {user?.isLoggedIn && <Link href="/profile" className={styles.headerElement}>My Profile</Link>}
+            {user?.isLoggedIn && <Link href={`/profiles/${user.userID}`} className={styles.headerElement}>My Profile</Link>}
             {user?.isLoggedIn && logoutButton}
             {!user?.isLoggedIn && <Link href="/signup" className={styles.headerElement}>Sign-up</Link>}
             {!user?.isLoggedIn && <Link href="/login" className={styles.headerElement}>Sign-in</Link>}
