@@ -1,0 +1,36 @@
+/* form element style */
+.loginForm, .loginLabel {
+    margin: 0.5rem 1rem 1rem;
+    display: flex;
+    flex-flow: column;
+}
+
+.formLayout {
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.loginPrompt {
+    font-weight: 600;
+}
+
+.formInput {
+    padding: 8px;
+    margin: 0.5rem 0 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.loginTitle {
+    margin: 0.5rem 1rem 1rem;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.loginSubmit {
+    margin: 0.5rem 1rem 1rem;
+}
+
+.error {
+    color: brown;
+    margin: 1rem 0 0;
+}
