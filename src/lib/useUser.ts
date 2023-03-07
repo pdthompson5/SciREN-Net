@@ -1,16 +1,16 @@
 import { useEffect } from "react";
-import Router from "next/router";
 import useSWR from "swr";
 import { User } from "@/pages/api/user";
+import Router from "next/router";
 
 /*
 * Called when a page needs access to user state. 
 */
 
-export default function useUser({
-  redirectTo = "",
-  redirectIfFound = false,
-} = {}) {
+export default function useUser(
+  redirectTo?: ((user: User) => string),
+  redirectIfFound: boolean = false,
+) {
   const { data: user, mutate: mutateUser } = useSWR<User>("/api/user");
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function useUser({
       // If redirectIfFound is also set, redirect if the user was found
       (redirectIfFound && user?.isLoggedIn)
     ) {
-      Router.push(redirectTo);
+      Router.push(redirectTo(user));
     }
   }, [user, redirectIfFound, redirectTo]);
 

@@ -8,10 +8,10 @@ import styles from "@/styles/Form.module.css";
 
 export default function Login() {
   // here we just check if user is already logged in and redirect to profile
-  const { mutateUser } = useUser({
-    redirectTo: "/profile",
-    redirectIfFound: true,
-  });
+  const { mutateUser } = useUser(
+    (user) => `/profiles/${user.userID}`,
+    true,
+  );
 
   const [errorMsg, setErrorMsg] = useState("");
 
@@ -33,6 +33,7 @@ export default function Login() {
         }),
         false,
       );
+      //TODO: Should we redirect to the user's profile here?
     } catch (error) {
       if (error instanceof FetchError) {
         setErrorMsg(error.data.message);

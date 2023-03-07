@@ -1,4 +1,4 @@
-import { MongoClient, WithId } from "mongodb";
+import { MongoClient, ObjectId, WithId } from "mongodb";
 
 export const establishMongoConnection = async () => {
     const mongoURI = process.env.MONGO_URI;
@@ -39,7 +39,7 @@ interface UserWithID extends WithId<Document> {
 export const getMongoUser = async (userID: string)=> {
     const client = await establishMongoConnection();
     const collection = getUserCollection(client);
-    const userInfoCursor = collection.findOne({userid: userID}, {});
+    const userInfoCursor = collection.findOne({_id: new ObjectId(userID)}, {});
 
     //TODO: There is probably a better way to translate the mongo response
     //TODO: A significant issue is that we are strictly reliant on all fields being present in the DB
@@ -68,7 +68,7 @@ export interface ProfileInformation {
 export const getProfileInformation = async (userID: string): Promise<ProfileInformation> => {
     const rawUser = await getMongoUser(userID)
     return {
-        userID: rawUser.userid,
+        userID: rawUser._id,
         email: rawUser.email,
         firstName: rawUser.firstname,
         lastName: rawUser.lastname,
@@ -82,9 +82,10 @@ export const getAllUserIDs = async () => {
     const client = await establishMongoConnection();
     const collection = getUserCollection(client);
 
-    const userIDs = collection.distinct("userid");
+    const userIDs = collection.distinct("_id");
+    const userIDsStrings = (await userIDs).map((id) => id.toString())
 
     client.close();
-    return userIDs;
+    return userIDsStrings;
 }
   
