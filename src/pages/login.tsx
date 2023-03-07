@@ -3,14 +3,13 @@ import useUser from "@/lib/useUser";
 import fetchJson, { FetchError } from "@/lib/fetchJson";
 import Head from "next/head";
 import styles from "@/styles/Form.module.css";
-import Router from "next/router";
 
 /* Login Page */
 
 export default function Login() {
   // here we just check if user is already logged in and redirect to profile
   const { mutateUser } = useUser(
-    (user) => Router.push(`/profiles/${user.userID}`),
+    (user) => `/profiles/${user.userID}`,
     true,
   );
 
