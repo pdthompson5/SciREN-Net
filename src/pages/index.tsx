@@ -90,8 +90,7 @@ export default function Home() {
             </p>
             <p style={{color: "white", fontSize: 20, textAlign: "center", padding: 8}}>
             SciREN aims to achieve our goals and mission through annual networking events and lesson plan workshops. 
-            The networking events bring researchers and teachers to the table for face-to-face interaction and exchange of ideas and materials. 
-            The lesson plan workshops help researchers translate their work into classroom-ready exercises that meet state and national standards.
+            The networking events bring researchers and teachers to the table for face-to-face interaction and exchange of ideas and materials. The lesson plan workshops help researchers translate their work into classroom-ready exercises that meet state and national standards.
             </p>
         
           </div>
