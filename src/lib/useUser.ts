@@ -8,7 +8,7 @@ import { User } from "@/pages/api/user";
 
 export default function useUser(
   redirectTo?: ((user: User) => void),
-  redirectIfFound?: boolean,
+  redirectIfFound: boolean = false,
 ) {
   const { data: user, mutate: mutateUser } = useSWR<User>("/api/user");
 
