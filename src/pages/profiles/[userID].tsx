@@ -65,10 +65,8 @@ export const getStaticProps = async ({ params }: GetStaticPropsContext<{
 //Return all paths
 export const getStaticPaths = async () => {
     const ids: string[] = await getAllUserIDs()
-    //TODO: Remove this once we have determined if we need all fields to be present for all users
-    const idsWithoutAdminInUserID = ids.filter((id) => !(id.includes("63f588d36c46294f0b62ea19")))
 
-    const params = idsWithoutAdminInUserID.map((id) => ({
+    const params = ids.map((id) => ({
       params: {
         userID: id
       }
