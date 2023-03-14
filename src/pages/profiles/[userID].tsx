@@ -1,13 +1,26 @@
 import React from "react";
-import Head from 'next/head'
+import Head from "next/head";
 import Link from "next/link";
-import Image from 'next/image';
+import Image from "next/image";
 import useUser from "@/lib/useUser";
-import { ProfileInformation, getAllUserIDs, getProfileInformation, getMongoUser } from "@/lib/database";
-import { GetStaticPaths, GetStaticProps, GetStaticPropsContext, InferGetStaticPropsType } from "next";
-import styles from '@/styles/Profile.module.css'
+import {
+  ProfileInformation,
+  getAllUserIDs,
+  getProfileInformation,
+  getMongoUser,
+} from "@/lib/database";
+import {
+  GetStaticPaths,
+  GetStaticProps,
+  GetStaticPropsContext,
+  InferGetStaticPropsType,
+} from "next";
+import styles from "@/styles/Profile.module.css";
+import { GetUserResponse } from "../api/user";
 
-const UserProfile: React.FC<ProfileInformation> = (props: ProfileInformation) => {
+const UserProfile: React.FC<ProfileInformation> = (
+  props: ProfileInformation
+) => {
   const { user } = useUser();
 
   const title = `${props.firstName} ${props.lastName} | SciREN-Net`;
@@ -30,15 +43,17 @@ const UserProfile: React.FC<ProfileInformation> = (props: ProfileInformation) =>
             src="https://github.com/s-kirby.png"
           />
           {props.firstName} {props.lastName}
-          {isCurrentUser && <Link href="/edit-profile">
+          {isCurrentUser && (
+            <Link href="/edit-profile">
               <Image
                 height="24"
                 width="24"
                 alt="Edit Profile"
                 className="profile"
-                src="/edit.svg">
-              </Image>
-            </Link>}
+                src="/edit.svg"
+              ></Image>
+            </Link>
+          )}
         </h1>
 
         <div>
@@ -50,30 +65,31 @@ const UserProfile: React.FC<ProfileInformation> = (props: ProfileInformation) =>
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
 //Return props for each page
-export const getStaticProps = async ({ params }: GetStaticPropsContext<{
-    userID: string
+export const getStaticProps = async ({
+  params,
+}: GetStaticPropsContext<{
+  userID: string;
 }>) => {
   const { userID } = params as { userID: string };
-  const user = await getProfileInformation(userID)
-  return {props: user}
-}
+  const user = await getProfileInformation(userID);
+  return { props: user };
+};
 
 //Return all paths
 export const getStaticPaths = async () => {
-    const ids: string[] = await getAllUserIDs()
+  const ids: string[] = await getAllUserIDs();
 
-    const params = ids.map((id) => ({
-      params: {
-        userID: id
-      }
-    }))
-    //TODO: Determine how to use profile-not-found page for fallback
-    return { paths: params, fallback: false }
-}
-
+  const params = ids.map((id) => ({
+    params: {
+      userID: id,
+    },
+  }));
+  //TODO: Determine how to use profile-not-found page for fallback
+  return { paths: params, fallback: false };
+};
 
 export default UserProfile;

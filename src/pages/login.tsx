@@ -3,14 +3,15 @@ import useUser from "@/lib/useUser";
 import fetchJson, { FetchError } from "@/lib/fetchJson";
 import Head from "next/head";
 import styles from "@/styles/Form.module.css";
+import { GetUserResponse } from "./api/user";
 
 /* Login Page */
 
 export default function Login() {
   // here we just check if user is already logged in and redirect to profile
   const { mutateUser } = useUser(
-    (user) => `/profiles/${user.userID}`,
-    true,
+    (user: GetUserResponse) => `/profiles/${user.userID}`,
+    true
   );
 
   const [errorMsg, setErrorMsg] = useState("");
@@ -18,7 +19,7 @@ export default function Login() {
   async function handleSubmit(event: any) {
     // Handle form submit button trigger
     event.preventDefault();
-    console.log("Handling Submit. " + event.currentTarget.email.value)
+    console.log("Handling Submit. " + event.currentTarget.email.value);
     const body = {
       email: event.currentTarget.email.value,
       password: event.currentTarget.password.value,
@@ -31,7 +32,7 @@ export default function Login() {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body),
         }),
-        false,
+        false
       );
       //TODO: Should we redirect to the user's profile here?
     } catch (error) {
@@ -58,14 +59,26 @@ export default function Login() {
         <form onSubmit={handleSubmit} className={styles.loginForm}>
           <label className={styles.loginLabel}>
             <span className={styles.loginPrompt}>Enter your Email</span>
-            <input type="text" name="email" required className={styles.formInput} />
+            <input
+              type="text"
+              name="email"
+              required
+              className={styles.formInput}
+            />
           </label>
           <label className={styles.loginLabel}>
             <span className={styles.loginPrompt}>Enter your Password</span>
-            <input type="password" name="password" required className={styles.formInput} />
+            <input
+              type="password"
+              name="password"
+              required
+              className={styles.formInput}
+            />
           </label>
 
-          <button type="submit" className={styles.loginSubmit}>Login</button>
+          <button type="submit" className={styles.loginSubmit}>
+            Login
+          </button>
 
           {errorMsg && <p className={styles.error}>{errorMsg}</p>}
         </form>
