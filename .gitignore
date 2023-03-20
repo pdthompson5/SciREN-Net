@@ -40,3 +40,7 @@ next-env.d.ts
 
 # Incorrect Build Files
 package-lock.json
+
+# Lesson plan scraper
+lesson_plan_scraper/venv
+lesson_plan_scraper/cache
