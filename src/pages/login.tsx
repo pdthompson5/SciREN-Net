@@ -3,14 +3,14 @@ import useUser from "@/lib/useUser";
 import fetchJson, { FetchError } from "@/lib/fetchJson";
 import Head from "next/head";
 import styles from "@/styles/Form.module.css";
-import { GetUserResponse } from "./api/user";
+import { ClientSideUser, GetUserResponse } from "./api/user";
 
 /* Login Page */
 
 export default function Login() {
   // here we just check if user is already logged in and redirect to profile
   const { mutateUser } = useUser(
-    (user: GetUserResponse) => `/profiles/${user.userID}`,
+    (user: ClientSideUser) => `/profiles/${user.userID}`,
     true
   );
 

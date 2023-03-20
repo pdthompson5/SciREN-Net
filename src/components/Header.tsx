@@ -5,6 +5,7 @@ import useUser from "@/lib/useUser";
 import Sticky from "react-stickynode";
 import fetchJson from "@/lib/fetchJson";
 import { useRouter, Router } from "next/router";
+import { isClientSideUser } from "@/lib/useUser";
 
 const Header: React.FC = () => {
   const { user, mutateUser } = useUser();
@@ -21,6 +22,12 @@ const Header: React.FC = () => {
       Logout
     </Link>
   );
+
+  const user_logged_in  = user ? 
+      isClientSideUser(user) ? 
+        user.isLoggedIn
+      : false
+    : false;
 
   return (
     <>

@@ -16,7 +16,10 @@ import {
   InferGetStaticPropsType,
 } from "next";
 import styles from "@/styles/Profile.module.css";
-import { GetUserResponse } from "../api/user";
+import { isClientSideUser } from "@/lib/useUser";
+
+
+
 
 const UserProfile: React.FC<ProfileInformation> = (
   props: ProfileInformation
@@ -24,7 +27,15 @@ const UserProfile: React.FC<ProfileInformation> = (
   const { user } = useUser();
 
   const title = `${props.firstName} ${props.lastName} | SciREN-Net`;
-  const isCurrentUser = user && user.isLoggedIn && user.email === props.email;
+
+
+  const isCurrentUser = user ? 
+    isClientSideUser(user) ? 
+      user.isLoggedIn && user.email === props.email
+    : false
+  : false;
+  
+
   return (
     <>
       <Head>
@@ -89,6 +100,7 @@ export const getStaticPaths = async () => {
     },
   }));
   //TODO: Determine how to use profile-not-found page for fallback
+
   return { paths: params, fallback: false };
 };
 
