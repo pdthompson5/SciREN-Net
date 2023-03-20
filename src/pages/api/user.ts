@@ -7,6 +7,18 @@ export interface PostUserResponse {
   message: string;
 }
 
+export const EmptyUserResponse: GetUserResponse = {
+  isLoggedIn: false,
+  email: "",
+  firstName: "",
+  lastName: "",
+  userType: "",
+  userID: "",
+  joinDate: "", // ISO string always
+  academicInterest: [],
+  gradeRange: [],
+};
+
 export interface User {
   email: string;
   password: string;
@@ -34,10 +46,7 @@ export type ErrorResponse = {
   message: string;
 };
 
-export type ClientSideUser = (Omit<User, "password"> & { isLoggedIn: boolean })
-export type GetUserResponse =
-  | ClientSideUser
-  | ErrorResponse;
+export type GetUserResponse = Omit<User, "password"> & { isLoggedIn: boolean };
 
 async function getUser(
   req: NextApiRequest,
@@ -45,10 +54,8 @@ async function getUser(
 ) {
   // This is triggered when we need data from the user
   if (!req.session.user) {
-    console.log("api/user : reg.session.user == True, ");
-    res.status(404).json({
-      message: "User not found",
-    });
+    console.error("No user found.");
+    res.status(404).json(EmptyUserResponse);
     return;
   }
 

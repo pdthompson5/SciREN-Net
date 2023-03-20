@@ -8,11 +8,8 @@ import {
   getAllUserIDs,
   getProfileInformation,
 } from "@/lib/database";
-import {
-  GetStaticPropsContext,
-} from "next";
+import { GetStaticPropsContext } from "next";
 import styles from "@/styles/Profile.module.css";
-import { isClientSideUser } from "@/lib/useUser";
 
 const UserProfile: React.FC<ProfileInformation> = (
   props: ProfileInformation
@@ -20,14 +17,7 @@ const UserProfile: React.FC<ProfileInformation> = (
   const { user } = useUser();
 
   const title = `${props.firstName} ${props.lastName} | SciREN-Net`;
-
-
-  const isCurrentUser = user ? 
-    isClientSideUser(user) ? 
-      user.isLoggedIn && user.email === props.email
-    : false
-  : false;
-  
+  const isCurrentUser = user && user.isLoggedIn && user.email === props.email;
 
   return (
     <>
