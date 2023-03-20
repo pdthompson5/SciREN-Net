@@ -37,3 +37,6 @@ next-env.d.ts
 
 # Secrets
 /docs/private-keys.md
+
+# Incorrect Build Files
+package-lock.json
