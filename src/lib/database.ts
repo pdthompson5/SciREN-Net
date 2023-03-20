@@ -23,7 +23,7 @@ export const getUserCollection = (client: MongoClient) => {
     const mongoDB = process.env.DB_NAME;
     return client.db(mongoDB).collection("users");
 }
-// TODO: userid is deprecated
+
 interface UserWithID extends WithId<Document> {
     email: string;
     password: string;
