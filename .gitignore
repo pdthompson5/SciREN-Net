@@ -37,3 +37,7 @@ next-env.d.ts
 
 # Secrets
 /docs/private-keys.md
+
+# Lesson plan scraper
+lesson_plan_scraper/venv
+lesson_plan_scraper/cache
