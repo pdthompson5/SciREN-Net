@@ -1,9 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Router from "next/router";
 import useSWR from "swr";
-import { User, GetUserResponse, ErrorResponse, ClientSideUser } from "@/pages/api/user";
-
-
+import { GetUserResponse, ErrorResponse, ClientSideUser } from "@/pages/api/user";
 
 /*
  * Called when a page needs access to user state.

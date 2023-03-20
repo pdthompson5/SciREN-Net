@@ -7,19 +7,12 @@ import {
   ProfileInformation,
   getAllUserIDs,
   getProfileInformation,
-  getMongoUser,
 } from "@/lib/database";
 import {
-  GetStaticPaths,
-  GetStaticProps,
   GetStaticPropsContext,
-  InferGetStaticPropsType,
 } from "next";
 import styles from "@/styles/Profile.module.css";
 import { isClientSideUser } from "@/lib/useUser";
-
-
-
 
 const UserProfile: React.FC<ProfileInformation> = (
   props: ProfileInformation
@@ -100,7 +93,6 @@ export const getStaticPaths = async () => {
     },
   }));
   //TODO: Determine how to use profile-not-found page for fallback
-
   return { paths: params, fallback: false };
 };
 
