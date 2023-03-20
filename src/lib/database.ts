@@ -23,17 +23,16 @@ export const getUserCollection = (client: MongoClient) => {
     const mongoDB = process.env.DB_NAME;
     return client.db(mongoDB).collection("users");
 }
-
+// TODO: userid is deprecated
 interface UserWithID extends WithId<Document> {
-    userid: string;
     email: string;
     password: string;
-    firstname: string;
-    lastname: string;
-    grades_taught: string;
-    joindate: Date;
-    usertype: string;
-    academicinterest: Array<string>;
+    firstName: string;
+    lastName: string;
+    gradeRange: string;
+    joinDate: Date;
+    userType: string;
+    academicInterest: Array<string>;
 }
 
 export const getMongoUser = async (userID: string)=> {
@@ -48,7 +47,7 @@ export const getMongoUser = async (userID: string)=> {
     const userInfoSerializable = {
         ...userInfo,
         _id: userInfo._id.toString(),
-        joindate: userInfo.joindate.toISOString()
+        joinDate: userInfo.joinDate.toISOString()
     }
 
     client.close();
@@ -61,7 +60,7 @@ export interface ProfileInformation {
     firstName: string,
     lastName: string,
     userType: string,
-    gradesTaught: string,
+    gradeRange: string,
     academicInterests: Array<string>
 }
 
@@ -70,11 +69,11 @@ export const getProfileInformation = async (userID: string): Promise<ProfileInfo
     return {
         userID: rawUser._id,
         email: rawUser.email,
-        firstName: rawUser.firstname,
-        lastName: rawUser.lastname,
-        userType: rawUser.usertype,
-        gradesTaught: rawUser.grades_taught,
-        academicInterests: rawUser.academicinterest
+        firstName: rawUser.firstName,
+        lastName: rawUser.lastName,
+        userType: rawUser.userType,
+        gradeRange: rawUser.gradeRange,
+        academicInterests: rawUser.academicInterest
     }
 }
 
