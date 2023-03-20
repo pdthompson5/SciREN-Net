@@ -1,71 +1,278 @@
-import React from "react";
-import Head from 'next/head'
-import Image from 'next/image'
+import React, { useState } from "react";
+import Head from "next/head";
+import styles from "@/styles/Form.module.css";
+import { User, PostUserRequest, PostUserResponse } from "./api/user";
+import { useRouter, Router } from "next/router";
 
-import { GetServerSideProps } from "next";
-import { Inter } from '@next/font/google'
-import styles from '@/styles/Profile.module.css'
-import { MongoClient } from "mongodb";
+type UserType = "researcher" | "teacher" | "student" | "admin";
 
-/*
-Created by Stephen on 02/16/23
-Registration Page, Users should be directed here from landing page, sign-in page. 
+type AcademicInterestClass =
+  | "mathematics"
+  | "biology"
+  | "chemistry"
+  | "social studies"
+  | "history"
+  | "none";
 
-*/
-interface Props {
-  updatedID: string,
-}
+/* Registration Page */
+//TODO: Apply templated handlers
+//TODO: Template academic interest form elements
 
+const Register: React.FC = () => {
+  const router = useRouter();
+  // state for form fields
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [verifyPassword, setVerifyPassword] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  // Three academic interests allowed
+  const [academicInterests, setAcademicInterests] = useState(["mathematics"]);
+  const [gradeRange, setGradeRange] = useState([]);
+  const [userType, setUserType] = useState<UserType>("researcher");
 
-export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
- 
+  // state for submit, error
+  const [submitted, setSubmitted] = useState(false);
+  const [error, setError] = useState<string | undefined>();
 
-  const updatedProps = {
-    updatedID: "",
-  }
+  // Form field change hooks
+  const handleField = (setter: any) => {
+    // Handles all fields which require no special parsing
+    return (event: any) => {
+      setter(event.target.value);
+      setSubmitted(false);
+    };
+  };
+  const handleGradeRange = (event: any) => {
+    var options = event.target.options;
+    var selectedValues: Array<number> = [];
+    for (var i = 0, l = options.length; i < l; i++) {
+      if (options[i].selected) {
+        selectedValues.push(+options[i].value);
+      }
+    }
+    setGradeRange(event.target.value); // Always returns sorted.
+    setSubmitted(false);
+  };
+  const handleAcademicInterests = (event: any) => {
+    var options = event.target.options;
+    var selectedValues: Array<string> = [];
+    for (var i = 0, l = options.length; i < l; i++) {
+      if (options[i].selected) {
+        selectedValues.push(options[i].value);
+      }
+    }
+    setAcademicInterests(selectedValues);
+  };
 
-  const mongoURI = process.env.MONGO_URI;
-  if (!mongoURI) {
-    throw new Error(
-      "Please define the MONGODB_URI environment variable inside .env.local"
-    );
-  }
+  // Field validation
+  const validateEmail = (e: string): boolean => {
+    const regex =
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return e.toLowerCase().match(regex) !== null;
+  };
 
-  const mongoDB = process.env.DB_NAME;
-  if (!mongoDB) {
-    throw new Error(
-      "Please define the DB_NAME environment variable inside .env.local"
-    );
-  }
+  const validatePassword = (p: string) => {
+    if (p.length < 8) {
+      return "Password must be at least 8 characters long.";
+    } else if (p !== verifyPassword) {
+      return "Passwords do not match.";
+    }
+    return null;
+  };
 
-  // Establish Mongo
-  // const client = await MongoClient.connect(mongoURI);
-  const client = new MongoClient(mongoURI);
+  // Add user call
+  // Note: no need for arguments, just use react state
+  const addUser = async () => {
+    setSubmitted(true);
 
-  const collection = client.db(mongoDB).collection("users");
-  console.log("Connected to MongoDB.");
+    const postUser: PostUserRequest = {
+      email: email,
+      password: password,
+      userType: userType,
+      firstName: firstName,
+      lastName: lastName,
+      academicInterest: academicInterests,
+      gradeRange: gradeRange,
+    };
+    const resp = await fetch("/api/user", {
+      method: "POST",
+      body: JSON.stringify(postUser),
+    });
 
-  // Close mongoDB
-  client.close();
+    const body: PostUserResponse = await resp.json();
+    console.log(body);
+    if (resp.status >= 400) {
+      setError(body.message);
+    } else {
+      setError(undefined);
+      router.replace("/login");
+    }
+    console.log(resp.status);
+  };
 
-  
-  return { props: updatedProps };
-};
+  // form submission handler
+  const handleSubmit = (event: any) => {
+    event.preventDefault();
+    if (
+      email === "" ||
+      password === "" ||
+      firstName === "" ||
+      lastName === ""
+    ) {
+      // Any fields missing data
+      setError("Please fill out all fields before submitting.");
+    } else {
+      // Run field validation checks
+      if (!validateEmail(email)) {
+        setError("Invalid email provided.");
+        return;
+      } else {
+        // Password checks
+        const passwordError = validatePassword(password);
+        if (passwordError !== null) {
+          setError(passwordError);
+          return;
+        }
+      }
 
-const Profile: React.FC<Props> = (props) => {
+      console.log("Form checks complete.");
+      addUser();
 
-  // State-related code will go here.
+      console.log("Submission complete.");
+      // All other checks passed
+      setSubmitted(true);
+      setError(undefined);
+    }
+  };
+
   return (
     <>
       <Head>
-        <title>SciREN: Sign-up</title>
+        <title>SciREN: Register an Account</title>
         <meta name="description" content="SciREN Profile Signup" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <h1>Signup</h1>
-    </>
-  )
-}
+      <div>
+        <h1>SciREN - Signup</h1>
+        <form className={styles.loginForm}>
+          {/* First name */}
+          <label className={styles.loginLabel}>First Name</label>
+          <input
+            onChange={handleField(setFirstName)}
+            required
+            className={styles.formInput}
+            value={firstName}
+            type="text"
+          />
+          {/* Last name */}
+          <label className={styles.loginLabel}>Last Name</label>
+          <input
+            onChange={handleField(setLastName)}
+            required
+            className={styles.formInput}
+            value={lastName}
+            type="text"
+          />
+          {/* User type */}
+          <label className={styles.loginLabel}>User Type</label>
+          <select
+            name="selectList"
+            id="selectList"
+            onChange={handleField(setUserType)}
+            className={styles.formInput}
+          >
+            <option value="researcher">Researcher</option>
+            <option value="teacher">Teacher</option>
+            <option value="student">Student</option>
+            <option value="admin">Administrator</option>
+          </select>
+          {/* Academic interests */}
+          <label className={styles.loginLabel}>
+            Academic Interests: Drag or use Ctrl to select multiple
+          </label>
+          <select
+            name="selectList"
+            id="selectList"
+            multiple
+            onChange={handleAcademicInterests}
+            className={styles.formInput}
+          >
+            <option value="mathematics">Mathematics</option>
+            <option value="biology">Biology</option>
+            <option value="chemistry">Chemistry</option>
+            <option value="social studies">Social Studies</option>
+            <option value="history">History</option>
+          </select>
+          {/* Grade Range */}
+          <label className={styles.loginLabel}>
+            Grade Range: Drag or use Ctrl to select multiple
+          </label>
+          <select
+            name="selectList[]"
+            id="selectList[]"
+            multiple
+            onChange={handleGradeRange}
+            className={styles.formInput}
+          >
+            {/* LOL GORE */}
+            <option value={0}>Kindergarten</option>
+            <option value={1}>Grade 1</option>
+            <option value={2}>Grade 2</option>
+            <option value={3}>Grade 3</option>
+            <option value={4}>Grade 4</option>
+            <option value={5}>Grade 5</option>
+            <option value={6}>Grade 6</option>
+            <option value={7}>Grade 7</option>
+            <option value={8}>Grade 8</option>
+            <option value={9}>Grade 9</option>
+            <option value={10}>Grade 10</option>
+            <option value={11}>Grade 11</option>
+            <option value={12}>Grade 12</option>
+          </select>
+          {/* Email */}
+          <label className={styles.loginLabel}>Email</label>
+          <input
+            onChange={handleField(setEmail)}
+            required
+            className={styles.formInput}
+            value={email}
+            type="text"
+          />
+          {/* Password */}
+          <label className={styles.loginLabel}>Password</label>
+          <input
+            onChange={handleField(setPassword)}
+            required
+            className={styles.formInput}
+            value={password}
+            type="password"
+          />
+          {/* Verify Password */}
+          <label className={styles.loginLabel}>Verify Password</label>
+          <input
+            onChange={handleField(setVerifyPassword)}
+            required
+            className={styles.formInput}
+            value={verifyPassword}
+            type="password"
+          />
+          {/* Submit */}
+          <button
+            onClick={handleSubmit}
+            className={styles.loginSubmit}
+            type="submit"
+          >
+            Submit
+          </button>
 
-export default Profile;
+          {error && <p className={styles.error}>{error}</p>}
+          {/* TODO: Add message for successful submission */}
+        </form>
+      </div>
+    </>
+  );
+};
+
+export default Register;
