@@ -3,19 +3,20 @@ import Image from 'next/image'
 import { Inter } from '@next/font/google'
 import styles from '@/styles/Home.module.css'
 import logo from '../../public/cropped-SciREN-Pen-W.png'
-import { useRef } from 'react'
+import { RefObject, useRef } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
+
   const abt = useRef(null);
-  const scrollDown = (elementRef) => {
+  const scrollDown = (elementRef: RefObject<any>) => {
     window.scrollTo({
       top: elementRef.current.offsetTop,
       behavior: "smooth",
     })
   }
-  const scrollUp = (elementRef) => {
+  const scrollUp = (elementRef: RefObject<any>) => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",

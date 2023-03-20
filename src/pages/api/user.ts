@@ -34,8 +34,9 @@ export type ErrorResponse = {
   message: string;
 };
 
+export type ClientSideUser = (Omit<User, "password"> & { isLoggedIn: boolean })
 export type GetUserResponse =
-  | (Omit<User, "password"> & { isLoggedIn: boolean })
+  | ClientSideUser
   | ErrorResponse;
 
 async function getUser(

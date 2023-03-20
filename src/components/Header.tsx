@@ -4,24 +4,14 @@ import Link from "next/link";
 import useUser from "@/lib/useUser";
 import Sticky from "react-stickynode";
 import fetchJson from "@/lib/fetchJson";
-import { useRouter, Router } from "next/router";
+import { useRouter, Router, NextRouter } from "next/router";
+import { isClientSideUser } from "@/lib/useUser";
+import { ClientSideUser, GetUserResponse } from "@/pages/api/user";
+import { KeyedMutator } from "swr";
 
 const Header: React.FC = () => {
   const { user, mutateUser } = useUser();
   const router = useRouter();
-  const logoutButton = (
-    <Link
-      href="/api/logout"
-      onClick={async (e) => {
-        e.preventDefault();
-        mutateUser(await fetchJson("/api/logout", { method: "POST" }), false);
-        router.replace("/login");
-      }}
-    >
-      Logout
-    </Link>
-  );
-
   return (
     <>
       <Sticky enabled={true}>
@@ -29,29 +19,55 @@ const Header: React.FC = () => {
           <Link href="/" className={styles.headerElement}>
             SciRenNet
           </Link>
-          {user?.isLoggedIn && (
-            <Link
-              href={`/profiles/${user.userID}`}
-              className={styles.headerElement}
-            >
-              My Profile
-            </Link>
-          )}
-          {user?.isLoggedIn && logoutButton}
-          {!user?.isLoggedIn && (
-            <Link href="/register" className={styles.headerElement}>
-              Sign-up
-            </Link>
-          )}
-          {!user?.isLoggedIn && (
-            <Link href="/login" className={styles.headerElement}>
-              Sign-in
-            </Link>
-          )}
+          {
+            user ? 
+              isClientSideUser(user) ? 
+                logged_in_header_elements(user, router, mutateUser): 
+                logged_out_header_elements()
+              : logged_out_header_elements()
+          }
         </div>
       </Sticky>
     </>
   );
 };
+
+const logged_in_header_elements = 
+(user: ClientSideUser, router: NextRouter, mutateUser: KeyedMutator<GetUserResponse>
+  ) =>{
+ 
+  return [
+  <Link
+    href={`/profiles/${user.userID}`}
+    className={styles.headerElement}
+    key="my-profile"
+  >
+  My Profile
+  </Link>,
+  <Link
+    href="/api/logout"
+    key="logout"
+    onClick={async (e) => {
+      e.preventDefault();
+      mutateUser(await fetchJson("/api/logout", { method: "POST" }), false);
+      router.replace("/login");
+    }}
+  >
+    Logout
+  </Link>
+  ]
+}
+
+const logged_out_header_elements = () => {
+  return [
+    <Link href="/login" className={styles.headerElement} key="login">
+      Sign-in
+    </Link>,
+
+    <Link href="/register" className={styles.headerElement} key="register">
+      Sign-up
+    </Link>
+    ]
+}
 
 export default Header;

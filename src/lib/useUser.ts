@@ -1,14 +1,13 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import Router from "next/router";
 import useSWR from "swr";
-import { User, GetUserResponse, ErrorResponse } from "@/pages/api/user";
+import { GetUserResponse, ErrorResponse, ClientSideUser } from "@/pages/api/user";
 
 /*
  * Called when a page needs access to user state.
  */
-
 export default function useUser(
-  redirectTo?: (user: GetUserResponse) => string,
+  redirectTo?: (user: ClientSideUser) => string,
   redirectIfFound: boolean = false
 ) {
   const { data: resp, mutate: mutateUser } =
@@ -39,4 +38,8 @@ export default function useUser(
   }, [resp, redirectIfFound, redirectTo]);
 
   return { user: resp, mutateUser };
+}
+
+export const isClientSideUser = (obj: ClientSideUser | ErrorResponse): obj is ClientSideUser => {
+  return "isLoggedIn" in obj
 }
