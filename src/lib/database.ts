@@ -25,7 +25,6 @@ export const getUserCollection = (client: MongoClient) => {
 };
 
 interface UserWithID extends WithId<Document> {
-  userid: string;
   email: string;
   password: string;
   firstName: string;
