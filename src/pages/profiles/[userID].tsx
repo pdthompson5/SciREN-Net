@@ -10,7 +10,6 @@ import {
 } from "@/lib/database";
 import { GetStaticPropsContext } from "next";
 import styles from "@/styles/Profile.module.css";
-import { BSONError } from "bson";
 
 const UserProfile: React.FC<ProfileInformation> = (
   props: ProfileInformation
