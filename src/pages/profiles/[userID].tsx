@@ -84,7 +84,7 @@ export const getStaticPaths = async () => {
     },
   }));
 
-  return { paths: params, fallback: "blocking" };
+  return { paths: params, fallback: false };
 };
 
 export default UserProfile;
