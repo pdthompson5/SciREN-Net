@@ -154,7 +154,7 @@ const Register: React.FC = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div>
+      <div className={styles.bggradient}>
         <h1>SciREN - Signup</h1>
         <form className={styles.loginForm}>
           {/* First name */}
@@ -166,6 +166,7 @@ const Register: React.FC = () => {
             value={firstName}
             type="text"
           />
+          
           {/* Last name */}
           <label className={styles.loginLabel}>Last Name</label>
           <input

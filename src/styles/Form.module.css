@@ -1,6 +1,11 @@
 /* form element style */
-.loginForm, .loginLabel {
-    margin: 0.5rem 1rem 1rem;
+.loginLabel {
+    margin: .5rem 1rem 1rem;
+    display: flex; 
+    flex-flow: column; 
+}
+.loginForm{
+    margin: .5rem 5rem 1rem;
     display: flex;
     flex-flow: column;
 }
@@ -16,9 +21,32 @@
 
 .formInput {
     padding: 8px;
+    width: 40rem;
     margin: 0.5rem 0 1rem;
-    border: 1px solid #ccc;
+    border: 1px solid #000000;
     border-radius: 4px;
+}
+
+.formInputLastName {
+    padding: 8px;
+    width: 15rem;
+    /* margin: 0.5rem 30rem 1rem; */
+    border: 1px solid #000000;
+    border-radius: 4px;
+    padding-left: 0px;
+        display:table-cell;
+    margin-left: 5rem;
+}
+
+.formInputFirstName {
+    padding: 8px;
+    width: 15rem;
+    /* margin: 0.5rem 0rem 1rem; */
+    border: 1px solid #000000;
+    border-radius: 4px;
+    padding-right: 0px;
+        display:table-cell;
+    margin-right: 5rem;
 }
 
 .loginTitle {
@@ -30,8 +58,9 @@
     margin: 0.5rem 1rem 1rem;
 }
 
-
-
+.bggradient{
+    background-image: linear-gradient(rgba(89, 187, 190, 0.979), rgba(61, 150, 98, 0.849));
+  }
 
 .error {
     color: brown;
