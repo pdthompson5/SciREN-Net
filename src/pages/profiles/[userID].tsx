@@ -83,7 +83,7 @@ export const getStaticPaths = async () => {
     },
   }));
   //TODO: Determine how to use profile-not-found page for fallback
-  return { paths: params, fallback: false };
+  return { paths: params, fallback: "blocking" };
 };
 
 export default UserProfile;
