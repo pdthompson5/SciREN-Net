@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Head from "next/head";
 import styles from "@/styles/Form.module.css";
-import { User, PostUserRequest, PostUserResponse } from "./api/user";
+import { User } from "./api/userSession";
+import { PostUserRequest, PostUserResponse } from "./api/user";
 import { useRouter, Router } from "next/router";
 
 type UserType = "researcher" | "teacher" | "student" | "admin";
