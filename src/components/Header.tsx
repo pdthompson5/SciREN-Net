@@ -5,7 +5,7 @@ import useUser from "@/lib/useUser";
 import Sticky from "react-stickynode";
 import fetchJson from "@/lib/fetchJson";
 import { useRouter, Router, NextRouter } from "next/router";
-import { GetUserResponse } from "@/pages/api/user";
+import { GetUserResponse } from "@/pages/api/userSession";
 import { KeyedMutator } from "swr";
 
 const Header: React.FC = () => {
