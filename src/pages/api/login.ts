@@ -1,4 +1,4 @@
-import type { User, GetUserResponse } from "./user";
+import type { User, GetUserResponse } from "./userSession";
 
 import { withIronSessionApiRoute } from "iron-session/next";
 import { sessionOptions } from "@/lib/session";

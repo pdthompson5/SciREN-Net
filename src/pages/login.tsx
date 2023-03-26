@@ -3,7 +3,7 @@ import useUser from "@/lib/useUser";
 import fetchJson, { FetchError } from "@/lib/fetchJson";
 import Head from "next/head";
 import styles from "@/styles/Form.module.css";
-import { GetUserResponse } from "./api/user";
+import { GetUserResponse } from "./api/userSession";
 
 /* Login Page */
 

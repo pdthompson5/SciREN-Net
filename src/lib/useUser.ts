@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import Router from "next/router";
 import useSWR from "swr";
-import { GetUserResponse } from "@/pages/api/user";
+import { GetUserResponse } from "@/pages/api/userSession";
 
 /*
  * Called when a page needs access to user state.
@@ -11,7 +11,7 @@ export default function useUser(
   redirectIfFound: boolean = false
 ) {
   const { data: resp, mutate: mutateUser } =
-    useSWR<GetUserResponse>("/api/user");
+    useSWR<GetUserResponse>("/api/userSession");
 
   useEffect(() => {
     if (resp === undefined) {
