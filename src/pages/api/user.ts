@@ -112,6 +112,7 @@ async function postUser(
 }
 
 export default function handler(req: NextApiRequest, res: NextApiResponse) {
+  
   switch (req.method) {
     case "POST":
       // posting user to database requires no session, only used in registration

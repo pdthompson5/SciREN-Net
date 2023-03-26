@@ -18,6 +18,23 @@ type AcademicInterestClass =
 //TODO: Apply templated handlers
 //TODO: Template academic interest form elements
 
+// TODO: I don't think that I need to pull these out actually
+// Field validation
+export const validateEmail = (e: string): boolean => {
+  const regex =
+    /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return e.toLowerCase().match(regex) !== null;
+};
+
+export const validatePassword = (p1: string, p2: string) => {
+  if (p1.length < 8) {
+    return "Password must be at least 8 characters long.";
+  } else if (p1 !== p2) {
+    return "Passwords do not match.";
+  }
+  return null;
+};
+
 const Register: React.FC = () => {
   const router = useRouter();
   // state for form fields
@@ -63,22 +80,6 @@ const Register: React.FC = () => {
       }
     }
     setAcademicInterests(selectedValues);
-  };
-
-  // Field validation
-  const validateEmail = (e: string): boolean => {
-    const regex =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    return e.toLowerCase().match(regex) !== null;
-  };
-
-  const validatePassword = (p: string) => {
-    if (p.length < 8) {
-      return "Password must be at least 8 characters long.";
-    } else if (p !== verifyPassword) {
-      return "Passwords do not match.";
-    }
-    return null;
   };
 
   // Add user call
@@ -129,7 +130,7 @@ const Register: React.FC = () => {
         return;
       } else {
         // Password checks
-        const passwordError = validatePassword(password);
+        const passwordError = validatePassword(password, verifyPassword);
         if (passwordError !== null) {
           setError(passwordError);
           return;
