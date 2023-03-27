@@ -156,26 +156,31 @@ const Register: React.FC = () => {
       </Head>
       <div className={styles.bggradient}>
         <h1>SciREN - Signup</h1>
-        <form className={styles.loginForm}>
+        <label className={styles.loginLabel}>Name</label>
+        <form className={styles.loginFormFL}>
           {/* First name */}
-          <label className={styles.loginLabel}>First Name</label>
+          {/* <label className={styles.loginLabel}>First Name</label> */}
           <input
             onChange={handleField(setFirstName)}
+            placeholder="First Name"
             required
-            className={styles.formInput}
+            className={styles.formInputFirstName}
             value={firstName}
             type="text"
           />
           
           {/* Last name */}
-          <label className={styles.loginLabel}>Last Name</label>
+          {/* <label className={styles.loginLabel}>Last Name</label> */}
           <input
             onChange={handleField(setLastName)}
+            placeholder="Last Name"
             required
-            className={styles.formInput}
+            className={styles.formInputLastName}
             value={lastName}
             type="text"
           />
+        </form>
+        <form className={styles.loginForm}>
           {/* User type */}
           <label className={styles.loginLabel}>User Type</label>
           <select
@@ -233,27 +238,27 @@ const Register: React.FC = () => {
             <option value={12}>Grade 12</option>
           </select>
           {/* Email */}
-          <label className={styles.loginLabel}>Email</label>
           <input
             onChange={handleField(setEmail)}
+            placeholder="Email"
             required
             className={styles.formInput}
             value={email}
             type="text"
           />
           {/* Password */}
-          <label className={styles.loginLabel}>Password</label>
           <input
             onChange={handleField(setPassword)}
+            placeholder="Password"
             required
             className={styles.formInput}
             value={password}
             type="password"
           />
           {/* Verify Password */}
-          <label className={styles.loginLabel}>Verify Password</label>
           <input
             onChange={handleField(setVerifyPassword)}
+            placeholder="Verify Password"
             required
             className={styles.formInput}
             value={verifyPassword}

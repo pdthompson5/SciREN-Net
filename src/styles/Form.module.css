@@ -1,13 +1,28 @@
 /* form element style */
 .loginLabel {
-    margin: .5rem 1rem 1rem;
+    margin: 1rem 1rem 2.9rem;
     display: flex; 
     flex-flow: column; 
+    text-align: center;
+    font-weight: bold;
 }
 .loginForm{
     margin: .5rem 5rem 1rem;
     display: flex;
     flex-flow: column;
+    align-items: center;
+    background-image: url(../../public/ALABAMA_Simple3.png);
+    background-position-x: center;
+    background-size: 1100px 700px;
+    background-repeat: no-repeat;
+
+}
+
+.loginFormFL{
+    margin: .5rem 5rem 1rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center; 
 }
 
 .formLayout {
@@ -29,24 +44,25 @@
 
 .formInputLastName {
     padding: 8px;
-    width: 15rem;
-    /* margin: 0.5rem 30rem 1rem; */
+    width: 17rem;
+    margin: 0.5rem 30rem 1rem;
     border: 1px solid #000000;
     border-radius: 4px;
     padding-left: 0px;
         display:table-cell;
-    margin-left: 5rem;
+    margin-left: 2rem;
 }
 
 .formInputFirstName {
     padding: 8px;
-    width: 15rem;
-    /* margin: 0.5rem 0rem 1rem; */
+    width: 17rem;
+    margin: 0.5rem 0rem 1rem;
     border: 1px solid #000000;
     border-radius: 4px;
     padding-right: 0px;
         display:table-cell;
     margin-right: 5rem;
+    margin-left: 32.6rem;
 }
 
 .loginTitle {
