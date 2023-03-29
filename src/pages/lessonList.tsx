@@ -23,7 +23,7 @@ const LessonList: React.FC<Lesson[]> = (props: Lesson[]) => {
 export const getStaticProps = async (context: GetStaticPropsContext) => {
   const lessons = await getLessonPlans().catch((reason) => undefined);
   const notFound = !lessons;
-  return { props: notFound };
+  return { props: { notFound } };
 };
 
 const LessonFragment: React.FC<{

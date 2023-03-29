@@ -112,8 +112,6 @@ export const getAllUserIDs = async () => {
   return userIDsStrings;
 };
 
-const convertLessonLinks = (links: LessonLink[]) => {};
-
 export const getLessonPlans = async (
   sortKey?: string, // Fields to sort by, TODO: make this an enum
   sortDirection?: number // 1 for ascending, -1 for descending
@@ -132,20 +130,18 @@ export const getLessonPlans = async (
       }
     )
     .toArray();
-  // let TypedLessonPlans: Lesson[];
-  lessonPlans.forEach((lesson) => {
-    console.log(typeof lesson.authors);
-    console.log(lesson.authors);
-    // lesson._id = lesson._id.toString();
-
-    // TypedLessonPlans.push({
-    //   _id: lesson._id.toString(),
-    //   title: lesson.title,
-    //   year: lesson.year,
-    //   abstract: lesson.abstract,
-    //   mediaLinks: convertLessonLinks(lesson.mediaLinks),
-    // } as Lesson);
-  });
+  const TypedLessonPlans: Lesson[] = lessonPlans.map(
+    (lesson): Lesson => ({
+      _id: lesson._id.toString(),
+      title: lesson.title,
+      year: lesson.year,
+      abstract: lesson.abstract,
+      mediaLinks: lesson.mediaLinks as LessonLink[],
+      contentLinks: lesson.contentLinks as LessonLink[],
+      authors: lesson.authors as Author[],
+      gradeLevel: lesson.gradeLevel as number[],
+    })
+  );
   client.close();
   return lessonPlans;
 };
