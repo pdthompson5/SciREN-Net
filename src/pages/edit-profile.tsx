@@ -27,7 +27,7 @@ const capitalizeField = (field: string) => {
     }).join(" ");
 }
 
-
+// Can I just delete the old user and add a new one? Probably not 
 const EditProfile = () => {
 
     const {user} = useUser((user) => "/login")
