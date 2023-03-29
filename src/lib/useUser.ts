@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Router from "next/router";
 import useSWR from "swr";
 import { GetUserResponse } from "@/pages/api/userSession";
+import { FetchError } from "./fetchJson";
 
 /*
  * Called when a page needs access to user state.
@@ -13,6 +14,7 @@ export default function useUser(
   const { data: resp, mutate: mutateUser } =
     useSWR<GetUserResponse>("/api/userSession");
 
+  // TODO: Figure out if we want to do any error handling here
   useEffect(() => {
     if (resp === undefined) {
       return;

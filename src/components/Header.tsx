@@ -18,7 +18,7 @@ const Header: React.FC = () => {
           <Link href="/" className={styles.headerElement}>
             SciRenNet
           </Link>
-          {user
+          {user?.isLoggedIn
             ? logged_in_header_elements(user, router, mutateUser)
             : logged_out_header_elements()}
         </div>

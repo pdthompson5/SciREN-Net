@@ -41,7 +41,8 @@ async function getUser(
   // This is triggered when we need data from the user
   if (!req.session.user) {
     console.error("No user found.");
-    res.status(404).json(EmptyUserResponse);
+    // TODO: Figure out if we want to keep this as a 200
+    res.status(200).json(EmptyUserResponse);
     return;
   }
 

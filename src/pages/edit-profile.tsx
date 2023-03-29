@@ -1,17 +1,20 @@
-import React, { useState } from "react";
-import Head from "next/head";
+import React from "react";
 import styles from "@/styles/Form.module.css";
-import { User, PostUserRequest, PostUserResponse } from "./api/user";
-import { useRouter, Router } from "next/router";
-import { useFormik, Field, Form, Formik, FormikProps} from "formik";
+import { Field, Form, Formik, FormikProps} from "formik";
 
-import { validatePassword, validateEmail } from "./register";
 import useUser from "@/lib/useUser";
+import {Button} from "@mui/material"
+import {TextField, Autocomplete, Select, AutocompleteRenderInputParams} from "formik-mui"
+import {TextField as MaterialTextField} from "@mui/material"
+import * as Yup from 'yup';
+import { GetUserResponse } from "./api/userSession";
+import { academicInterestOptions, gradeRangeOptions, userTypes } from "./api/user";
 
 
 /* Registration Page */
 //TODO: Apply templated handlers
 //TODO: Template academic interest form elements
+// TODO: Actually edit database -> This should just update the fields
 
 const capitalizeField = (field: string) => {
     const words = field.split(" ");
@@ -22,64 +25,121 @@ const capitalizeField = (field: string) => {
 
 
 const EditProfile = () => {
-    // TODO: Default values should be current user values
-    // TODO: Make all fields required
-    // TODO: styles
+
     const {user} = useUser((user) => "/login")
-    console.log(user)
-
-
-    const gradeRangeOptions = ["Kindergarten", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6", "Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"];
-    const academicInterestOptions = ["mathematics", "biology", "chemistry", "social studies", "history"];
     return (
         <>
-            <div>
-                <h1>Edit Profile</h1>
-                <Formik
-                    initialValues={{userType: "researcher", firstName: "", lastName: "", academicInterests: [], gradeRange: []}}
-                    onSubmit={(values, actions) => {
-                        setTimeout(() => {
-                          alert(JSON.stringify(values, null, 2));
-                          actions.setSubmitting(false);
-                        }, 1000);
-                      }}
-                >
-                    {(props: FormikProps<any>) => (
-                    <Form>
-                        <label htmlFor="userType">User Type</label>
-                        <Field as="select" name="userType">
-                            <option value="researcher">Researcher</option>
-                            <option value="teacher">Teacher</option>
-                            <option value="student">Student</option>
-                            <option value="admin">Administrator</option>
-                        </Field>
-
-                        <label htmlFor="firstName">First Name</label>
-                        <Field type="text" name="firstName" placeholder="First Name" />
-
-                        <label htmlFor="lastName">Last Name</label>
-                        <Field type="text" name="lastName" placeholder="Last Name" />
-
-                        {/* TODO: I think that checkboxes would probably be better? Perhaps, not sure */}
-                        <label htmlFor="academicInterests">Academic Interests</label>
-                        <Field as = "select" name="academicInterests" multiple>
-                            {academicInterestOptions.map((interest, index) => <option key={index} value={interest}>{capitalizeField(interest)}</option>)}
-                        </Field>
-
-                        <label htmlFor="gradeRange">Grade Range</label>
-                        <Field as = "select" name="gradeRange" multiple>
-                            {gradeRangeOptions.map((grade, index) => <option key={index} value={index}>{grade}</option>)}
-                        </Field>
-
-                        <button type="submit">Submit</button>
-                    </Form>
-                    )}
-                    
-                </Formik>
-            </div>
+          <div>
+          <h1>Edit Profile</h1>
+          {user ? 
+            user.isLoggedIn ?
+              editProfileForm(user):
+            <h1>Loading</h1>:
+            <h1>Loading</h1>
+          }
+      </div>
       </>
     )
   
 };
+
+const editProfileForm = (user: GetUserResponse) =>{
+  const EditUserSchema = Yup.object().shape({
+    userType: Yup.string()
+        .required("Required"),
+    firstName: Yup.string()
+        .min(2, 'Too Short!')
+        .max(50, 'Too Long!')
+        .required('Required'),
+    lastName: Yup.string()
+        .min(2, 'Too Short!')
+        .max(50, 'Too Long!')
+        .required('Required'),
+    academicInterest: Yup.array(),
+    gradeRange: Yup.array()
+  });
+
+
+
+  return (
+    <Formik
+      enableReinitialize
+      validationSchema={EditUserSchema}
+      initialValues={{userType: user.userType, firstName: user.firstName, lastName: user.lastName, academicInterest: user.academicInterest, gradeRange: user.gradeRange}}
+      onSubmit={(values, actions) => {
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+            actions.setSubmitting(false);
+          }, 1000);
+        }}
+    >
+      {(props: FormikProps<any>) => (
+      <Form className={styles.loginForm}>
+        <Field 
+            name="userType"
+            className={styles.formInput}
+            component={Autocomplete}
+            label="User Type"
+            options={userTypes}
+            getOptionLabel={(option: string) => capitalizeField(option)}
+            renderInput={(params: AutocompleteRenderInputParams) => (
+              <MaterialTextField
+                {...params}
+                name="userType"
+                label="User Type"
+                variant="outlined"
+              />
+            )}
+            >
+        </Field>
+
+        <Field name="firstName" className={styles.formInput} component={TextField} type="text" label="First Name"/>
+        <Field name="lastName" className={styles.formInput} component={TextField} type="text"  label="Last Name"/>
+
+        <Field 
+            name="academicInterest"
+            className={styles.formInput}
+            component={Autocomplete}
+            label="Academic Interests"
+            options={academicInterestOptions}
+            multiple
+            getOptionLabel={(option: string) => capitalizeField(option)}
+            renderInput={(params: AutocompleteRenderInputParams) => (
+              <MaterialTextField
+                {...params}
+                name="academicInterest"
+                label="Academic Interests"
+                variant="outlined"
+              />
+            )}
+            >
+        </Field>
+
+
+        <Field 
+            name="gradeRange"
+            className={styles.formInput}
+            component={Autocomplete}
+            label="Grade Range"
+            options={gradeRangeOptions.map((x, i) => i)}
+            getOptionLabel={(option: number) => gradeRangeOptions[option]}
+            multiple
+            renderInput={(params: AutocompleteRenderInputParams) => (
+              <MaterialTextField
+                {...params}
+                name="gradeRange"
+                label="Grade Range"
+                variant="outlined"
+              />
+            )}
+            >
+        </Field>
+        <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
+      </Form>
+      )}
+      
+    </Formik>
+  )
+}
 
 export default EditProfile;
