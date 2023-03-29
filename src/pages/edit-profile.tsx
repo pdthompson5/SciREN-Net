@@ -8,13 +8,17 @@ import {TextField, Autocomplete, Select, AutocompleteRenderInputParams} from "fo
 import {TextField as MaterialTextField} from "@mui/material"
 import * as Yup from 'yup';
 import { GetUserResponse } from "./api/userSession";
-import { academicInterestOptions, gradeRangeOptions, userTypes } from "./api/user";
+// import { academicInterestOptions, gradeRangeOptions, userTypes } from "./api/user";
 
 
 /* Registration Page */
-//TODO: Apply templated handlers
-//TODO: Template academic interest form elements
 // TODO: Actually edit database -> This should just update the fields
+// TODO: After editing the user I should revalidate their profile page and redirect to that page
+
+// TODO: These can't go in /api/user because it still result in front-end/back-end errors 
+export const gradeRangeOptions = ["Kindergarten", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6", "Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"]
+export const academicInterestOptions = ["mathematics", "biology", "chemistry", "social studies", "history", "sociology"];
+export const userTypes = ["researcher", "teacher", "student", "admin"]
 
 const capitalizeField = (field: string) => {
     const words = field.split(" ");
