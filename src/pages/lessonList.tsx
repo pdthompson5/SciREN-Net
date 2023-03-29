@@ -4,7 +4,13 @@ import { GetStaticProps, GetStaticPropsContext } from "next";
 import { LessonLink, Author, Lesson, getLessonPlans } from "@/lib/database";
 import styles from "@/styles/List.module.css";
 
-const LessonList: React.FC<Lesson[]> = (props: Lesson[]) => {
+interface LessonListProps {
+  lessons: Lesson[];
+  undefined: boolean;
+}
+
+const LessonList: React.FC<LessonListProps> = (props: LessonListProps) => {
+  console.log(props.lessons);
   return (
     <>
       <Head>
@@ -14,16 +20,18 @@ const LessonList: React.FC<Lesson[]> = (props: Lesson[]) => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main>
-        <LessonFragment lessons={[]} />
+        <LessonFragment lessons={props.lessons} />
       </main>
     </>
   );
 };
 
 export const getStaticProps = async (context: GetStaticPropsContext) => {
-  const lessons = await getLessonPlans().catch((reason) => undefined);
+  const lessons: Lesson[] | undefined = await getLessonPlans().catch(
+    (reason) => undefined
+  );
   const notFound = !lessons;
-  return { props: { notFound } };
+  return { props: { lessons, notFound } };
 };
 
 const LessonFragment: React.FC<{

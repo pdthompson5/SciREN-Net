@@ -143,5 +143,5 @@ export const getLessonPlans = async (
     })
   );
   client.close();
-  return lessonPlans;
+  return TypedLessonPlans;
 };
