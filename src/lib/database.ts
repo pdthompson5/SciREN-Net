@@ -1,5 +1,27 @@
 import { MongoClient, ObjectId, WithId } from "mongodb";
 
+export interface LessonLink {
+  text: string;
+  href: string;
+}
+
+export interface Author {
+  name: string;
+  contact: string;
+  position: string;
+}
+
+export interface Lesson {
+  _id: string;
+  title: string;
+  year: number;
+  abstract: string;
+  mediaLinks: LessonLink[];
+  contentLinks: LessonLink[];
+  authors: Author[];
+  gradeLevel: number[];
+}
+
 export const establishMongoConnection = async () => {
   const mongoURI = process.env.MONGO_URI;
   if (!mongoURI) {
@@ -88,4 +110,42 @@ export const getAllUserIDs = async () => {
 
   client.close();
   return userIDsStrings;
+};
+
+const convertLessonLinks = (links: LessonLink[]) => {};
+
+export const getLessonPlans = async (
+  sortKey?: string, // Fields to sort by, TODO: make this an enum
+  sortDirection?: number // 1 for ascending, -1 for descending
+) => {
+  // Get Lesson Plans for listing page
+  const client = await establishMongoConnection();
+  const collection = client.db("sciren").collection("lessons");
+  const lessonPlans = await collection
+    .find(
+      {}, // Filter
+      {
+        projection: {
+          _id: 1,
+          courseOfStudy: 0,
+        },
+      }
+    )
+    .toArray();
+  // let TypedLessonPlans: Lesson[];
+  lessonPlans.forEach((lesson) => {
+    console.log(typeof lesson.authors);
+    console.log(lesson.authors);
+    // lesson._id = lesson._id.toString();
+
+    // TypedLessonPlans.push({
+    //   _id: lesson._id.toString(),
+    //   title: lesson.title,
+    //   year: lesson.year,
+    //   abstract: lesson.abstract,
+    //   mediaLinks: convertLessonLinks(lesson.mediaLinks),
+    // } as Lesson);
+  });
+  client.close();
+  return lessonPlans;
 };
