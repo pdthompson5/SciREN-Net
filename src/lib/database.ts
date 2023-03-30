@@ -112,6 +112,13 @@ export const getAllUserIDs = async () => {
   return userIDsStrings;
 };
 
+const mapLinks = (links: any) => {
+  return links.map((link: any) => ({
+    text: link.text,
+    href: link.href,
+  }));
+};
+
 export const getLessonPlans = async (
   sortKey?: string, // Fields to sort by, TODO: make this an enum
   sortDirection?: number // 1 for ascending, -1 for descending
@@ -130,6 +137,12 @@ export const getLessonPlans = async (
       }
     )
     .toArray();
+
+  console.log("------------------");
+  console.log(lessonPlans[0]);
+  console.log("------------------");
+  console.log(lessonPlans[0].contentLinks);
+  console.log("------------------");
   const TypedLessonPlans: Lesson[] = lessonPlans.map(
     (lesson): Lesson => ({
       _id: lesson._id.toString(),
@@ -137,7 +150,7 @@ export const getLessonPlans = async (
       year: lesson.year,
       abstract: lesson.abstract,
       mediaLinks: lesson.mediaLinks as LessonLink[],
-      contentLinks: lesson.contentLinks as LessonLink[],
+      contentLinks: mapLinks(lesson.contentLinks),
       authors: lesson.authors as Author[],
       gradeLevel: lesson.gradeLevel as number[],
     })

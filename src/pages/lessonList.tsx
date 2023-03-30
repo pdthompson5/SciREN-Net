@@ -10,7 +10,6 @@ interface LessonListProps {
 }
 
 const LessonList: React.FC<LessonListProps> = (props: LessonListProps) => {
-  console.log(props.lessons);
   return (
     <>
       <Head>
@@ -19,7 +18,7 @@ const LessonList: React.FC<LessonListProps> = (props: LessonListProps) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <main>
+      <main className={styles.mainContainer}>
         <LessonFragment lessons={props.lessons} />
       </main>
     </>
@@ -42,10 +41,26 @@ const LessonFragment: React.FC<{
       {" "}
       {
         // Wrapped in a fragment to satisfy type checks
-        props.lessons.map((chp: Lesson) => (
-          <React.Fragment key={chp._id}>
+        props.lessons.map((lesson: Lesson) => (
+          <React.Fragment key={lesson._id}>
             <div className={styles.lessonContainer}>
-              <h2 className="lessonTitle">{chp.title}</h2>
+              <h2 className="lessonTitle">
+                {lesson.title} - {lesson.year}
+              </h2>
+              <text className={styles.authorText}>
+                By: {lesson.authors[0].name}
+              </text>
+              <p className={styles.lessonAbstract}>{lesson.abstract}</p>
+              {lesson.mediaLinks[0] ? (
+                <a
+                  className={styles.mediaLink}
+                  href={lesson.mediaLinks[0].href}
+                >
+                  Read More
+                </a>
+              ) : (
+                <></>
+              )}
             </div>
           </React.Fragment>
         ))

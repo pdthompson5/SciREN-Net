@@ -1,0 +1,25 @@
+.mainContainer {
+  background: #8e8e8e;
+  padding: 25px;
+}
+
+.lessonContainer {
+  background: #fff;
+  padding: 25px;
+  margin: 25px 0;
+  border-radius: 5px;
+  max-width: 60vw;
+  margin: auto auto;
+  margin-top: 20px;
+}
+
+.authorText {
+  font-size: 12px;
+  color: #23118c;
+}
+
+.mediaLink {
+  margin-top: 5px;
+  text-decoration: underline;
+  color: #3c9bca;
+}
