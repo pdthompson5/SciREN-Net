@@ -16,6 +16,7 @@ export interface Lesson {
   title: string;
   year: number;
   abstract: string;
+  subject: string;
   mediaLinks: LessonLink[];
   contentLinks: LessonLink[];
   authors: Author[];
@@ -126,18 +127,8 @@ export const getLessonPlans = async (
   // Get Lesson Plans for listing page
   const client = await establishMongoConnection();
   const collection = client.db("sciren").collection("lessons");
-  const lessonPlans = await collection
-    .find(
-      {}, // Filter
-      {
-        projection: {
-          _id: 1,
-          courseOfStudy: 0,
-        },
-      }
-    )
-    .toArray();
-
+  const lessonPlans = await collection.find({}).toArray();
+  client.close();
   const TypedLessonPlans: Lesson[] = lessonPlans.map(
     (lesson): Lesson => ({
       _id: lesson._id.toString(),
@@ -148,8 +139,9 @@ export const getLessonPlans = async (
       contentLinks: mapLinks(lesson.contentLinks),
       authors: lesson.authors as Author[],
       gradeLevel: lesson.gradeLevel as number[],
+      subject: lesson.subject,
     })
   );
-  client.close();
+
   return TypedLessonPlans;
 };

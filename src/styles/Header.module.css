@@ -4,9 +4,10 @@
   table-layout: fixed;
   padding: 10px;
   text-align: center;
-  background: #1abc9c;
+  background: rgb(0 0 0 / 30%);
   color: white;
   font-size: 20px;
+  backdrop-filter: blur(5px);
 }
 
 .headerElement {
