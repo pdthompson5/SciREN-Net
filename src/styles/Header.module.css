@@ -1,16 +1,15 @@
 .header {
-    display: table;
-    width: 100%;
-    table-layout: fixed;  
-    padding: 10px;
-    text-align: center;
-    background: #1abc9c;
-    color: white;
-    font-size: 20px;
+  display: table;
+  width: 100%;
+  table-layout: fixed;
+  padding: 10px;
+  text-align: center;
+  background: #1abc9c;
+  color: white;
+  font-size: 20px;
 }
 
-
 .headerElement {
-    display: table-cell;
-    text-align: center;
+  display: table-cell;
+  text-align: center;
 }

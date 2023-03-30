@@ -138,11 +138,6 @@ export const getLessonPlans = async (
     )
     .toArray();
 
-  console.log("------------------");
-  console.log(lessonPlans[0]);
-  console.log("------------------");
-  console.log(lessonPlans[0].contentLinks);
-  console.log("------------------");
   const TypedLessonPlans: Lesson[] = lessonPlans.map(
     (lesson): Lesson => ({
       _id: lesson._id.toString(),

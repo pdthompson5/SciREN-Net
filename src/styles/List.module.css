@@ -1,6 +1,6 @@
 .mainContainer {
-  background: #8e8e8e;
-  padding: 25px;
+  background: #343434;
+  padding: 10px 20vw 10px 10vw;
 }
 
 .lessonContainer {
@@ -8,18 +8,34 @@
   padding: 25px;
   margin: 25px 0;
   border-radius: 5px;
-  max-width: 60vw;
+  max-width: 80vw;
   margin: auto auto;
   margin-top: 20px;
 }
 
 .authorText {
-  font-size: 12px;
-  color: #23118c;
+  font-size: 14px;
+  color: #313131;
+  margin-bottom: 10px;
 }
 
-.mediaLink {
-  margin-top: 5px;
-  text-decoration: underline;
-  color: #3c9bca;
+.linkContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.listTitle {
+  color: aliceblue;
+}
+
+.lessonFooter {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+  color: #b7b4c4;
+}
+
+.divider {
+  margin: 0;
 }
