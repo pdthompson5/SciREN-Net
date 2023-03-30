@@ -4,44 +4,50 @@ import { establishMongoConnection } from "@/lib/database";
 import postUser, { PostUserRequest, PostUserResponse } from "./user";
 import { UserWithID } from "@/lib/database";
 
- 
-// I probably want post user request and id 
+
+type PostUserRequestWithID = PostUserRequest & {userID: string}
 export default async function postEditUser(
   req: NextApiRequest,
   res: NextApiResponse<PostUserResponse>
 ) {
     console.log((await req.body).type)
-    const reqBody: PostUserRequest = await req.body;
+    const reqBody: PostUserRequestWithID = await JSON.parse(req.body);
     const mclient = await establishMongoConnection();
     const userCollection = mclient.db("sciren").collection("users");
     console.log(reqBody)
 
+    console.log("email")
+    console.log(reqBody.email)
     // TODO: This seems inefficient 
     if (
         (await userCollection.countDocuments({
         email: reqBody.email,
         })) < 1
     ) {
+        console.log((await userCollection.countDocuments({
+            email: reqBody.email,
+            })))
         res.status(404).json({
         message: "User not found with given email.",
         });
         return;
     }
 
-
+    const { userID, ...reqWithoutUserID }= reqBody;
+    
     userCollection.updateOne(
         {email: reqBody.email},
-        {$set: reqBody}
+        {$set: reqWithoutUserID}
     )
 
     // TODO: There is probably a better way to get _id
-    userCollection.findOne({email: reqBody.email})
+    // userCollection.findOne({email: reqBody.email})
 
-    const userInfoCursor = userCollection.findOne({ email: reqBody.email }, {});
-    const userInfo = (await userInfoCursor) as UserWithID;
+    // const userInfoCursor = userCollection.findOne({ email: reqBody.email }, {});
+    // const userInfo = (await userInfoCursor) as UserWithID;
 
 
-    res.revalidate(`/profiles/${userInfo._id}`)
+    res.revalidate(`/profiles/${reqBody.userID}`)
 
 
     // const resp = await fetch(`/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}`, {

@@ -8,6 +8,9 @@ import {TextField, Autocomplete, Select, AutocompleteRenderInputParams} from "fo
 import {TextField as MaterialTextField} from "@mui/material"
 import * as Yup from 'yup';
 import { GetUserResponse } from "./api/userSession";
+import { KeyedMutator, useSWRConfig } from "swr";
+import { ScopedMutator } from "swr/_internal";
+import fetchJson from "@/lib/fetchJson";
 // import { academicInterestOptions, gradeRangeOptions, userTypes } from "./api/user";
 
 
@@ -16,6 +19,7 @@ import { GetUserResponse } from "./api/userSession";
 // TODO: After editing the user I should revalidate their profile page and redirect to that page
 
 // TODO: These can't go in /api/user because it still result in front-end/back-end errors 
+// TODO: Consider making this an interface
 export const gradeRangeOptions = ["Kindergarten", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6", "Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"]
 export const academicInterestOptions = ["mathematics", "biology", "chemistry", "social studies", "history", "sociology"];
 export const userTypes = ["researcher", "teacher", "student", "admin"]
@@ -30,14 +34,18 @@ const capitalizeField = (field: string) => {
 // Can I just delete the old user and add a new one? Probably not 
 const EditProfile = () => {
 
-    const {user} = useUser((user) => "/login")
+    const { mutate } = useSWRConfig()
+
+
+    const {user, mutateUser} = useUser((user) => "/login")
+    // console.log(user)
     return (
         <>
           <div>
           <h1>Edit Profile</h1>
           {user ? 
             user.isLoggedIn ?
-              editProfileForm(user):
+              editProfileForm(user, mutateUser, mutate):
             <h1>Loading</h1>:
             <h1>Loading</h1>
           }
@@ -47,7 +55,7 @@ const EditProfile = () => {
   
 };
 
-const editProfileForm = (user: GetUserResponse) =>{
+const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUserResponse>, mutate: ScopedMutator) =>{
   const EditUserSchema = Yup.object().shape({
     userType: Yup.string()
         .required("Required"),
@@ -63,18 +71,38 @@ const editProfileForm = (user: GetUserResponse) =>{
     gradeRange: Yup.array()
   });
 
-
+// TODO: If academic interests or grade range are empty then add empty array
 
   return (
     <Formik
       enableReinitialize
       validationSchema={EditUserSchema}
       initialValues={{userType: user.userType, firstName: user.firstName, lastName: user.lastName, academicInterest: user.academicInterest, gradeRange: user.gradeRange}}
-      onSubmit={(values, actions) => {
-          setTimeout(() => {
-            alert(JSON.stringify(values, null, 2));
-            actions.setSubmitting(false);
-          }, 1000);
+      onSubmit={async (values, actions) => {    
+          const valuesWithID = {
+            userID: user.userID,
+            email: user.email,
+            ...values
+          }
+          const resp = await fetch("/api/editUser", {
+          method: "POST",
+          body: JSON.stringify(valuesWithID),
+          });
+          // TODO: Redirect to profile
+          // TODO: If there is an error with updating the user how should we report it?
+          // TODO: This still isn't working
+          // TODO: Mutate doesn't actually work since we are just fetching the cookie
+
+          const newUserInfo = {
+            ...user,
+            ...valuesWithID
+          }
+
+
+          const resp2 = await mutateUser(await fetchJson("/api/userSession", {method: "POST", body: JSON.stringify(newUserInfo)}))
+          console.log(resp2)
+          console.log(user)
+          actions.setSubmitting(false)
         }}
     >
       {(props: FormikProps<any>) => (
