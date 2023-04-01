@@ -87,7 +87,6 @@ const LessonCard: React.FC<Lesson> = (lesson: Lesson) => {
         </text>
 
         <hr className={styles.divider} />
-        {/* TODO: Expand expands the abstract  */}
         <div
           onMouseEnter={() => setIsCollapsed(false)}
           onMouseLeave={() => setIsCollapsed(true)}
@@ -95,9 +94,7 @@ const LessonCard: React.FC<Lesson> = (lesson: Lesson) => {
             isCollapsed ? styles.lessonAbstractCollapsed : ""
           }`}
         >
-          {/* {isExpanded ? lesson.abstract : lesson.abstract.split(".")} */}
           {lesson.abstract}
-          {/* {lesson.abstract.slice(0, 200)}... Expand */}
         </div>
 
         <div className={styles.gradeBox}>
@@ -116,6 +113,18 @@ const LessonCard: React.FC<Lesson> = (lesson: Lesson) => {
               href={lesson.mediaLinks[0].href}
             >
               View PDF
+            </Button>
+          ) : (
+            <></>
+          )}
+          {lesson.contentLinks[0] ? (
+            <Button
+              variant="contained"
+              color="primary"
+              className={styles.optionalLink}
+              href={lesson.contentLinks[0].href}
+            >
+              View Profile
             </Button>
           ) : (
             <></>

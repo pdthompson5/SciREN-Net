@@ -64,3 +64,8 @@
 .gradeBox {
   margin-top: 10px;
 }
+
+.optionalLink {
+  color: #b7b4c4;
+  text-decoration: none;
+}
