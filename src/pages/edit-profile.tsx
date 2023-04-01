@@ -32,14 +32,11 @@ const capitalizeField = (field: string) => {
     }).join(" ");
 }
 
-// Can I just delete the old user and add a new one? Probably not 
+ 
 const EditProfile = () => {
-
     const { mutate } = useSWRConfig()
 
-
     const {user, mutateUser} = useUser((user) => "/login")
-    // console.log(user)
     return (
         <>
           <div>
@@ -47,8 +44,8 @@ const EditProfile = () => {
           {user ? 
             user.isLoggedIn ?
               editProfileForm(user, mutateUser, mutate):
-            <h1>Loading</h1>:
-            <h1>Loading</h1>
+              <h1>Loading</h1>
+            :<h1>Loading</h1>  
           }
       </div>
       </>
@@ -72,13 +69,11 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
     gradeRange: Yup.array()
   });
 
-// TODO: If academic interests or grade range are empty then add empty array
-
   return (
     <Formik
       enableReinitialize
       validationSchema={EditUserSchema}
-      initialValues={{userType: user?.userType, firstName: user?.firstName, lastName: user?.lastName, academicInterest: user?.academicInterest, gradeRange: user?.gradeRange}}
+      initialValues={{userType: user.userType, firstName: user.firstName, lastName: user.lastName, academicInterest: user.academicInterest, gradeRange: user.gradeRange}}
       onSubmit={async (values, actions) => {    
           const valuesWithID = {
             userID: user.userID,
@@ -100,12 +95,8 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
             return;
           }
 
-
           // TODO: If there is an error with updating the user how should we report it?
-          // TODO: This still isn't working
-          // TODO: Mutate doesn't actually work since we are just fetching the cookie
           await Router.push(`/profiles/${user.userID}`)
-
 
           await mutateUser(
             await fetchJson("/api/userSession", {
@@ -116,8 +107,6 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
             false
           );
 
-
-          console.log(user)
           actions.setSubmitting(false)
         }}
     >
@@ -162,7 +151,6 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
             )}
             >
         </Field>
-
 
         <Field 
             name="gradeRange"

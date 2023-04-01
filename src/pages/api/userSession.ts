@@ -42,7 +42,6 @@ async function getUser(
   if(req.method === "GET"){
     if (!req.session.user) {
       console.error("No user found.");
-      // TODO: Figure out if we want to keep this as a 200
       res.status(200).json(EmptyUserResponse);
       return;
     }
@@ -52,17 +51,14 @@ async function getUser(
       isLoggedIn: true,
     });
   }
-  if(req.method === "POST") {
-    console.log(req.body)
+  if(req.method === "POST"){
     req.session.user = req.body;
     await req.session.save();
-    console.log(req.body);
 
     res.status(200).json({
-      ...req.body.user,
       isLoggedIn: true,
+      ...req.body
     });
-    console.log("Here")
     return;
   }
 }

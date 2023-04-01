@@ -37,7 +37,7 @@ const UserProfile: React.FC<ProfileInformation> = (
             src="https://github.com/s-kirby.png"
           />
           {props.firstName} {props.lastName}
-          {user && user.isLoggedIn && user.email === props.email && (
+          {isCurrentUser && (
             <Link href="/edit-profile">
               <Image
                 height="24"
