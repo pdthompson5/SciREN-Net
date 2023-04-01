@@ -53,7 +53,9 @@ async function getUser(
     });
   }
   if(req.method === "POST") {
-    req.session.user = JSON.parse(req.body);
+    console.log(req.body)
+    req.session.user = req.body;
+    await req.session.save();
     console.log(req.body);
 
     res.status(200).json({

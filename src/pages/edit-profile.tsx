@@ -10,7 +10,8 @@ import * as Yup from 'yup';
 import { GetUserResponse } from "./api/userSession";
 import { KeyedMutator, useSWRConfig } from "swr";
 import { ScopedMutator } from "swr/_internal";
-import fetchJson from "@/lib/fetchJson";
+import fetchJson, { FetchError } from "@/lib/fetchJson";
+import Router from "next/router";
 // import { academicInterestOptions, gradeRangeOptions, userTypes } from "./api/user";
 
 
@@ -77,30 +78,45 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
     <Formik
       enableReinitialize
       validationSchema={EditUserSchema}
-      initialValues={{userType: user.userType, firstName: user.firstName, lastName: user.lastName, academicInterest: user.academicInterest, gradeRange: user.gradeRange}}
+      initialValues={{userType: user?.userType, firstName: user?.firstName, lastName: user?.lastName, academicInterest: user?.academicInterest, gradeRange: user?.gradeRange}}
       onSubmit={async (values, actions) => {    
           const valuesWithID = {
             userID: user.userID,
-            email: user.email,
+            email: "nonsense",
             ...values
           }
-          const resp = await fetch("/api/editUser", {
-          method: "POST",
-          body: JSON.stringify(valuesWithID),
-          });
-          // TODO: Redirect to profile
+          // TODO: Catch error in updating user
+          try{
+            await fetch("/api/editUser", {
+              method: "POST",
+              body: JSON.stringify(valuesWithID),
+            });
+          }
+          catch(error){
+            if(error instanceof Error){
+              actions.setStatus(error.message);
+            }
+            actions.setSubmitting(false);
+            return;
+          }
+
+
           // TODO: If there is an error with updating the user how should we report it?
           // TODO: This still isn't working
           // TODO: Mutate doesn't actually work since we are just fetching the cookie
-
-          const newUserInfo = {
-            ...user,
-            ...valuesWithID
-          }
+          await Router.push(`/profiles/${user.userID}`)
 
 
-          const resp2 = await mutateUser(await fetchJson("/api/userSession", {method: "POST", body: JSON.stringify(newUserInfo)}))
-          console.log(resp2)
+          await mutateUser(
+            await fetchJson("/api/userSession", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(valuesWithID),
+            }),
+            false
+          );
+
+
           console.log(user)
           actions.setSubmitting(false)
         }}

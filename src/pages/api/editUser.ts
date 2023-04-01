@@ -47,7 +47,7 @@ export default async function postEditUser(
     // const userInfo = (await userInfoCursor) as UserWithID;
 
 
-    res.revalidate(`/profiles/${reqBody.userID}`)
+    await res.revalidate(`/profiles/${reqBody.userID}`)
 
 
     // const resp = await fetch(`/api/revalidate?secret=${process.env.REVALIDATION_TOKEN}`, {
