@@ -82,7 +82,7 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
       onSubmit={async (values, actions) => {    
           const valuesWithID = {
             userID: user.userID,
-            email: "nonsense",
+            email: user.email,
             ...values
           }
           // TODO: Catch error in updating user
