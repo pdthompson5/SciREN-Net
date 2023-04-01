@@ -23,6 +23,8 @@ export interface Lesson {
   gradeLevel: number[];
 }
 
+export const foo = "bar";
+
 export const establishMongoConnection = async () => {
   const mongoURI = process.env.MONGO_URI;
   if (!mongoURI) {

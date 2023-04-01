@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import { GetStaticProps, GetStaticPropsContext } from "next";
-import { LessonLink, Author, Lesson, getLessonPlans } from "@/lib/database";
+import { NextRouter, useRouter } from "next/router";
+import { redirect } from "next/navigation";
+import { Lesson, getLessonPlans } from "@/lib/database";
 import styles from "@/styles/List.module.css";
 import Button from "@mui/material/Button";
-
+import useUser from "@/lib/useUser";
 interface LessonListProps {
   lessons: Lesson[];
   undefined: boolean;
 }
 
-export const GradeMapping = [
+const GradeMapping = [
   "Pre-K",
   "Kindergarten",
   "1st",
@@ -29,21 +31,36 @@ export const GradeMapping = [
 ];
 
 const LessonList: React.FC<LessonListProps> = (props: LessonListProps) => {
-  return (
-    <>
-      <Head>
-        <title>Lesson Plans - SciREN</title>
-        <meta name="description" content="SciREN Lesson Plan List" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-      <main className={styles.mainContainer}>
-        <h1 className={styles.listTitle}>SciREN Lesson Plans - Alabama</h1>
-        <LessonFragment lessons={props.lessons} />
-        <Footer />
-      </main>
-    </>
-  );
+  const router = useRouter();
+  const { user, mutateUser } = useUser();
+  useEffect(() => {
+    if (!user) {
+      router.push("/login");
+    }
+  }, [user, router]);
+  if (user) {
+    return (
+      <>
+        <Head>
+          <title>Lesson Plans - SciREN</title>
+          <meta name="description" content="SciREN Lesson Plan List" />
+          <meta name="viewport" content="width=device-width, initial-scale=1" />
+          <link rel="icon" href="/favicon.ico" />
+        </Head>
+        <main className={styles.mainContainer}>
+          <h1 className={styles.listTitle}>SciREN Lesson Plans - Alabama</h1>
+          <LessonFragment lessons={props.lessons} />
+          <Footer />
+        </main>
+      </>
+    );
+  } else {
+    return (
+      <>
+        <h1>Loading...</h1>
+      </>
+    );
+  }
 };
 
 const Footer: React.FC = () => {
@@ -59,7 +76,9 @@ const Footer: React.FC = () => {
   );
 };
 
-export const getStaticProps = async (context: GetStaticPropsContext) => {
+export const getStaticProps: GetStaticProps = async (
+  context: GetStaticPropsContext
+) => {
   const lessons: Lesson[] | undefined = await getLessonPlans().catch(
     (reason) => undefined
   );
@@ -124,7 +143,7 @@ const LessonCard: React.FC<Lesson> = (lesson: Lesson) => {
               className={styles.optionalLink}
               href={lesson.contentLinks[0].href}
             >
-              View Profile
+              Author Bio
             </Button>
           ) : (
             <></>

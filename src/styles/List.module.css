@@ -66,6 +66,8 @@
 }
 
 .optionalLink {
-  color: #b7b4c4;
   text-decoration: none;
+  position: relative;
+  bottom: 0px;
+  left: 0px;
 }
