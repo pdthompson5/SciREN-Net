@@ -69,8 +69,9 @@ export const getStaticProps = async ({
   userID: string;
 }>) => {
   const { userID } = params as { userID: string };
-  const user = await getProfileInformation(userID);
-  return { props: user };
+  const user = await getProfileInformation(userID).catch((reason) => undefined);
+  const notFound = !user
+  return { props: user, notFound };
 };
 
 //Return all paths
@@ -82,7 +83,7 @@ export const getStaticPaths = async () => {
       userID: id,
     },
   }));
-  //TODO: Determine how to use profile-not-found page for fallback
+
   return { paths: params, fallback: false };
 };
 
