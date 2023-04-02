@@ -7,34 +7,30 @@
   min-height: 100vh;
 }
 
-  .bggradient{
-    background-image: linear-gradient(rgba(89, 187, 190, 0.979), rgba(61, 150, 98, 0.849));
-  }
+.App {
+  text-align: center;
+}
 
-  .App{
-    text-align: center;
-  }
+.link {
+  color: white;
+  text-decoration: none;
+  display: inline;
+  padding: 20px 20px;
+  font-weight: 700;
+  font-size: large;
+  cursor: pointer;
+}
 
-  .link{
-    color: white;
-    text-decoration: none;
-    display: inline;
-    padding: 20px 20px;
-    font-weight: 700;
-    font-size: large;
-    cursor: pointer;
-  }
+.about {
+  height: 20vh;
+}
 
-  .about {
-    height: 20vh;
-  }
+.welcome {
+  height: 2vh;
+}
 
-  .welcome {
-    height: 2vh;
-  }
-
-  .abouttext{
-    padding: 100px;
-    width: 50vw;
-    text-align: justify
-  }
+.abouttext {
+  padding: 100px;
+  width: 50vw;
+  text-align: justify;
+}

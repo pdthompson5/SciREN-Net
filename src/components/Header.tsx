@@ -4,7 +4,7 @@ import Link from "next/link";
 import useUser from "@/lib/useUser";
 import Sticky from "react-stickynode";
 import fetchJson from "@/lib/fetchJson";
-import { useRouter, Router, NextRouter } from "next/router";
+import { useRouter, NextRouter } from "next/router";
 import { GetUserResponse } from "@/pages/api/userSession";
 import { KeyedMutator } from "swr";
 
@@ -33,6 +33,9 @@ const logged_in_header_elements = (
   mutateUser: KeyedMutator<GetUserResponse>
 ) => {
   return [
+    <Link href="/lessons" className={styles.headerElement} key="login">
+      Lesson Plans
+    </Link>,
     <Link
       href={`/profiles/${user.userID}`}
       className={styles.headerElement}
