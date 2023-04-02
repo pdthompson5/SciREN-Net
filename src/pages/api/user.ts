@@ -17,12 +17,10 @@ export type PostUserRequest = Pick<
   | "gradeRange"
 >;
 
-
 export default async function postUser(
   req: NextApiRequest,
   res: NextApiResponse<PostUserResponse>
 ) {
-  // TODO: How is this working is req.body is an object rather than json text?
   const reqBody: PostUserRequest = JSON.parse(await req.body);
   const mclient = await establishMongoConnection();
   const userCollection = mclient.db("sciren").collection("users");

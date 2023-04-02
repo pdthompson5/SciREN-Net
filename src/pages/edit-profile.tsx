@@ -1,24 +1,38 @@
 import React from "react";
 import styles from "@/styles/Form.module.css";
-import { Field, Form, Formik, FormikProps} from "formik";
+import { Field, Form, Formik} from "formik";
 
 import useUser from "@/lib/useUser";
-import {Box, Button, Container, Stack} from "@mui/material"
+import {Button, Container} from "@mui/material"
 
-import {TextField, Autocomplete, Select, AutocompleteRenderInputParams} from "formik-mui"
+import {TextField, Autocomplete, AutocompleteRenderInputParams} from "formik-mui"
 import {TextField as MaterialTextField} from "@mui/material"
 import * as Yup from 'yup';
 import { GetUserResponse } from "./api/userSession";
 import { KeyedMutator, useSWRConfig } from "swr";
 import { ScopedMutator } from "swr/_internal";
-import fetchJson, { FetchError } from "@/lib/fetchJson";
+import fetchJson from "@/lib/fetchJson";
 import Router from "next/router";
-import Grid from "@mui/material/Unstable_Grid2";
 
 
+export const gradeRangeOptions = [
+  "Pre-K",
+  "Kindergarten",
+  "1st",
+  "2nd",
+  "3rd",
+  "4th",
+  "5th",
+  "6th",
+  "7th",
+  "8th",
+  "9th",
+  "10th",
+  "11th",
+  "12th",
+  "College",
+];
 
-/* Registration Page */
-export const gradeRangeOptions = ["Kindergarten", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6", "Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"]
 export const academicInterestOptions = ["mathematics", "biology", "chemistry", "social studies", "history", "sociology"];
 export const userTypes = ["researcher", "teacher", "student", "admin"]
 

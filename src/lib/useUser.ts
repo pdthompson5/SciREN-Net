@@ -14,7 +14,6 @@ export default function useUser(
   const { data: resp, mutate: mutateUser } =
     useSWR<GetUserResponse>("/api/userSession");
 
-  // TODO: Figure out if we want to do any error handling here
   useEffect(() => {
     if (resp === undefined) {
       return;

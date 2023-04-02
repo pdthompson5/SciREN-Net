@@ -19,7 +19,6 @@ type AcademicInterestClass =
 //TODO: Apply templated handlers
 //TODO: Template academic interest form elements
 
-// TODO: I don't think that I need to pull these out actually
 // Field validation
 export const validateEmail = (e: string): boolean => {
   const regex =
