@@ -29,7 +29,7 @@ const Register: React.FC = () => {
   const [lastName, setLastName] = useState("");
   // Three academic interests allowed
   const [academicInterests, setAcademicInterests] = useState(["mathematics"]);
-  const [gradeRange, setGradeRange] = useState([]);
+  const [gradeRange, setGradeRange] = useState<number[]>([]);
   const [userType, setUserType] = useState<UserType>("researcher");
 
   // state for submit, error
@@ -52,7 +52,7 @@ const Register: React.FC = () => {
         selectedValues.push(+options[i].value);
       }
     }
-    setGradeRange(event.target.value); // Always returns sorted.
+    setGradeRange(selectedValues); // Always returns sorted.
     setSubmitted(false);
   };
   const handleAcademicInterests = (event: any) => {
@@ -218,19 +218,21 @@ const Register: React.FC = () => {
             className={styles.formInput}
           >
             {/* LOL GORE */}
-            <option value={0}>Kindergarten</option>
-            <option value={1}>Grade 1</option>
-            <option value={2}>Grade 2</option>
-            <option value={3}>Grade 3</option>
-            <option value={4}>Grade 4</option>
-            <option value={5}>Grade 5</option>
-            <option value={6}>Grade 6</option>
-            <option value={7}>Grade 7</option>
-            <option value={8}>Grade 8</option>
-            <option value={9}>Grade 9</option>
-            <option value={10}>Grade 10</option>
-            <option value={11}>Grade 11</option>
-            <option value={12}>Grade 12</option>
+            <option value={0}>Pre-K</option>
+            <option value={1}>Kindergarten</option>
+            <option value={2}>Grade 1</option>
+            <option value={3}>Grade 2</option>
+            <option value={4}>Grade 3</option>
+            <option value={5}>Grade 4</option>
+            <option value={6}>Grade 5</option>
+            <option value={7}>Grade 6</option>
+            <option value={8}>Grade 7</option>
+            <option value={9}>Grade 8</option>
+            <option value={10}>Grade 9</option>
+            <option value={11}>Grade 10</option>
+            <option value={12}>Grade 11</option>
+            <option value={13}>Grade 12</option>
+            <option value={14}>College</option>
           </select>
           {/* Email */}
           <label className={styles.loginLabel}>Email</label>
