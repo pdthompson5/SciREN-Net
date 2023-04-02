@@ -3,7 +3,8 @@ import styles from "@/styles/Form.module.css";
 import { Field, Form, Formik, FormikProps} from "formik";
 
 import useUser from "@/lib/useUser";
-import {Button} from "@mui/material"
+import {Box, Button, Container, Stack} from "@mui/material"
+
 import {TextField, Autocomplete, Select, AutocompleteRenderInputParams} from "formik-mui"
 import {TextField as MaterialTextField} from "@mui/material"
 import * as Yup from 'yup';
@@ -12,6 +13,8 @@ import { KeyedMutator, useSWRConfig } from "swr";
 import { ScopedMutator } from "swr/_internal";
 import fetchJson, { FetchError } from "@/lib/fetchJson";
 import Router from "next/router";
+import Grid from "@mui/material/Unstable_Grid2";
+
 
 
 /* Registration Page */
@@ -34,7 +37,6 @@ const EditProfile = () => {
     return (
         <>
           <div>
-          <h1>Edit Profile</h1>
           {user ? 
             user.isLoggedIn ?
               editProfileForm(user, mutateUser, mutate):
@@ -99,67 +101,74 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
         }}
     >
       {({status}) => (
-      <Form className={styles.loginForm}>
-        <Field 
-            name="userType"
-            className={styles.formInput}
-            component={Autocomplete}
-            label="User Type"
-            options={userTypes}
-            getOptionLabel={(option: string) => capitalizeField(option)}
-            renderInput={(params: AutocompleteRenderInputParams) => (
-              <MaterialTextField
-                {...params}
-                name="userType"
-                label="User Type"
-                variant="outlined"
-              />
-            )}
-            >
-        </Field>
+      <Form className={styles.formLayout}>
+        <Container>
+          <h1 className={styles.loginTitle}>Edit Profile</h1>
+          <Field 
+              name="userType"
+              className={styles.formInput}
+              component={Autocomplete}
+              label="User Type"
+              options={userTypes}
+              getOptionLabel={(option: string) => capitalizeField(option)}
+              renderInput={(params: AutocompleteRenderInputParams) => (
+                <MaterialTextField
+                  {...params}
+                  name="userType"
+                  label="User Type"
+                  variant="outlined"
+                />
+              )}
+              >
+          </Field>
 
-        <Field name="firstName" className={styles.formInput} component={TextField} type="text" label="First Name"/>
-        <Field name="lastName" className={styles.formInput} component={TextField} type="text"  label="Last Name"/>
+          <Field name="firstName" className={styles.formInput} component={TextField} variant="standard" size="medium" type="text" label="First Name"/>
+          <Field name="lastName" className={styles.formInput} component={TextField}  variant="standard" margin="normal" size="medium" type="text" label="Last Name"/>
 
-        <Field 
-            name="academicInterest"
-            className={styles.formInput}
-            component={Autocomplete}
-            label="Academic Interests"
-            options={academicInterestOptions}
-            multiple
-            getOptionLabel={(option: string) => capitalizeField(option)}
-            renderInput={(params: AutocompleteRenderInputParams) => (
-              <MaterialTextField
-                {...params}
-                name="academicInterest"
-                label="Academic Interests"
-                variant="outlined"
-              />
-            )}
-            >
-        </Field>
+          <Field 
+              name="academicInterest"
+              className={styles.formInput}
+              component={Autocomplete}
+              label="Academic Interests"
+              options={academicInterestOptions}
+              multiple
+              getOptionLabel={(option: string) => capitalizeField(option)}
+              renderInput={(params: AutocompleteRenderInputParams) => (
+                <MaterialTextField
+                  {...params}
+                  name="academicInterest"
+                  label="Academic Interests"
+                  variant="outlined"
+                />
+              )}
+              >
+          </Field>
 
-        <Field 
-            name="gradeRange"
-            className={styles.formInput}
-            component={Autocomplete}
-            label="Grade Range"
-            options={gradeRangeOptions.map((x, i) => i)}
-            getOptionLabel={(option: number) => gradeRangeOptions[option]}
-            multiple
-            renderInput={(params: AutocompleteRenderInputParams) => (
-              <MaterialTextField
-                {...params}
-                name="gradeRange"
-                label="Grade Range"
-                variant="outlined"
-              />
-            )}
-            >
-        </Field>
-        <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
-        { status && <p className={styles.error}>{status.message}</p>}
+
+          <Field 
+              name="gradeRange"
+              className={styles.formInput}
+              component={Autocomplete}
+              label="Grade Range"
+              options={gradeRangeOptions.map((x, i) => i)}
+              getOptionLabel={(option: number) => gradeRangeOptions[option]}
+              multiple
+              renderInput={(params: AutocompleteRenderInputParams) => (
+                <MaterialTextField
+                  {...params}
+                  name="gradeRange"
+                  label="Grade Range"
+                  variant="outlined"
+                />
+              )}
+              >
+          </Field>
+
+          <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
+
+
+          { status && <p className={styles.error}>{status.message}</p>}
+        </Container>
       </Form>
       )}
       
