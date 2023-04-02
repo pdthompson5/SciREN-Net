@@ -13,6 +13,7 @@ import { KeyedMutator, useSWRConfig } from "swr";
 import { ScopedMutator } from "swr/_internal";
 import fetchJson from "@/lib/fetchJson";
 import Router from "next/router";
+import Head from "next/head";
 
 
 export const gradeRangeOptions = [
@@ -51,12 +52,18 @@ const EditProfile = () => {
     return (
         <>
           <div>
-          {user ? 
-            user.isLoggedIn ?
-              editProfileForm(user, mutateUser, mutate):
-              <h1>Loading</h1>
-            :<h1>Loading</h1>  
-          }
+            <Head>
+              <title>Edit Profile - SciREN</title>
+              <meta name="description" content="Edit User Profile" />
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+              <link rel="icon" href="/favicon.ico" />
+            </Head>
+            {user ? 
+              user.isLoggedIn ?
+                editProfileForm(user, mutateUser, mutate):
+                <h1>Loading</h1>
+              :<h1>Loading</h1>  
+            }
       </div>
       </>
     )
