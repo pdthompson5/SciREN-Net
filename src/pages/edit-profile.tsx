@@ -12,15 +12,9 @@ import { KeyedMutator, useSWRConfig } from "swr";
 import { ScopedMutator } from "swr/_internal";
 import fetchJson, { FetchError } from "@/lib/fetchJson";
 import Router from "next/router";
-// import { academicInterestOptions, gradeRangeOptions, userTypes } from "./api/user";
 
 
 /* Registration Page */
-// TODO: Actually edit database -> This should just update the fields
-// TODO: After editing the user I should revalidate their profile page and redirect to that page
-
-// TODO: These can't go in /api/user because it still result in front-end/back-end errors 
-// TODO: Consider making this an interface
 export const gradeRangeOptions = ["Kindergarten", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6", "Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"]
 export const academicInterestOptions = ["mathematics", "biology", "chemistry", "social studies", "history", "sociology"];
 export const userTypes = ["researcher", "teacher", "student", "admin"]
@@ -79,23 +73,17 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
             userID: user.userID,
             email: user.email,
             ...values
-          }
-          // TODO: Catch error in updating user
-          try{
-            await fetch("/api/editUser", {
-              method: "POST",
-              body: JSON.stringify(valuesWithID),
-            });
-          }
-          catch(error){
-            if(error instanceof Error){
-              actions.setStatus(error.message);
-            }
+          }          
+          const resp = await fetch("/api/editUser", {
+            method: "POST",
+            body: JSON.stringify(valuesWithID),
+          });
+          if(resp.status != 200){
+            actions.setStatus({message: resp.statusText});
             actions.setSubmitting(false);
             return;
           }
 
-          // TODO: If there is an error with updating the user how should we report it?
           await Router.push(`/profiles/${user.userID}`)
 
           await mutateUser(
@@ -110,7 +98,7 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
           actions.setSubmitting(false)
         }}
     >
-      {(props: FormikProps<any>) => (
+      {({status}) => (
       <Form className={styles.loginForm}>
         <Field 
             name="userType"
@@ -171,6 +159,7 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
             >
         </Field>
         <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
+        { status && <p className={styles.error}>{status.message}</p>}
       </Form>
       )}
       
