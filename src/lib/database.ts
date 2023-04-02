@@ -1,5 +1,30 @@
 import { MongoClient, ObjectId, WithId } from "mongodb";
 
+export interface LessonLink {
+  text: string;
+  href: string;
+}
+
+export interface Author {
+  name: string;
+  contact: string;
+  position: string;
+}
+
+export interface Lesson {
+  _id: string;
+  title: string;
+  year: number;
+  abstract: string;
+  subject: string;
+  mediaLinks: LessonLink[];
+  contentLinks: LessonLink[];
+  authors: Author[];
+  gradeLevel: number[];
+}
+
+export const foo = "bar";
+
 export const establishMongoConnection = async () => {
   const mongoURI = process.env.MONGO_URI;
   if (!mongoURI) {
@@ -88,4 +113,37 @@ export const getAllUserIDs = async () => {
 
   client.close();
   return userIDsStrings;
+};
+
+const mapLinks = (links: any) => {
+  return links.map((link: any) => ({
+    text: link.text,
+    href: link.href,
+  }));
+};
+
+export const getLessonPlans = async (
+  sortKey?: string, // Fields to sort by, TODO: make this an enum
+  sortDirection?: number // 1 for ascending, -1 for descending
+) => {
+  // Get Lesson Plans for listing page
+  const client = await establishMongoConnection();
+  const collection = client.db("sciren").collection("lessons");
+  const lessonPlans = await collection.find({}).toArray();
+  client.close();
+  const TypedLessonPlans: Lesson[] = lessonPlans.map(
+    (lesson): Lesson => ({
+      _id: lesson._id.toString(),
+      title: lesson.title,
+      year: lesson.year,
+      abstract: lesson.abstract,
+      mediaLinks: lesson.mediaLinks as LessonLink[],
+      contentLinks: mapLinks(lesson.contentLinks),
+      authors: lesson.authors as Author[],
+      gradeLevel: lesson.gradeLevel as number[],
+      subject: lesson.subject,
+    })
+  );
+
+  return TypedLessonPlans;
 };
