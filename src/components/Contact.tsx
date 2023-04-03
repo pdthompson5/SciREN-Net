@@ -40,9 +40,16 @@ const contactUserForm = (user: GetUserResponse, userToContact: ProfileInformatio
             contactedUserEmail: userToContact.email,
             message: values.message
           }
-          // TODO: Handle fetch error
 
-          await fetch("/api/contact", {method: "POST", body: JSON.stringify(contactRequest)})
+          const resp = await fetch("/api/contact", {method: "POST", body: JSON.stringify(contactRequest)})
+
+          if(resp.status != 200){
+            actions.setStatus({message: resp.statusText});
+            actions.setSubmitting(false);
+            return;
+          }
+
+          
           actions.setSubmitting(false)
         }}
     >
