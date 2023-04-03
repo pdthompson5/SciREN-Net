@@ -7,28 +7,13 @@ import { Lesson, getLessonPlans } from "@/lib/database";
 import styles from "@/styles/List.module.css";
 import Button from "@mui/material/Button";
 import useUser from "@/lib/useUser";
+import { gradeRangeOptions } from "./edit-profile";
 interface LessonListProps {
   lessons: Lesson[];
   undefined: boolean;
 }
 
-const GradeMapping = [
-  "Pre-K",
-  "Kindergarten",
-  "1st",
-  "2nd",
-  "3rd",
-  "4th",
-  "5th",
-  "6th",
-  "7th",
-  "8th",
-  "9th",
-  "10th",
-  "11th",
-  "12th",
-  "College",
-];
+
 
 const LessonList: React.FC<LessonListProps> = (props: LessonListProps) => {
   const router = useRouter();
@@ -118,7 +103,7 @@ const LessonCard: React.FC<Lesson> = (lesson: Lesson) => {
 
         <div className={styles.gradeBox}>
           <p className={styles.categoryText}>
-            Grades: {lesson.gradeLevel.map((gi) => GradeMapping[gi]).join(", ")}
+            Grades: {lesson.gradeLevel.map((gi) => gradeRangeOptions[gi]).join(", ")}
           </p>
           <p className={styles.categoryText}>Subject: {lesson.subject}</p>
         </div>
