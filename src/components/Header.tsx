@@ -11,7 +11,6 @@ import { KeyedMutator } from "swr";
 const Header: React.FC = () => {
   const { user, mutateUser } = useUser();
   const router = useRouter();
-  console.log(process.env)
   return (
     <>
       <Sticky enabled={true}>
