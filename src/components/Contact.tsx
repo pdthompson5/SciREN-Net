@@ -6,6 +6,7 @@ import {TextField} from "formik-mui"
 import * as Yup from 'yup';
 import { GetUserResponse } from "@/pages/api/userSession";
 import { ProfileInformation } from "@/lib/database";
+import Router from "next/router";
 
 
 const MESSAGE_CHARACTER_LIMIT = 3000;
@@ -40,8 +41,12 @@ const Contact = (props: {user: GetUserResponse, userToContact: ProfileInformatio
               return;
             }
 
-            
+            actions.setStatus({message: "Successfully sent message"})
+            // TODO: Does this router push actually work?
+            // TODO: Do the emails actually send?
             actions.setSubmitting(false)
+            Router.push(`/profiles/${userToContact.userID}`)
+          
           }}
       >
         {({status, values}) => (
@@ -63,7 +68,7 @@ const Contact = (props: {user: GetUserResponse, userToContact: ProfileInformatio
               />
 
             <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
-            { status && <p className={styles.error}>{status.message}</p>}
+            { status && <p>{status.message}</p>}
           </Stack>
         </Form>
         )}
