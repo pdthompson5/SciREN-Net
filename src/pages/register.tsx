@@ -28,50 +28,35 @@ type AcademicInterestClass =
 
 const Register: React.FC = () => {
   const router = useRouter();
-  // state for form fields
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [verifyPassword, setVerifyPassword] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  // Three academic interests allowed
-  const [academicInterests, setAcademicInterests] = useState(["mathematics"]);
-  const [gradeRange, setGradeRange] = useState([]);
-  const [userType, setUserType] = useState<typeof userTypes>("researcher");
-
-  // state for submit, error
-  const [submitted, setSubmitted] = useState(false);
-  const [error, setError] = useState<string | undefined>();
-
   // Form field change hooks
-  const handleField = (setter: any) => {
-    // Handles all fields which require no special parsing
-    return (event: any) => {
-      setter(event.target.value);
-      setSubmitted(false);
-    };
-  };
-  const handleGradeRange = (event: any) => {
-    var options = event.target.options;
-    var selectedValues: Array<number> = [];
-    for (var i = 0, l = options.length; i < l; i++) {
-      if (options[i].selected) {
-        selectedValues.push(+options[i].value);
-      }
-    }
-    setGradeRange(event.target.value); // Always returns sorted.
-    setSubmitted(false);
-  };
-  const handleAcademicInterests = (event: any) => {
-    var options = event.target.options;
-    var selectedValues: Array<string> = [];
-    for (var i = 0, l = options.length; i < l; i++) {
-      if (options[i].selected) {
-        selectedValues.push(options[i].value);
-      }
-    }
-    setAcademicInterests(selectedValues);
-  };
+  // const handleField = (setter: any) => {
+  //   // Handles all fields which require no special parsing
+  //   return (event: any) => {
+  //     setter(event.target.value);
+  //     setSubmitted(false);
+  //   };
+  // };
+  // const handleGradeRange = (event: any) => {
+  //   var options = event.target.options;
+  //   var selectedValues: Array<number> = [];
+  //   for (var i = 0, l = options.length; i < l; i++) {
+  //     if (options[i].selected) {
+  //       selectedValues.push(+options[i].value);
+  //     }
+  //   }
+  //   setGradeRange(event.target.value); // Always returns sorted.
+  //   setSubmitted(false);
+  // };
+  // const handleAcademicInterests = (event: any) => {
+  //   var options = event.target.options;
+  //   var selectedValues: Array<string> = [];
+  //   for (var i = 0, l = options.length; i < l; i++) {
+  //     if (options[i].selected) {
+  //       selectedValues.push(options[i].value);
+  //     }
+  //   }
+  //   setAcademicInterests(selectedValues);
+  // };
   // Field validation
   const validateEmail = (e: string): boolean => {
     const regex =
@@ -79,10 +64,10 @@ const Register: React.FC = () => {
     return e.toLowerCase().match(regex) !== null;
   };
 
-  const validatePassword = (p: string) => {
+  const validatePassword = (p: string, verify: string) => {
     if (p.length < 8) {
       return "Password must be at least 8 characters long.";
-    } else if (p !== verifyPassword) {
+    } else if (p !== verify) {
       return "Passwords do not match.";
     }
     return null;
@@ -90,18 +75,7 @@ const Register: React.FC = () => {
 
   // Add user call
   // Note: no need for arguments, just use react state
-  const addUser = async () => {
-    setSubmitted(true);
-
-    const postUser: PostUserRequest = {
-      email: email,
-      password: password,
-      userType: userType,
-      firstName: firstName,
-      lastName: lastName,
-      academicInterest: academicInterests,
-      gradeRange: gradeRange,
-    };
+  const addUser = async (postUser: PostUserRequest) => {
     const resp = await fetch("/api/user", {
       method: "POST",
       body: JSON.stringify(postUser),
@@ -109,65 +83,64 @@ const Register: React.FC = () => {
 
     const body: PostUserResponse = await resp.json();
     console.log(body);
-    if (resp.status >= 400) {
-      setError(body.message);
-    } else {
-      setError(undefined);
-      router.replace("/login");
-    }
+    // if (resp.status >= 400) {
+    //   setError(body.message);
+    // } else {
+    //   setError(undefined);
+    //   router.replace("/login");
+    // }
     console.log(resp.status);
   };
 
   // form submission handler
-  const handleSubmit = (event: any) => {
-    event.preventDefault();
-    if (
-      email === "" ||
-      password === "" ||
-      firstName === "" ||
-      lastName === ""
-    ) {
-      // Any fields missing data
-      setError("Please fill out all fields before submitting.");
-    } else {
-      // Run field validation checks
-      if (!validateEmail(email)) {
-        setError("Invalid email provided.");
-        return;
-      } else {
-        // Password checks
-        const passwordError = validatePassword(password);
-        if (passwordError !== null) {
-          setError(passwordError);
-          return;
-        }
-      }
+  // const handleSubmit = (event: any) => {
+  //   event.preventDefault();
+  //   if (
+  //     email === "" ||
+  //     password === "" ||
+  //     firstName === "" ||
+  //     lastName === ""
+  //   ) {
+  //     // Any fields missing data
+  //     setError("Please fill out all fields before submitting.");
+  //   } else {
+  //     // Run field validation checks
+  //     if (!validateEmail(email)) {
+  //       setError("Invalid email provided.");
+  //       return;
+  //     } else {
+  //       // Password checks
+  //       const passwordError = validatePassword(password, verifyPassword);
+  //       if (passwordError !== null) {
+  //         setError(passwordError);
+  //         return;
+  //       }
+  //     }
 
-      console.log("Form checks complete.");
-      addUser();
+  //     console.log("Form checks complete.");
+  //     addUser();
 
-      console.log("Submission complete.");
-      // All other checks passed
-      setSubmitted(true);
-      setError(undefined);
-    }
-  };
+  //     console.log("Submission complete.");
+  //     // All other checks passed
+  //     setSubmitted(true);
+  //     setError(undefined);
+  //   }
+  // };
 
-
-  const EditUserSchema = Yup.object().shape({
-    userType: Yup.string()
-        .required("Required"),
-    firstName: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
-        .required('Required'),
-    lastName: Yup.string()
-        .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
-        .required('Required'),
-    academicInterest: Yup.array(),
-    gradeRange: Yup.array()
-  });
+  // const EditUserSchema = Yup.object().shape({
+  //   userType: Yup.string()
+  //       .required("Required"),
+  //   firstName: Yup.string()
+  //       .min(2, 'Too Short!')
+  //       .max(50, 'Too Long!')
+  //       .required('Required'),
+  //   lastName: Yup.string()
+  //       .min(2, 'Too Short!')
+  //       .max(50, 'Too Long!')
+  //       .required('Required'),
+  //   academicInterest: Yup.array(),
+  //   gradeRange: Yup.array()
+  // });
 
   return (
     <>
@@ -178,110 +151,114 @@ const Register: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Formik enableReinitialize 
-      initialValues={{userType: "", firstName: "", lastName: "", academicInterest: "", gradeRange: ""}} 
-      validationSchema={EditUserSchema} 
-      onSubmit={async (values, actions) => {    
+      initialValues={{userType: "researcher", firstName: "", lastName: "", academicInterest: [], gradeRange: [], email: "", password: "", verifyPassword: ""}} 
+      // validationSchema={EditUserSchema} 
+      onSubmit={async (values, actions) => {  
+        addUser(values)
+        actions.setSubmitting(false)
+        console.log(values)
       }}> 
         {(props: FormikProps<any>) => (
         <div className={styles.formLayout}>
           <h1>SciREN - Signup</h1>
-          <form className={styles.loginFormFL}>
-            {/* Name */}
-            <Field name="firstName" className={styles.formInput} component={TextField} type="text" label="First Name"/>
-            <Field name="lastName" className={styles.formInput} component={TextField} type="text"  label="Last Name"/>
-          </form> 
-          
-          <form className={styles.loginForm}>
-            {/* User type */}
-            <Field 
-            name="userType"
-            className={styles.formInput}
-            component={Autocomplete}
-            label="User Type"
-            options={userTypes}
-            renderInput={(params: AutocompleteRenderInputParams) => (
-              <MaterialTextField
-                {...params}
-                name="userType"
-                label="User Type"
-                variant="outlined"
-              />
-            )}
-            >
-            </Field>
-            {/* Academic interests */}
-            <Field 
-            name="academicInterest"
-            className={styles.formInput}
-            component={Autocomplete}
-            label="Academic Interests"
-            options={academicInterestOptions}
-            // multiple   TODO: CANNOT SELECT MULTIPLE
-            renderInput={(params: AutocompleteRenderInputParams) => (
-              <MaterialTextField
-                {...params}
-                name="academicInterest"
-                label="Academic Interests"
-                variant="outlined"
-              />
-            )}>
-            </Field>
-            {/* Grade Range */}
-            <Field 
-            name="gradeRange"
-            className={styles.formInput}
-            component={Autocomplete}
-            label="Grade Range"
-            options={gradeRangeOptions.map((x, i) => i)}
-            getOptionLabel={(option: number) => gradeRangeOptions[option]}
-            // multiple
-            renderInput={(params: AutocompleteRenderInputParams) => (
-              <MaterialTextField
-                {...params}
-                name="gradeRange"
-                label="Grade Range"
-                variant="outlined"
-              />
-            )}
-            >
-            </Field>
-            {/* Email */}
-            {/* <input
-              onChange={handleField(setEmail)}
-              placeholder="Email"
-              required
+          <Form>
+            <div className={styles.loginFormFL}>
+              {/* Name */}
+              <Field name="firstName" className={styles.formInput} component={TextField} type="text" label="First Name"/>
+              <Field name="lastName" className={styles.formInput} component={TextField} type="text"  label="Last Name"/>
+            </div> 
+            
+            <div className={styles.loginForm}>
+              {/* User type */}
+              <Field 
+              name="userType"
               className={styles.formInput}
-              value={email}
-              type="text"
-            /> */}
-            <Field name="Email" className={styles.formInput} component={TextField} type="text" label="Email"/>
-            {/* Password */}
-            {/* <input
-              onChange={handleField(setPassword)}
-              placeholder="Password"
-              required
+              component={Autocomplete}
+              label="User Type"
+              options={userTypes}
+              renderInput={(params: AutocompleteRenderInputParams) => (
+                <MaterialTextField
+                  {...params}
+                  name="userType"
+                  label="User Type"
+                  variant="outlined"
+                />
+              )}
+              >
+              </Field>
+              {/* Academic interests */}
+              <Field 
+              name="academicInterest"
               className={styles.formInput}
-              value={password}
-              type="password"
-            /> */}
-            <Field name="Password" className={styles.formInput} component={TextField} type="text" label="Password"/>
-            {/* Verify Password */}
-            {/* <input
-              onChange={handleField(setVerifyPassword)}
-              placeholder="Verify Password"
-              required
+              component={Autocomplete}
+              label="Academic Interests"
+              options={academicInterestOptions}
+              multiple  
+              renderInput={(params: AutocompleteRenderInputParams) => (
+                <MaterialTextField
+                  {...params}
+                  name="academicInterest"
+                  label="Academic Interests"
+                  variant="outlined"
+                />
+              )}>
+              </Field>
+              {/* Grade Range */}
+              <Field 
+              name="gradeRange"
               className={styles.formInput}
-              value={verifyPassword}
-              type="password"
-            /> */}
-            <Field name="Verify Password" className={styles.formInput} component={TextField} type="text" label="Verify Password"/>
-            {/* Submit */}
-            <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
+              component={Autocomplete}
+              label="Grade Range"
+              options={gradeRangeOptions.map((x, i) => i)}
+              getOptionLabel={(option: number) => gradeRangeOptions[option]}
+              multiple
+              renderInput={(params: AutocompleteRenderInputParams) => (
+                <MaterialTextField
+                  {...params}
+                  name="gradeRange"
+                  label="Grade Range"
+                  variant="outlined"
+                />
+              )}
+              >
+              </Field>
+              {/* Email */}
+              {/* <input
+                onChange={handleField(setEmail)}
+                placeholder="Email"
+                required
+                className={styles.formInput}
+                value={email}
+                type="text"
+              /> */}
+              <Field name="email" className={styles.formInput} component={TextField} type="text" label="Email"/>
+              {/* Password */}
+              {/* <input
+                onChange={handleField(setPassword)}
+                placeholder="Password"
+                required
+                className={styles.formInput}
+                value={password}
+                type="password"
+              /> */}
+              <Field name="password" className={styles.formInput} component={TextField} type="text" label="Password"/>
+              {/* Verify Password */}
+              {/* <input
+                onChange={handleField(setVerifyPassword)}
+                placeholder="Verify Password"
+                required
+                className={styles.formInput}
+                value={verifyPassword}
+                type="password"
+              /> */}
+              <Field name="verifyPassword" className={styles.formInput} component={TextField} type="text" label="Verify Password"/>
+              {/* Submit */}
+              <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
 
-            {error && <p className={styles.error}>{error}</p>}
-            {/* TODO: Add message for successful submission */}
-          </form>
-          
+              {/* {error && <p className={styles.error}>{error}</p>} */}
+              {/* TODO: Add message for successful submission */}
+            </div>
+          </Form>
         </div>
         )}
       </Formik>
