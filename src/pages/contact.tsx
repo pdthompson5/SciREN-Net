@@ -15,12 +15,11 @@ const ContactPage = () => {
     if(error){
         console.error(error)
     }
-    console.log(userToContact)
 
     const {user} = useUser((user) => "/login")
     return (
         <>
-          <div style={{background: "aliceblue"}}>
+          <div>
             <Head>
               <title>Contact User - SciREN</title>
               <meta name="description" content="Contact User" />

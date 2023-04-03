@@ -1,7 +1,7 @@
 import React from "react";
 import styles from "@/styles/Form.module.css";
 import { Field, Form, Formik} from "formik";
-import {Button, Stack} from "@mui/material"
+import {Button, Container, Stack} from "@mui/material"
 import {TextField} from "formik-mui"
 import * as Yup from 'yup';
 import { GetUserResponse } from "@/pages/api/userSession";
@@ -42,8 +42,7 @@ const Contact = (props: {user: GetUserResponse, userToContact: ProfileInformatio
             }
 
             actions.setStatus({message: "Successfully sent message"})
-            // TODO: Does this router push actually work?
-            // TODO: Do the emails actually send?
+
             actions.setSubmitting(false)
             Router.push(`/profiles/${userToContact.userID}`)
           
@@ -51,8 +50,9 @@ const Contact = (props: {user: GetUserResponse, userToContact: ProfileInformatio
       >
         {({status, values}) => (
         <Form className={styles.formLayout}>
+          <Container>
           <Stack spacing={4}>
-            <h1 className={styles.loginTitle}>Contact User</h1>
+            <h1 className={styles.loginTitle}>Contact User: {userToContact.firstName} {userToContact.lastName}</h1>
 
             {/* TODO: display number of chars remaining */}
             <Field 
@@ -70,6 +70,7 @@ const Contact = (props: {user: GetUserResponse, userToContact: ProfileInformatio
             <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
             { status && <p>{status.message}</p>}
           </Stack>
+          </Container>
         </Form>
         )}
         

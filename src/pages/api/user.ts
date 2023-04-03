@@ -27,8 +27,6 @@ export default async function postUser(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  console.log("Reached /api/user")
-
   if(req.method === "GET"){
     const idToFetch = req.query.userID
     if(idToFetch === undefined || Array.isArray(idToFetch)){
@@ -36,7 +34,6 @@ export default async function postUser(
     }
     const user = await getProfileInformation(idToFetch)
 
-    console.log(user)
     return res.status(200).json(user);
   }
 
