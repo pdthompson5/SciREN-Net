@@ -8,7 +8,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.query.secret !== process.env.REVALIDATION_TOKEN) {
         return res.status(401).json({ message: 'Invalid token' })
     }
-    const { path }: RevalidationRequest = await req.body;
+    const { path }: RevalidationRequest = await JSON.parse(req.body);
 
     try {
         await res.revalidate(path)

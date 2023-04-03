@@ -49,7 +49,7 @@ export const getUserCollection = (client: MongoClient) => {
   return client.db(mongoDB).collection("users");
 };
 
-interface UserWithID extends WithId<Document> {
+export interface UserWithID extends WithId<Document> {
   email: string;
   password: string;
   firstName: string;

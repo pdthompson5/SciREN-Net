@@ -73,8 +73,8 @@ export const getStaticProps = async ({
   userID: string;
 }>) => {
   const { userID } = params as { userID: string };
-  const user = await getProfileInformation(userID).catch((reason) => undefined);
-  const notFound = !user
+  const user = await getProfileInformation(userID).catch((reason) => {console.log(reason); return undefined});
+  const notFound = !user;
   return { props: user, notFound };
 };
 
@@ -88,7 +88,7 @@ export const getStaticPaths = async () => {
     },
   }));
 
-  return { paths: params, fallback: false };
+  return { paths: params, fallback: "blocking" };
 };
 
 export default UserProfile;
