@@ -28,6 +28,7 @@
 .formLayout {
     min-width: 100vw;
     min-height: 100vh;
+    background-image: linear-gradient(rgba(89, 187, 190, 0.979), rgba(61, 150, 98, 0.849));
 }
 
 .loginPrompt {

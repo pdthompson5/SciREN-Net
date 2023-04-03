@@ -4,12 +4,19 @@ import styles from "@/styles/Form.module.css";
 import { User } from "./api/userSession";
 import { PostUserRequest, PostUserResponse } from "./api/user";
 import { useRouter, Router } from "next/router";
+import { Field, Form, Formik, FormikProps} from "formik";
+import {TextField, Autocomplete, Select, AutocompleteRenderInputParams} from "formik-mui"
+import {Button} from "@mui/material"
+import {TextField as MaterialTextField} from "@mui/material"
+import * as Yup from 'yup';
 
-type UserType = "researcher" | "teacher" | "student" | "admin";
+export const gradeRangeOptions = ["Kindergarten", "Grade 1", "Grade 2", "Grade 3", "Grade 4", "Grade 5", "Grade 6", "Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"]
+export const academicInterestOptions = ["mathematics", "biology", "chemistry", "social studies", "history", "sociology"];
+export const userTypes = ["researcher", "teacher", "student", "admin"]
 
 type AcademicInterestClass =
   | "mathematics"
-  | "biology"
+  | "biology" 
   | "chemistry"
   | "social studies"
   | "history"
@@ -30,7 +37,7 @@ const Register: React.FC = () => {
   // Three academic interests allowed
   const [academicInterests, setAcademicInterests] = useState(["mathematics"]);
   const [gradeRange, setGradeRange] = useState([]);
-  const [userType, setUserType] = useState<UserType>("researcher");
+  const [userType, setUserType] = useState<typeof userTypes>("researcher");
 
   // state for submit, error
   const [submitted, setSubmitted] = useState(false);
@@ -65,7 +72,6 @@ const Register: React.FC = () => {
     }
     setAcademicInterests(selectedValues);
   };
-
   // Field validation
   const validateEmail = (e: string): boolean => {
     const regex =
@@ -147,6 +153,22 @@ const Register: React.FC = () => {
     }
   };
 
+
+  const EditUserSchema = Yup.object().shape({
+    userType: Yup.string()
+        .required("Required"),
+    firstName: Yup.string()
+        .min(2, 'Too Short!')
+        .max(50, 'Too Long!')
+        .required('Required'),
+    lastName: Yup.string()
+        .min(2, 'Too Short!')
+        .max(50, 'Too Long!')
+        .required('Required'),
+    academicInterest: Yup.array(),
+    gradeRange: Yup.array()
+  });
+
   return (
     <>
       <Head>
@@ -155,129 +177,114 @@ const Register: React.FC = () => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <div className={styles.bggradient}>
-        <h1>SciREN - Signup</h1>
-        <label className={styles.loginLabel}>Name</label>
-        <form className={styles.loginFormFL}>
-          {/* First name */}
-          {/* <label className={styles.loginLabel}>First Name</label> */}
-          <input
-            onChange={handleField(setFirstName)}
-            placeholder="First Name"
-            required
-            className={styles.formInputFirstName}
-            value={firstName}
-            type="text"
-          />
+      <Formik enableReinitialize 
+      initialValues={{userType: "", firstName: "", lastName: "", academicInterest: "", gradeRange: ""}} 
+      validationSchema={EditUserSchema} 
+      onSubmit={async (values, actions) => {    
+      }}> 
+        {(props: FormikProps<any>) => (
+        <div className={styles.formLayout}>
+          <h1>SciREN - Signup</h1>
+          <form className={styles.loginFormFL}>
+            {/* Name */}
+            <Field name="firstName" className={styles.formInput} component={TextField} type="text" label="First Name"/>
+            <Field name="lastName" className={styles.formInput} component={TextField} type="text"  label="Last Name"/>
+          </form> 
           
-          {/* Last name */}
-          {/* <label className={styles.loginLabel}>Last Name</label> */}
-          <input
-            onChange={handleField(setLastName)}
-            placeholder="Last Name"
-            required
-            className={styles.formInputLastName}
-            value={lastName}
-            type="text"
-          />
-        </form>
-        <form className={styles.loginForm}>
-          {/* User type */}
-          <label className={styles.loginLabel}>User Type</label>
-          <select
-            name="selectList"
-            id="selectList"
-            onChange={handleField(setUserType)}
+          <form className={styles.loginForm}>
+            {/* User type */}
+            <Field 
+            name="userType"
             className={styles.formInput}
-          >
-            <option value="researcher">Researcher</option>
-            <option value="teacher">Teacher</option>
-            <option value="student">Student</option>
-            <option value="admin">Administrator</option>
-          </select>
-          {/* Academic interests */}
-          <label className={styles.loginLabel}>
-            Academic Interests: Drag or use Ctrl to select multiple
-          </label>
-          <select
-            name="selectList"
-            id="selectList"
-            multiple
-            onChange={handleAcademicInterests}
+            component={Autocomplete}
+            label="User Type"
+            options={userTypes}
+            renderInput={(params: AutocompleteRenderInputParams) => (
+              <MaterialTextField
+                {...params}
+                name="userType"
+                label="User Type"
+                variant="outlined"
+              />
+            )}
+            >
+            </Field>
+            {/* Academic interests */}
+            <Field 
+            name="academicInterest"
             className={styles.formInput}
-          >
-            <option value="mathematics">Mathematics</option>
-            <option value="biology">Biology</option>
-            <option value="chemistry">Chemistry</option>
-            <option value="social studies">Social Studies</option>
-            <option value="history">History</option>
-          </select>
-          {/* Grade Range */}
-          <label className={styles.loginLabel}>
-            Grade Range: Drag or use Ctrl to select multiple
-          </label>
-          <select
-            name="selectList[]"
-            id="selectList[]"
-            multiple
-            onChange={handleGradeRange}
+            component={Autocomplete}
+            label="Academic Interests"
+            options={academicInterestOptions}
+            // multiple   TODO: CANNOT SELECT MULTIPLE
+            renderInput={(params: AutocompleteRenderInputParams) => (
+              <MaterialTextField
+                {...params}
+                name="academicInterest"
+                label="Academic Interests"
+                variant="outlined"
+              />
+            )}>
+            </Field>
+            {/* Grade Range */}
+            <Field 
+            name="gradeRange"
             className={styles.formInput}
-          >
-            {/* LOL GORE */}
-            <option value={0}>Kindergarten</option>
-            <option value={1}>Grade 1</option>
-            <option value={2}>Grade 2</option>
-            <option value={3}>Grade 3</option>
-            <option value={4}>Grade 4</option>
-            <option value={5}>Grade 5</option>
-            <option value={6}>Grade 6</option>
-            <option value={7}>Grade 7</option>
-            <option value={8}>Grade 8</option>
-            <option value={9}>Grade 9</option>
-            <option value={10}>Grade 10</option>
-            <option value={11}>Grade 11</option>
-            <option value={12}>Grade 12</option>
-          </select>
-          {/* Email */}
-          <input
-            onChange={handleField(setEmail)}
-            placeholder="Email"
-            required
-            className={styles.formInput}
-            value={email}
-            type="text"
-          />
-          {/* Password */}
-          <input
-            onChange={handleField(setPassword)}
-            placeholder="Password"
-            required
-            className={styles.formInput}
-            value={password}
-            type="password"
-          />
-          {/* Verify Password */}
-          <input
-            onChange={handleField(setVerifyPassword)}
-            placeholder="Verify Password"
-            required
-            className={styles.formInput}
-            value={verifyPassword}
-            type="password"
-          />
-          {/* Submit */}
-          <button
-            onClick={handleSubmit}
-            className={styles.loginSubmit}
-            type="submit"
-          >
-            Submit
-          </button>
+            component={Autocomplete}
+            label="Grade Range"
+            options={gradeRangeOptions.map((x, i) => i)}
+            getOptionLabel={(option: number) => gradeRangeOptions[option]}
+            // multiple
+            renderInput={(params: AutocompleteRenderInputParams) => (
+              <MaterialTextField
+                {...params}
+                name="gradeRange"
+                label="Grade Range"
+                variant="outlined"
+              />
+            )}
+            >
+            </Field>
+            {/* Email */}
+            {/* <input
+              onChange={handleField(setEmail)}
+              placeholder="Email"
+              required
+              className={styles.formInput}
+              value={email}
+              type="text"
+            /> */}
+            <Field name="Email" className={styles.formInput} component={TextField} type="text" label="Email"/>
+            {/* Password */}
+            {/* <input
+              onChange={handleField(setPassword)}
+              placeholder="Password"
+              required
+              className={styles.formInput}
+              value={password}
+              type="password"
+            /> */}
+            <Field name="Password" className={styles.formInput} component={TextField} type="text" label="Password"/>
+            {/* Verify Password */}
+            {/* <input
+              onChange={handleField(setVerifyPassword)}
+              placeholder="Verify Password"
+              required
+              className={styles.formInput}
+              value={verifyPassword}
+              type="password"
+            /> */}
+            <Field name="Verify Password" className={styles.formInput} component={TextField} type="text" label="Verify Password"/>
+            {/* Submit */}
+            <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
 
-          {error && <p className={styles.error}>{error}</p>}
-          {/* TODO: Add message for successful submission */}
-        </form>
-      </div>
+            {error && <p className={styles.error}>{error}</p>}
+            {/* TODO: Add message for successful submission */}
+          </form>
+          
+        </div>
+        )}
+      </Formik>
     </>
   );
 };
