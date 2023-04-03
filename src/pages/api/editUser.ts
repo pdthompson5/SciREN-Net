@@ -30,15 +30,18 @@ export default async function postEditUser(
 
     const { userID, ...reqWithoutUserID }= reqBody;
     
-    userCollection.updateOne(
+    await userCollection.updateOne(
         {email: reqBody.email},
         {$set: reqWithoutUserID}
+    ).then(
+        () => 
+            res.revalidate(`/profiles/${reqBody.userID}`).then(
+                () => {
+                    console.log("api/editUser : edited user successfully");
+                    res.status(200).json({
+                        message: "Successfully updated user.",
+                    });
+                }
+            )
     )
-
-    await res.revalidate(`/profiles/${reqBody.userID}`)
-
-    console.log("api/editUser : edited user successfully");
-        res.status(200).json({
-            message: "Successfully updated user.",
-        });
 }

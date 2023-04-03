@@ -97,28 +97,35 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
             email: user.email,
             ...values
           }          
-          const resp = await fetch("/api/editUser", {
+
+          await fetch("/api/editUser", {
             method: "POST",
             body: JSON.stringify(valuesWithID),
-          });
-          if(resp.status != 200){
-            actions.setStatus({message: resp.statusText});
-            actions.setSubmitting(false);
-            return;
-          }
-
-          await Router.push(`/profiles/${user.userID}`)
-
-          await mutateUser(
-            await fetchJson("/api/userSession", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(valuesWithID),
-            }),
-            false
-          );
-
-          actions.setSubmitting(false)
+          }).then(
+            (resp) => {
+              if(resp.status != 200){
+                actions.setStatus({message: resp.statusText});
+                actions.setSubmitting(false);
+                return;
+              }
+              else{
+                Router.push(`/profiles/${user.userID}`).then(
+                  () => {
+                    mutateUser(
+                      fetchJson("/api/userSession", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(valuesWithID),
+                      }),
+                      false
+                    );
+                    actions.setSubmitting(false)
+                    Router.reload()
+                  }
+                )
+              }
+            } 
+          )
         }}
     >
       {({status}) => (
