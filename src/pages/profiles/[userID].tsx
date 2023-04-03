@@ -54,7 +54,11 @@ const UserProfile: React.FC<ProfileInformation> = (
           <ul>
             <li>Profile Type: {props.userType}</li>
             <li>UserID: {props.userID}</li>
-            <li>Contact: {props.email}</li>
+            {(user && user.isLoggedIn) && <li>
+              <Link href={`/contact?user=${props.userID}`}>
+                Contact User
+              </Link>
+            </li>}
           </ul>
         </div>
       </div>
