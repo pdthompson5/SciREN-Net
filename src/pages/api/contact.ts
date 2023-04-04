@@ -32,13 +32,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
                 Contact request from ${contactingUserFullName} on SciRen-Net
                 Message:
                 ${request.message}
-                To respond to the message, please email Test User at ${request.contactingUser.email}
+                To respond to the message, please email ${contactingUserFullName} at ${request.contactingUser.email}
                 `, // plain text body
       html: `
                 <h1>Contact request from ${contactingUserFullName} on SciRen-Net</h1>
                 <h2>Message:<h2>
                 <p>${request.message}</p>
-                <h2>To respond to the message, please email Test User at ${request.contactingUser.email}</h2>
+                <h2>To respond to the message, please email ${contactingUserFullName} at ${request.contactingUser.email}</h2>
             `,
     });
 
