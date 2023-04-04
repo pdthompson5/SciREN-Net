@@ -10,6 +10,7 @@ import { MongoClient } from "mongodb";
 export default withIronSessionApiRoute(loginRoute, sessionOptions);
 
 async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
+  
   const { email, password } = await req.body;
   try {
     // User Validation
