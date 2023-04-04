@@ -10,6 +10,7 @@ import {
 } from "@/lib/database";
 import { GetStaticPropsContext } from "next";
 import styles from "@/styles/Profile.module.css";
+import { Button } from "@mui/material";
 
 const UserProfile: React.FC<ProfileInformation> = (
   props: ProfileInformation
@@ -54,7 +55,12 @@ const UserProfile: React.FC<ProfileInformation> = (
           <ul>
             <li>Profile Type: {props.userType}</li>
             <li>UserID: {props.userID}</li>
-            <li>Contact: {props.email}</li>
+            {(user && user.isLoggedIn) && 
+            <li>
+              <Link href={`/contact?user=${props.userID}`} passHref>
+                <Button variant="contained" color="primary">Contact User</Button>
+              </Link>
+            </li>}
           </ul>
         </div>
       </div>
