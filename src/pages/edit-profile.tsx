@@ -149,10 +149,12 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
               )}
               >
           </Field>
-
-          <Field name="firstName" className={styles.formInput} component={TextField} variant="standard" size="medium" type="text" label="First Name"/>
-          <Field name="lastName" className={styles.formInput} component={TextField}  variant="standard" margin="normal" size="medium" type="text" label="Last Name"/>
-
+          <div className={styles.formInput}>
+            <Field name="firstName" className={styles.formInput} component={TextField} type="text" label="First Name"/>
+          </div>
+          <div className={styles.formInput}>
+            <Field name="lastName" className={styles.formInput} component={TextField} type="text" label="Last Name"/>
+          </div>
           <Field 
               name="academicInterest"
               className={styles.formInput}
