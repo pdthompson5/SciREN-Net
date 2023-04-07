@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import useUser from "@/lib/useUser";
 import fetchJson, { FetchError } from "@/lib/fetchJson";
 import Head from "next/head";
 import styles from "@/styles/Form.module.css";
 import { GetUserResponse } from "./api/userSession";
-import { Field, Form, Formik} from "formik";
-import {TextField} from "formik-mui"
-import {Button, Container,} from "@mui/material"
+import { Form, Formik} from "formik";
+import { Container,} from "@mui/material"
 import * as Yup from 'yup';
 import { KeyedMutator } from "swr";
 import { Email, Password, SubmitButton } from "@/components/FormComponents";

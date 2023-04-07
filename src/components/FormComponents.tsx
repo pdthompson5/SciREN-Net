@@ -12,18 +12,25 @@ const capitalizeField = (field: string) => {
     }).join(" ");
 }
 
+
+export type FormStatus = {
+    severity: "error" | "warning" | "info" | "success";
+    message: string;
+}
+
 export const UserType = (props: {userTypes: string[]}) => {
     return (
         <Field 
             name="userType"
-            className={styles.formInput}
             component={Autocomplete}
+            className={styles.inputBorder}
             label="User Type"
             options={props.userTypes}
             getOptionLabel={(option: string) => capitalizeField(option)}
             renderInput={(params: AutocompleteRenderInputParams) => (
             <MaterialTextField
                 {...params}
+                className={styles.formInput}
                 name="userType"
                 label="User Type"
                 variant="outlined"
@@ -34,18 +41,30 @@ export const UserType = (props: {userTypes: string[]}) => {
     )
 }
 
+
+export const Temp = (props: {userTypes: string[]}) => {
+    return (
+        <MaterialTextField sx={{
+            padding: "20px"
+
+        }} >
+
+        </MaterialTextField>
+    )
+}
+
 export const FirstName = () => {
     return (
-        <div className={styles.formInput}>
-            <Field name="firstName" className={styles.formInput} component={TextField} type="text" label="First Name"/>
+        <div className={styles.inputBorder}>
+            <Field name="firstName" component={TextField} className={styles.formInput} type="text" label="First Name"/>
         </div>
     )
 }
 
 export const LastName = () => {
     return (
-        <div className={styles.formInput}>
-            <Field name="lastName" className={styles.formInput} component={TextField} type="text" label="Last Name"/>
+        <div className={styles.inputBorder}>
+            <Field name="lastName" component={TextField} className={styles.formInput} type="text" label="Last Name"/>
         </div>
     )
 }
@@ -54,8 +73,8 @@ export const AcademicInterests = (props: {academicInterestOptions: string[]}) =>
     return (
         <Field 
         name="academicInterest"
-        className={styles.formInput}
         component={Autocomplete}
+        className={styles.inputBorder}
         label="Academic Interests"
         options={props.academicInterestOptions}
         multiple
@@ -63,13 +82,14 @@ export const AcademicInterests = (props: {academicInterestOptions: string[]}) =>
         renderInput={(params: AutocompleteRenderInputParams) => (
           <MaterialTextField
             {...params}
+            className={styles.formInput}
             name="academicInterest"
             label="Academic Interests"
             variant="outlined"
           />
         )}
         >
-    </Field>
+        </Field>
     )
 }
 
@@ -77,8 +97,8 @@ export const AcademicInterests = (props: {academicInterestOptions: string[]}) =>
 export const GradeRange = (props: {gradeRangeOptions: string[]}) => {
     return ( <Field 
         name="gradeRange"
-        className={styles.formInput}
         component={Autocomplete}
+        className={styles.inputBorder}
         label="Grade Range"
         options={props.gradeRangeOptions.map((x, i) => i)}
         getOptionLabel={(option: number) => props.gradeRangeOptions[option]}
@@ -86,6 +106,7 @@ export const GradeRange = (props: {gradeRangeOptions: string[]}) => {
         renderInput={(params: AutocompleteRenderInputParams) => (
         <MaterialTextField
             {...params}
+            className={styles.formInput}
             name="gradeRange"
             label="Grade Range"
             variant="outlined"
@@ -104,13 +125,25 @@ export const SubmitButton = () => {
 
 export const Email = () => {
     return (
-        <Field name="email" className={styles.formInput} component={TextField} type="text" label="Email"/>
+        <div className={styles.inputBorder}>
+            <Field name="email" component={TextField} className={styles.formInput} type="text" label="Email"/>
+        </div>
     )
 }
 
 export const Password = () => {
     return (
-        <Field name="password" className={styles.formInput} component={TextField} type="password" label="Password"/>
+        <div className={styles.inputBorder}>
+            <Field name="password" component={TextField} className={styles.formInput} type="password" label="Password"/>
+        </div>
+    )
+}
+
+export const VerifyPassword = () => {
+    return (
+        <div className={styles.inputBorder}>
+            <Field name="verifyPassword" className={styles.formInput} component={TextField} type="password" label="Verify Password"/>
+        </div>
     )
 }
 

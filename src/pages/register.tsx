@@ -4,14 +4,16 @@ import styles from "@/styles/Form.module.css";
 import { PostUserResponse } from "./api/user";
 import { useRouter } from "next/router";
 import { Field, Form, Formik, FormikProps} from "formik";
-import {TextField, Autocomplete, AutocompleteRenderInputParams} from "formik-mui"
-import {Button} from "@mui/material"
-import {TextField as MaterialTextField} from "@mui/material"
+import {TextField} from "formik-mui"
 import * as Yup from 'yup';
 import { gradeRangeOptions, academicInterestOptions, userTypes } from "./edit-profile";
-import { AcademicInterests, Email, FirstName, GradeRange, LastName, Password, SubmitButton, UserType } from "@/components/FormComponents";
+import { AcademicInterests, Email, FirstName, GradeRange, LastName, Password, SubmitButton, UserType, VerifyPassword } from "@/components/FormComponents";
+import { Alert, Container } from "@mui/material";
 
 const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+
+
 
 const Register: React.FC = () => {
   const router = useRouter();
@@ -53,7 +55,10 @@ const Register: React.FC = () => {
       validationSchema={RegistrationSchema} 
       onSubmit={async (values, actions) => {
         if(values.password !== values.verifyPassword){
-          actions.setStatus("Passwords do not match")
+          actions.setStatus({
+            severity: "error",
+            message: "Passwords do not match"
+          });
           actions.setSubmitting(false)
           return
         }
@@ -68,36 +73,44 @@ const Register: React.FC = () => {
         const body: PostUserResponse = await resp.json();
         console.log(body);
         if (resp.status >= 400) {
-          actions.setStatus(body.message);
+
+          actions.setStatus({
+            severity: "error",
+            message: body.message
+          });
         } else {
           router.replace("/login");
         }
 
-        actions.setStatus("Successfully created user")
+        actions.setStatus({
+          severity: "success",
+          message: "Successfully created user"
+        })
         await new Promise(r => setTimeout(r, 1000));
         actions.setSubmitting(false)
 
       }}> 
         {(props: FormikProps<any>) => (
         <div className={styles.formLayout}>
-          <h1>SciREN - Signup</h1>
           <Form>
-            <div className={styles.loginForm}>
-              <UserType userTypes={userTypes}></UserType>
+            <Container>
+              <h1 className={styles.loginTitle}>SciREN - Signup</h1>
+              <UserType userTypes={userTypes} ></UserType>
               <FirstName/>
               <LastName/>
               <AcademicInterests academicInterestOptions={academicInterestOptions}/>
               <GradeRange gradeRangeOptions={gradeRangeOptions}/>
               <Email/>
               <Password/>
-
-              <Field name="verifyPassword" className={styles.formInput} component={TextField} type="password" label="Verify Password"/>
-
+              <VerifyPassword/>
+            
+              {props.status ? 
+                <Alert severity={props.status.severity} sx={{marginBottom: "10px"}}>{props.status.message}</Alert>
+                :<span>&nbsp;&nbsp;&nbsp;</span>}
               <SubmitButton/>
+              {/* { props.status && <p className={styles.error}>{props.status}</p>} */}
 
-              { props.status && <p className={styles.error}>{props.status}</p>}
-              {/* TODO: Add message for successful submission */}
-            </div>
+            </Container>
           </Form>
         </div>
         )}

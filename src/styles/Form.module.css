@@ -1,5 +1,62 @@
 /* form element style */
+
+/* form element style */
+.loginForm,
 .loginLabel {
+  margin: 0.5rem 1rem 1rem;
+  display: flex;
+  flex-flow: column;
+}
+
+.formLayout {
+  min-width: 100%;
+  min-height: 100%;
+}
+
+.loginPrompt {
+  font-weight: 600;
+}
+
+.formInput {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  background-color: aliceblue;
+  background: aliceblue;
+  z-index: 1000;
+}
+
+.inputBorder {
+  padding: 10px;
+  margin: 0.5rem 0 2rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  background-color: aliceblue;
+  background: aliceblue;
+}
+
+.loginTitle {
+  margin: 0.5rem 1rem 1rem;
+  text-align: center;
+  color:aliceblue;
+}
+
+.loginSubmit {
+  width: 100%;
+  margin-bottom: 50px;
+}
+
+.error {
+  color: brown;
+  margin: 1rem 0 0;
+}
+
+
+
+
+
+/* .loginLabel {
     margin: 1rem 1rem 2.9rem;
     display: flex; 
     flex-flow: column; 
@@ -16,9 +73,9 @@
     background-size: 1100px 700px;
     background-repeat: no-repeat; */
 
-}
+/* } */
 
-.loginFormFL{
+/* .loginFormFL{
     margin: .5rem 5rem 1rem;
     display: flex;
     flex-direction: row;
@@ -29,9 +86,8 @@
     min-width: 100vw;
     min-height: 100vh;
     background-image: linear-gradient(rgba(89, 187, 190, 0.979), rgba(61, 150, 98, 0.849));
-}
-/* .loginForm,
-.loginLabel {
+} */
+.loginForm {
   margin: 0.5rem 1rem 1rem;
   display: flex;
   flex-flow: column;
@@ -40,21 +96,21 @@
 .formLayout {
   min-width: 100%;
   min-height: 100%;
-} */
+}
 
 .loginPrompt {
   font-weight: 600;
 }
 
-.formInput {
+/* .formInput {
     padding: 8px;
     width: 40rem;
     margin: 0.5rem 0 1rem;
     border: 1px solid #000000;
     border-radius: 4px;
-}
-
-/* .formInput {
+} */
+/*  
+.formInput {
   padding: 8px;
   margin: 0.5rem 0 1rem;
   border: 1px solid #ccc;
@@ -62,30 +118,8 @@
   width: 100%;
   background-color: aliceblue;
   background: aliceblue;
-} */
-
-.formInputLastName {
-    padding: 8px;
-    width: 15vw;
-    margin: 0.5rem 30rem 1rem;
-    border: 1px solid #000000;
-    border-radius: 4px;
-    padding-left: 0px;
-        display:table-cell;
-    margin-left: 2rem;
 }
 
-.formInputFirstName {
-    padding: 8px;
-    width: 15vw;
-    margin: 0.5rem 0rem 1rem;
-    border: 1px solid #000000;
-    border-radius: 4px;
-    padding-right: 0px;
-        display:table-cell;
-    margin-right: 5rem;
-    margin-left: 32.6rem;
-}
 
 .loginTitle {
   margin: 0.5rem 1rem 1rem;
@@ -105,4 +139,4 @@
 .error {
   color: brown;
   margin: 1rem 0 0;
-}
+} */
