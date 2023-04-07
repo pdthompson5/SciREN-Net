@@ -12,10 +12,7 @@
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/material": "^5.11.15",
-<<<<<<< HEAD
     "@mui/system": "^5.11.16",
-=======
->>>>>>> b1a9bef9c840013278c59e50fd092a1244f0fffb
     "@next/font": "13.1.6",
     "@types/mongodb": "^4.0.7",
     "@types/node": "18.13.0",
