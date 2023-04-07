@@ -1,51 +1,40 @@
 import React, { useEffect, useState } from "react";
 import Head from "next/head";
 import { GetStaticProps, GetStaticPropsContext } from "next";
-import { NextRouter, useRouter } from "next/router";
-import { redirect } from "next/navigation";
 import { Lesson, getLessonPlans } from "@/lib/database";
 import styles from "@/styles/List.module.css";
 import Button from "@mui/material/Button";
 import useUser from "@/lib/useUser";
 import { gradeRangeOptions } from "./edit-profile";
+import { GetUserResponse } from "./api/userSession";
+
 interface LessonListProps {
   lessons: Lesson[];
   undefined: boolean;
 }
 
-
-
 const LessonList: React.FC<LessonListProps> = (props: LessonListProps) => {
-  const router = useRouter();
-  const { user, mutateUser } = useUser();
-  useEffect(() => {
-    if (!user) {
-      router.push("/login");
-    }
-  }, [user, router]);
-  if (user) {
-    return (
-      <>
-        <Head>
-          <title>Lesson Plans - SciREN</title>
-          <meta name="description" content="SciREN Lesson Plan List" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
+  const { user} = useUser(
+    (user: GetUserResponse) => "/login"
+  );
+  return (
+    <>
+      <Head>
+        <title>Lesson Plans - SciREN</title>
+        <meta name="description" content="SciREN Lesson Plan List" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <link rel="icon" href="/favicon.ico" />
+      </Head>
+      {user && user.isLoggedIn ? 
         <main className={styles.mainContainer}>
           <h1 className={styles.listTitle}>SciREN Lesson Plans - Alabama</h1>
           <LessonFragment lessons={props.lessons} />
           <Footer />
-        </main>
-      </>
-    );
-  } else {
-    return (
-      <>
+        </main>:
         <h1>Loading...</h1>
-      </>
-    );
-  }
+      }
+    </>
+  );
 };
 
 const Footer: React.FC = () => {
