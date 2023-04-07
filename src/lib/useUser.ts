@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import Router from "next/router";
 import useSWR from "swr";
 import { GetUserResponse } from "@/pages/api/userSession";
+import { FetchError } from "./fetchJson";
 
 /*
  * Called when a page needs access to user state.

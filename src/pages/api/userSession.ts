@@ -39,14 +39,26 @@ async function getUser(
   res: NextApiResponse<GetUserResponse>
 ) {
   // This is triggered when we need data from the user
-  if (!req.session.user) {
-    console.error("No user found.");
-    res.status(404).json(EmptyUserResponse);
+  if(req.method === "GET"){
+    if (!req.session.user) {
+      console.error("No user found.");
+      res.status(200).json(EmptyUserResponse);
+      return;
+    }
+
+    res.status(200).json({
+      ...req.session.user,
+      isLoggedIn: true,
+    });
+  }
+  if(req.method === "POST"){
+    req.session.user = req.body;
+    await req.session.save();
+
+    res.status(200).json({
+      isLoggedIn: true,
+      ...req.body
+    });
     return;
   }
-
-  res.status(200).json({
-    ...req.session.user,
-    isLoggedIn: true,
-  });
 }

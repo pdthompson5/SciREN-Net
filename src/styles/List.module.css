@@ -1,0 +1,73 @@
+.mainContainer {
+  cursor: url("https://storage.googleapis.com/scr-notes/licensed-image.jpeg"),
+    auto;
+  /* background: #343434; */
+  padding: 10px 20vw 10px 10vw;
+}
+
+.lessonContainer {
+  background: aliceblue;
+  color: black;
+  padding: 25px;
+  margin: 25px 0;
+  border-radius: 5px;
+  max-width: 80vw;
+  margin: auto auto;
+  margin-top: 20px;
+  box-shadow: #1c1c1c81 4px 4px 2px;
+}
+
+.authorText {
+  font-size: 14px;
+  color: #313131;
+  margin-bottom: 10px;
+}
+
+.linkContainer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.listTitle {
+  color: aliceblue;
+}
+
+.lessonFooter {
+  display: flex;
+  justify-content: center;
+  margin: 20px;
+  color: #b7b4c4;
+}
+
+.lessonAbstract {
+  /* line-clamp 
+   * https://stackoverflow.com/questions/3922739/limit-text-length-to-n-lines-using-css/13924997#13924997 
+  */
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  width: 80;
+}
+
+.lessonAbstract:hover {
+  cursor: text;
+  background-color: rgba(0, 0, 0, 0.08);
+  border-radius: 4px;
+}
+
+.lessonAbstractCollapsed {
+  -webkit-line-clamp: 3; /* number of lines to show */
+  line-clamp: 3;
+}
+
+.gradeBox {
+  margin-top: 10px;
+}
+
+.optionalLink {
+  text-decoration: none;
+  position: relative;
+  bottom: 0px;
+  left: 0px;
+}

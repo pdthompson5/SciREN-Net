@@ -30,9 +30,20 @@
     min-height: 100vh;
     background-image: linear-gradient(rgba(89, 187, 190, 0.979), rgba(61, 150, 98, 0.849));
 }
+/* .loginForm,
+.loginLabel {
+  margin: 0.5rem 1rem 1rem;
+  display: flex;
+  flex-flow: column;
+}
+
+.formLayout {
+  min-width: 100%;
+  min-height: 100%;
+} */
 
 .loginPrompt {
-    font-weight: 600;
+  font-weight: 600;
 }
 
 .formInput {
@@ -42,6 +53,16 @@
     border: 1px solid #000000;
     border-radius: 4px;
 }
+
+/* .formInput {
+  padding: 8px;
+  margin: 0.5rem 0 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  background-color: aliceblue;
+  background: aliceblue;
+} */
 
 .formInputLastName {
     padding: 8px;
@@ -67,12 +88,14 @@
 }
 
 .loginTitle {
-    margin: 0.5rem 1rem 1rem;
-    font-family: Arial, Helvetica, sans-serif;
+  margin: 0.5rem 1rem 1rem;
+  text-align: center;
+  color:aliceblue;
 }
 
 .loginSubmit {
-    margin: 0.5rem 1rem 1rem;
+  width: 100%;
+  background: #2196f3;
 }
 
 .bggradient{
@@ -80,6 +103,6 @@
   }
 
 .error {
-    color: brown;
-    margin: 1rem 0 0;
+  color: brown;
+  margin: 1rem 0 0;
 }
