@@ -2,7 +2,7 @@ import React from "react";
 import styles from "@/styles/Form.module.css";
 
 import {TextField, Autocomplete, AutocompleteRenderInputParams} from "formik-mui"
-import {Button, TextField as MaterialTextField} from "@mui/material"
+import {Alert, Button, TextField as MaterialTextField} from "@mui/material"
 import { Field} from "formik";
 
 const capitalizeField = (field: string) => {
@@ -147,3 +147,12 @@ export const VerifyPassword = () => {
     )
 }
 
+
+
+export const StatusAlert = (props: {status: FormStatus}) => {
+    return (
+        props.status ? 
+        <Alert severity={props.status.severity} sx={{marginBottom: "10px"}}>{props.status.message}</Alert>
+        :<span>&nbsp;&nbsp;&nbsp;</span>
+    )
+}

@@ -7,7 +7,7 @@ import { Field, Form, Formik, FormikProps} from "formik";
 import {TextField} from "formik-mui"
 import * as Yup from 'yup';
 import { gradeRangeOptions, academicInterestOptions, userTypes } from "./edit-profile";
-import { AcademicInterests, Email, FirstName, GradeRange, LastName, Password, SubmitButton, UserType, VerifyPassword } from "@/components/FormComponents";
+import { AcademicInterests, Email, FirstName, GradeRange, LastName, Password, StatusAlert, SubmitButton, UserType, VerifyPassword } from "@/components/FormComponents";
 import { Alert, Container } from "@mui/material";
 
 const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -103,13 +103,9 @@ const Register: React.FC = () => {
               <Email/>
               <Password/>
               <VerifyPassword/>
-            
-              {props.status ? 
-                <Alert severity={props.status.severity} sx={{marginBottom: "10px"}}>{props.status.message}</Alert>
-                :<span>&nbsp;&nbsp;&nbsp;</span>}
+          
+              <StatusAlert status={props.status}/>
               <SubmitButton/>
-              {/* { props.status && <p className={styles.error}>{props.status}</p>} */}
-
             </Container>
           </Form>
         </div>

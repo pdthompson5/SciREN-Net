@@ -8,7 +8,7 @@ import { Form, Formik} from "formik";
 import { Container,} from "@mui/material"
 import * as Yup from 'yup';
 import { KeyedMutator } from "swr";
-import { Email, Password, SubmitButton } from "@/components/FormComponents";
+import { Email, Password, StatusAlert, SubmitButton } from "@/components/FormComponents";
 /* Login Page */
 
 export default function Login() {
@@ -66,7 +66,10 @@ const loginForm = (mutateUser: KeyedMutator<GetUserResponse>) =>{
             );
           } catch (error) {
             if (error instanceof FetchError) {
-              actions.setStatus(error.data.message);
+              actions.setStatus({
+                severity: "error", 
+                message: error.data.message
+              });
             } else {
               console.error("An unexpected error happened:", error);
             }
@@ -81,8 +84,8 @@ const loginForm = (mutateUser: KeyedMutator<GetUserResponse>) =>{
           <h1 className={styles.loginTitle}> SCIRen - Login </h1>
           <Email/>
           <Password/>
+          <StatusAlert status={status}/>
           <SubmitButton/>
-          { status && <h3 className={styles.error}>{status}</h3>}
         </Container>
       </Form>
       )}

@@ -12,7 +12,7 @@ import { ScopedMutator } from "swr/_internal";
 import fetchJson from "@/lib/fetchJson";
 import Router from "next/router";
 import Head from "next/head";
-import { AcademicInterests, FirstName, GradeRange, LastName, SubmitButton, UserType } from "@/components/FormComponents";
+import { AcademicInterests, FirstName, GradeRange, LastName, StatusAlert, SubmitButton, UserType } from "@/components/FormComponents";
 
 
 export const gradeRangeOptions = [
@@ -94,8 +94,11 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
             body: JSON.stringify(valuesWithID),
           }).then(
             (resp) => {
-              if(resp.status != 200){
-                actions.setStatus({message: resp.statusText});
+              if(resp.status !== 200){
+                actions.setStatus({
+                  severity: "error",
+                  message: resp.statusText
+                });
                 actions.setSubmitting(false);
                 return;
               }
@@ -128,8 +131,8 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
           <LastName/>
           <AcademicInterests academicInterestOptions={academicInterestOptions}/>
           <GradeRange gradeRangeOptions={gradeRangeOptions}/>
+          <StatusAlert status={status}/>
           <SubmitButton/>
-          { status && <p className={styles.error}>{status.message}</p>}
         </Container>
       </Form>
       )}
