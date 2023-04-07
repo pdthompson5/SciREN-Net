@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Head from "next/head";
 import styles from "@/styles/Form.module.css";
 import { User } from "./api/userSession";
-import { PostUserRequest, PostUserResponse } from "./api/user";
+import postUser, { PostUserRequest, PostUserResponse } from "./api/user";
 import { useRouter, Router } from "next/router";
 import { Field, Form, Formik, FormikProps} from "formik";
 import {TextField, Autocomplete, Select, AutocompleteRenderInputParams} from "formik-mui"
@@ -27,6 +27,9 @@ type AcademicInterestClass =
 //TODO: Template academic interest form elements
 
 // Field validation
+
+const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
 export const validateEmail = (e: string): boolean => {
   const regex =
     /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -89,24 +92,7 @@ const Register: React.FC = () => {
     return null;
   };
 
-  // Add user call
-  // Note: no need for arguments, just use react state
-  const addUser = async (postUser: PostUserRequest) => {
-    const resp = await fetch("/api/user", {
-      method: "POST",
-      body: JSON.stringify(postUser),
-    });
 
-    const body: PostUserResponse = await resp.json();
-    console.log(body);
-    // if (resp.status >= 400) {
-    //   setError(body.message);
-    // } else {
-    //   setError(undefined);
-    //   router.replace("/login");
-    // }
-    console.log(resp.status);
-  };
 
   // form submission handler
   // const handleSubmit = (event: any) => {
@@ -143,20 +129,30 @@ const Register: React.FC = () => {
   //   }
   // };
 
-  // const EditUserSchema = Yup.object().shape({
-  //   userType: Yup.string()
-  //       .required("Required"),
-  //   firstName: Yup.string()
-  //       .min(2, 'Too Short!')
-  //       .max(50, 'Too Long!')
-  //       .required('Required'),
-  //   lastName: Yup.string()
-  //       .min(2, 'Too Short!')
-  //       .max(50, 'Too Long!')
-  //       .required('Required'),
-  //   academicInterest: Yup.array(),
-  //   gradeRange: Yup.array()
-  // });
+  // TODO: email regex validation
+  const RegistrationSchema = Yup.object().shape({
+    userType: Yup.string()
+        .required("Required"),
+    firstName: Yup.string()
+        .min(2, 'Too Short')
+        .max(80, 'Too Long')
+        .required('Required'),
+    lastName: Yup.string()
+        .min(2, 'Too Short')
+        .max(80, 'Too Long')
+        .required('Required'),
+    academicInterest: Yup.array(),
+    gradeRange: Yup.array(),
+    email: Yup.string()
+      .matches(EMAIL_REGEX, "Invalid email format")
+      .required("Required"),
+    password: Yup.string()
+      .min(8, "Password must be at least 8 characters")
+      .max(80, "Password must not exceed 80 characters")
+      .required("Required"),
+    verifyPassword: Yup.string()
+      .required("Required")
+  });
 
   return (
     <>
@@ -168,24 +164,39 @@ const Register: React.FC = () => {
       </Head>
       <Formik enableReinitialize 
       initialValues={{userType: "researcher", firstName: "", lastName: "", academicInterest: [], gradeRange: [], email: "", password: "", verifyPassword: ""}} 
-      // validationSchema={EditUserSchema} 
-      onSubmit={async (values, actions) => {  
-        addUser(values)
+      validationSchema={RegistrationSchema} 
+      onSubmit={async (values, actions) => {
+        if(values.password !== values.verifyPassword){
+          actions.setStatus("Passwords do not match")
+          actions.setSubmitting(false)
+          return
+        }
+
+        const {verifyPassword: _, ...postUser} = values;
+
+        const resp = await fetch("/api/user", {
+          method: "POST",
+          body: JSON.stringify(postUser),
+        });
+    
+        const body: PostUserResponse = await resp.json();
+        console.log(body);
+        if (resp.status >= 400) {
+          actions.setStatus(body.message);
+        } else {
+          router.replace("/login");
+        }
+
+        actions.setStatus("Successfully created user")
+        await new Promise(r => setTimeout(r, 1000));
         actions.setSubmitting(false)
-        console.log(values)
+
       }}> 
         {(props: FormikProps<any>) => (
         <div className={styles.formLayout}>
           <h1>SciREN - Signup</h1>
           <Form>
-            <div className={styles.loginFormFL}>
-              {/* Name */}
-              <Field name="firstName" className={styles.formInput} component={TextField} type="text" label="First Name"/>
-              <Field name="lastName" className={styles.formInput} component={TextField} type="text"  label="Last Name"/>
-            </div> 
-            
             <div className={styles.loginForm}>
-              {/* User type */}
               <Field 
               name="userType"
               className={styles.formInput}
@@ -202,7 +213,12 @@ const Register: React.FC = () => {
               )}
               >
               </Field>
-              {/* Academic interests */}
+
+              <div className={styles.loginFormFL}>
+                <Field name="firstName" className={styles.formInput} component={TextField} type="text" label="First Name"/>
+                <Field name="lastName" className={styles.formInput} component={TextField} type="text"  label="Last Name"/>
+              </div> 
+
               <Field 
               name="academicInterest"
               className={styles.formInput}
@@ -219,7 +235,7 @@ const Register: React.FC = () => {
                 />
               )}>
               </Field>
-              {/* Grade Range */}
+
               <Field 
               name="gradeRange"
               className={styles.formInput}
@@ -238,40 +254,14 @@ const Register: React.FC = () => {
               )}
               >
               </Field>
-              {/* Email */}
-              {/* <input
-                onChange={handleField(setEmail)}
-                placeholder="Email"
-                required
-                className={styles.formInput}
-                value={email}
-                type="text"
-              /> */}
+
               <Field name="email" className={styles.formInput} component={TextField} type="text" label="Email"/>
-              {/* Password */}
-              {/* <input
-                onChange={handleField(setPassword)}
-                placeholder="Password"
-                required
-                className={styles.formInput}
-                value={password}
-                type="password"
-              /> */}
-              <Field name="password" className={styles.formInput} component={TextField} type="text" label="Password"/>
-              {/* Verify Password */}
-              {/* <input
-                onChange={handleField(setVerifyPassword)}
-                placeholder="Verify Password"
-                required
-                className={styles.formInput}
-                value={verifyPassword}
-                type="password"
-              /> */}
-              <Field name="verifyPassword" className={styles.formInput} component={TextField} type="text" label="Verify Password"/>
-              {/* Submit */}
+              <Field name="password" className={styles.formInput} component={TextField} type="password" label="Password"/>
+              <Field name="verifyPassword" className={styles.formInput} component={TextField} type="password" label="Verify Password"/>
+
               <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
 
-              {/* {error && <p className={styles.error}>{error}</p>} */}
+              { props.status && <p className={styles.error}>{props.status}</p>}
               {/* TODO: Add message for successful submission */}
             </div>
           </Form>
