@@ -1,6 +1,5 @@
 import React from "react";
 import styles from "@/styles/Form.module.css";
-
 import {TextField, Autocomplete, AutocompleteRenderInputParams} from "formik-mui"
 import {Alert, Button, TextField as MaterialTextField} from "@mui/material"
 import { Field} from "formik";
@@ -38,18 +37,6 @@ export const UserType = (props: {userTypes: string[]}) => {
             )}
             >
         </Field>
-    )
-}
-
-
-export const Temp = (props: {userTypes: string[]}) => {
-    return (
-        <MaterialTextField sx={{
-            padding: "20px"
-
-        }} >
-
-        </MaterialTextField>
     )
 }
 
@@ -146,8 +133,6 @@ export const VerifyPassword = () => {
         </div>
     )
 }
-
-
 
 export const StatusAlert = (props: {status: FormStatus}) => {
     return (
