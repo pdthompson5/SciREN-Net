@@ -7,6 +7,7 @@ import * as Yup from 'yup';
 import { GetUserResponse } from "@/pages/api/userSession";
 import { ProfileInformation } from "@/lib/database";
 import Router from "next/router";
+import { StatusAlert, SubmitButton } from "./FormComponents";
 
 
 const MESSAGE_CHARACTER_LIMIT = 3000;
@@ -36,14 +37,21 @@ const Contact = (props: {user: GetUserResponse, userToContact: ProfileInformatio
             const resp = await fetch("/api/contact", {method: "POST", body: JSON.stringify(contactRequest)})
 
             if(resp.status != 200){
-              actions.setStatus({message: resp.statusText});
+              actions.setStatus({
+                severity: "error",
+                message: resp.statusText
+              });
               actions.setSubmitting(false);
               return;
             }
 
-            actions.setStatus({message: "Successfully sent message"})
+            actions.setStatus({
+              severity: "success",
+              message: "Successfully sent message"
+            })
 
             actions.setSubmitting(false)
+            await new Promise(r => setTimeout(r, 700));  
             Router.push(`/profiles/${userToContact.userID}`)
           
           }}
@@ -54,21 +62,21 @@ const Contact = (props: {user: GetUserResponse, userToContact: ProfileInformatio
           <Stack spacing={4}>
             <h1 className={styles.loginTitle}>Contact User: {userToContact.firstName} {userToContact.lastName}</h1>
 
-            {/* TODO: display number of chars remaining */}
-            <Field 
-              name="message"
-              className={styles.formInput}
-              component={TextField}
-              multiline
-              variant="standard"
-              size="medium"
-              type="text"
-              label="Message"
-              helperText={`${values.message.length}/${MESSAGE_CHARACTER_LIMIT}`}
-              />
+            <div className={styles.inputBorder}>
+              <Field 
+                name="message"
+                className={styles.formInput}
+                component={TextField}
+                multiline
+                size="medium"
+                type="text"
+                label="Message"
+                helperText={`${values.message.length}/${MESSAGE_CHARACTER_LIMIT}`}
+                />
+              <StatusAlert status={status}/>
+            </div>
 
-            <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
-            { status && <p>{status.message}</p>}
+            <SubmitButton/>
           </Stack>
           </Container>
         </Form>

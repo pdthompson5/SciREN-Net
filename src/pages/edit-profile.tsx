@@ -67,11 +67,11 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
         .required("Required"),
     firstName: Yup.string()
         .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
+        .max(80, 'Too Long!')
         .required('Required'),
     lastName: Yup.string()
         .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
+        .max(80, 'Too Long!')
         .required('Required'),
     academicInterest: Yup.array(),
     gradeRange: Yup.array()
