@@ -14,6 +14,7 @@ import { ScopedMutator } from "swr/_internal";
 import fetchJson from "@/lib/fetchJson";
 import Router from "next/router";
 import Head from "next/head";
+import { AcademicInterests, FirstName, GradeRange, LastName, SubmitButton, UserType } from "@/components/FormComponents";
 
 
 export const gradeRangeOptions = [
@@ -36,14 +37,6 @@ export const gradeRangeOptions = [
 
 export const academicInterestOptions = ["mathematics", "biology", "chemistry", "social studies", "history", "sociology"];
 export const userTypes = ["researcher", "teacher", "student", "admin"]
-
-const capitalizeField = (field: string) => {
-    const words = field.split(" ");
-    return words.map((word) => { 
-        return word[0].toUpperCase() + word.substring(1); 
-    }).join(" ");
-}
-
  
 const EditProfile = () => {
     const { mutate } = useSWRConfig()
@@ -132,71 +125,12 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
       <Form className={styles.formLayout}>
         <Container>
           <h1 className={styles.loginTitle}>Edit Profile</h1>
-          <Field 
-              name="userType"
-              className={styles.formInput}
-              component={Autocomplete}
-              label="User Type"
-              options={userTypes}
-              getOptionLabel={(option: string) => capitalizeField(option)}
-              renderInput={(params: AutocompleteRenderInputParams) => (
-                <MaterialTextField
-                  {...params}
-                  name="userType"
-                  label="User Type"
-                  variant="outlined"
-                />
-              )}
-              >
-          </Field>
-          <div className={styles.formInput}>
-            <Field name="firstName" className={styles.formInput} component={TextField} type="text" label="First Name"/>
-          </div>
-          <div className={styles.formInput}>
-            <Field name="lastName" className={styles.formInput} component={TextField} type="text" label="Last Name"/>
-          </div>
-          <Field 
-              name="academicInterest"
-              className={styles.formInput}
-              component={Autocomplete}
-              label="Academic Interests"
-              options={academicInterestOptions}
-              multiple
-              getOptionLabel={(option: string) => capitalizeField(option)}
-              renderInput={(params: AutocompleteRenderInputParams) => (
-                <MaterialTextField
-                  {...params}
-                  name="academicInterest"
-                  label="Academic Interests"
-                  variant="outlined"
-                />
-              )}
-              >
-          </Field>
-
-
-          <Field 
-              name="gradeRange"
-              className={styles.formInput}
-              component={Autocomplete}
-              label="Grade Range"
-              options={gradeRangeOptions.map((x, i) => i)}
-              getOptionLabel={(option: number) => gradeRangeOptions[option]}
-              multiple
-              renderInput={(params: AutocompleteRenderInputParams) => (
-                <MaterialTextField
-                  {...params}
-                  name="gradeRange"
-                  label="Grade Range"
-                  variant="outlined"
-                />
-              )}
-              >
-          </Field>
-
-          <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
-
-
+          <UserType userTypes={userTypes}></UserType>
+          <FirstName/>
+          <LastName/>
+          <AcademicInterests academicInterestOptions={academicInterestOptions}/>
+          <GradeRange gradeRangeOptions={gradeRangeOptions}/>
+          <SubmitButton/>
           { status && <p className={styles.error}>{status.message}</p>}
         </Container>
       </Form>

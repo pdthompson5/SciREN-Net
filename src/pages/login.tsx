@@ -9,6 +9,7 @@ import {TextField} from "formik-mui"
 import {Button, Container,} from "@mui/material"
 import * as Yup from 'yup';
 import { KeyedMutator } from "swr";
+import { Email, Password, SubmitButton } from "@/components/FormComponents";
 /* Login Page */
 
 export default function Login() {
@@ -79,13 +80,9 @@ const loginForm = (mutateUser: KeyedMutator<GetUserResponse>) =>{
       <Form className={styles.formLayout}>
         <Container>
           <h1 className={styles.loginTitle}> SCIRen - Login </h1>
-          <div className={styles.formInput}>
-            <Field name="email" className={styles.formInput} component={TextField} size="medium" type="text" label="Email"/>
-          </div>
-          <div className={styles.formInput}>
-            <Field name="password" className={styles.formInput} component={TextField} size="medium" type="password" label="Password"/>
-          </div>
-          <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
+          <Email/>
+          <Password/>
+          <SubmitButton/>
           { status && <h3 className={styles.error}>{status}</h3>}
         </Container>
       </Form>
