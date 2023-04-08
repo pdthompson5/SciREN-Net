@@ -87,9 +87,7 @@ const Register: React.FC = () => {
         });
     
         const body: PostUserResponse = await resp.json();
-        console.log(body);
         if (resp.status >= 400) {
-
           actions.setStatus({
             severity: "error",
             message: body.message

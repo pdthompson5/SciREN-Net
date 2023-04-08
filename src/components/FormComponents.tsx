@@ -11,7 +11,6 @@ const capitalizeField = (field: string) => {
     }).join(" ");
 }
 
-
 export type FormStatus = {
     severity: "error" | "warning" | "info" | "success";
     message: string;
@@ -58,7 +57,7 @@ export const LastName = () => {
 
 export const AcademicInterests = (props: {academicInterestOptions: string[]}) => {
     return (
-        <Field 
+    <Field 
         name="academicInterest"
         component={Autocomplete}
         className={styles.inputBorder}
@@ -75,14 +74,13 @@ export const AcademicInterests = (props: {academicInterestOptions: string[]}) =>
             variant="outlined"
           />
         )}
-        >
-        </Field>
+    />
     )
 }
 
-
 export const GradeRange = (props: {gradeRangeOptions: string[]}) => {
-    return ( <Field 
+    return ( 
+    <Field 
         name="gradeRange"
         component={Autocomplete}
         className={styles.inputBorder}
@@ -99,8 +97,7 @@ export const GradeRange = (props: {gradeRangeOptions: string[]}) => {
             variant="outlined"
         />
         )}
-        >
-    </Field>
+    />
     )
 }
 
