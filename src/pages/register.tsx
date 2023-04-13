@@ -107,7 +107,7 @@ const Register: React.FC = () => {
         {(props: FormikProps<any>) => (
         <div className={styles.formLayout}>
           <Form>
-            <Container>
+            <Container className={styles.formContainer}>
               <h1 className={styles.loginTitle}>SciREN - Signup</h1>
               <UserType userTypes={userTypes} ></UserType>
               <FirstName/>
