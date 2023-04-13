@@ -3,9 +3,12 @@ import styles from "@/styles/Form.module.css";
 import {TextField, Autocomplete, AutocompleteRenderInputParams} from "formik-mui"
 import {Alert, Button, TextField as MaterialTextField} from "@mui/material"
 import { Field } from "formik";
+import { regionOptions, userTypes } from "@/pages/edit-profile";
 
 const capitalizeField = (field: string) => {
-    const words = field.split(" ");
+    // TODO: I'm getting an empty string. Why?
+    const words = field.includes(" ") ? field.split(" "): [field]
+    // console.log(words)
     return words.map((word) => { 
         return word[0].toUpperCase() + word.substring(1); 
     }).join(" ");
@@ -17,6 +20,7 @@ export type FormStatus = {
 }
 
 export const UserType = (props: {userTypes: string[]}) => {
+    console.log(userTypes)
     return (
         <Field 
             name="userType"
@@ -55,22 +59,23 @@ export const LastName = () => {
     )
 }
 
-export const AcademicInterests = (props: {academicInterestOptions: string[]}) => {
+export const AcademicInterests = (props: {academicInterestOptions: string[], label: string, freeSolo: boolean}) => {
     return (
     <Field 
         name="academicInterest"
         component={Autocomplete}
         className={styles.inputBorder}
-        label="Academic Interests"
+        label={props.label}
         options={props.academicInterestOptions}
         multiple
+        freeSolo={props.freeSolo}
         getOptionLabel={(option: string) => capitalizeField(option)}
         renderInput={(params: AutocompleteRenderInputParams) => (
           <MaterialTextField
             {...params}
             className={styles.formInput}
             name="academicInterest"
-            label="Academic Interests"
+            label={props.label}
             variant="outlined"
           />
         )}
@@ -100,6 +105,71 @@ export const GradeRange = (props: {gradeRangeOptions: string[]}) => {
     />
     )
 }
+
+// TODO: Figure out a way to indicate to the user that they can add their own options
+export const Organization = (props: {organizationOptions: string[]} ) => {
+    return (
+        <Field 
+            name="organizations"
+            component={Autocomplete}
+            className={styles.inputBorder}
+            label="Organization(s)"
+            options={props.organizationOptions}
+            freeSolo
+            multiple
+            getOptionLabel={(option: string) => capitalizeField(option)}
+            renderInput={(params: AutocompleteRenderInputParams) => (
+              <MaterialTextField
+                {...params}
+                className={styles.formInput}
+                name="organizations"
+                label="Organization(s)"
+                variant="outlined"
+              />
+            )}
+        />
+        )
+}
+
+export const Position = () => {
+    return (
+        <div className={styles.inputBorder}>
+            <Field name="position" component={TextField} className={styles.formInput} type="text" label="Position at Organization(s)"/>
+        </div>
+    )
+}
+
+export const SciRENRegion = (props: {regionOptions: string[]}) => {
+    console.log(props.regionOptions)
+   return (
+        <Field 
+        name="scirenRegion"
+        component={Autocomplete}
+        className={styles.inputBorder}
+        label="SciREN Region"
+        options={props.regionOptions}
+        getOptionLabel={(option: string) => { capitalizeField(option)}}
+        renderInput={(params: AutocompleteRenderInputParams) => (
+            <MaterialTextField
+                {...params}
+                className={styles.formInput}
+                name="scirenRegion"
+                label="SciREN Region"
+                variant="outlined"
+            />
+        )}
+        />
+   )
+}
+
+export const TextBio = () => {
+    return (
+        <div className={styles.inputBorder}>
+            <Field name="textBio" component={TextField} className={styles.formInput} multiline type="text" label="About You"/>
+        </div>
+    )
+}
+
 
 export const SubmitButton = () => {
     return (
