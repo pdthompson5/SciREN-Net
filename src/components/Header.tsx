@@ -13,7 +13,7 @@ const Header: React.FC = () => {
   const router = useRouter();
   return (
     <>
-      <Sticky enabled={true}>
+      <Sticky enabled={true} innerZ={9999}>
         <div className={styles.header}>
           <Link href="/" className={styles.headerElement}>
             SciRenNet
