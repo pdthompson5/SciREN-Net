@@ -92,17 +92,16 @@ const Register: React.FC = () => {
             severity: "error",
             message: body.message
           });
+          actions.setSubmitting(false);
         } else {
+          actions.setStatus({
+            severity: "success",
+            message: "Successfully created user"
+          })
+          actions.setSubmitting(false);
+          await new Promise(r => setTimeout(r, 1000));
           router.replace("/login");
         }
-
-        actions.setStatus({
-          severity: "success",
-          message: "Successfully created user"
-        })
-        await new Promise(r => setTimeout(r, 1000));
-        actions.setSubmitting(false)
-
       }}> 
         {(props: FormikProps<any>) => (
         <div className={styles.formLayout}>

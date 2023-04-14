@@ -42,18 +42,16 @@ const Contact = (props: {user: GetUserResponse, userToContact: ProfileInformatio
                 message: resp.statusText
               });
               actions.setSubmitting(false);
-              return;
+            } else {
+              actions.setStatus({
+                severity: "success",
+                message: "Successfully sent message"
+              })
+  
+              actions.setSubmitting(false)
+              await new Promise(r => setTimeout(r, 700));  
+              Router.push(`/profiles/${userToContact.userID}`)
             }
-
-            actions.setStatus({
-              severity: "success",
-              message: "Successfully sent message"
-            })
-
-            actions.setSubmitting(false)
-            await new Promise(r => setTimeout(r, 700));  
-            Router.push(`/profiles/${userToContact.userID}`)
-          
           }}
       >
         {({status, values}) => (

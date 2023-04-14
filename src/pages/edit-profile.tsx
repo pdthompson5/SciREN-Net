@@ -100,9 +100,8 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
                   message: resp.statusText
                 });
                 actions.setSubmitting(false);
-                return;
               }
-              else{
+              else {
                 Router.push(`/profiles/${user.userID}`).then(
                   () => {
                     mutateUser(
