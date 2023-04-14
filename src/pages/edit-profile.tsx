@@ -48,16 +48,15 @@ export const organizationOptions = [
   "Duke University",
   "George Mason University",
 ];
- 
+
 export const regionOptions = [
-  "Alabama",
+  "Alabama", 
   "Coast",
   "Triangle",
   "Georgia",
   "George Mason",
-  "San Diego",
+  "San Diego"
 ];
-
 
 const EditProfile = () => {
     const { mutate } = useSWRConfig()

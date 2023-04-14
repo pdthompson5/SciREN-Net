@@ -76,7 +76,7 @@ const Register: React.FC = () => {
         textBio: "",
         organizations: [],
         position: "",
-        scirenRegion: "",
+        scirenRegion: "Alabama",
         email: "",
         password: "",
         verifyPassword: ""
@@ -125,7 +125,7 @@ const Register: React.FC = () => {
           <Form>
             <Container>
               <h1 className={styles.loginTitle}>SciREN - Signup</h1>
-              {/* <UserType userTypes={userTypes}/> */}
+              <UserType userTypes={userTypes}/>
               <FirstName/>
               <LastName/>
               {/* TODO: Determine what categories we want to choose from, we might just want to separate these */}
@@ -137,8 +137,7 @@ const Register: React.FC = () => {
               <Organization organizationOptions={organizationOptions}/>
               <Position/>
               <TextBio/>
-              {/* TODO: ScirenRegion is the issue */}
-              {/* <SciRENRegion regionOptions={regionOptions}/> */}
+              <SciRENRegion regionOptions={regionOptions}/>
               <Email/>
               <Password/>
               <VerifyPassword/>

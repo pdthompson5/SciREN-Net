@@ -20,7 +20,6 @@ export type FormStatus = {
 }
 
 export const UserType = (props: {userTypes: string[]}) => {
-    console.log(userTypes)
     return (
         <Field 
             name="userType"
@@ -140,7 +139,6 @@ export const Position = () => {
 }
 
 export const SciRENRegion = (props: {regionOptions: string[]}) => {
-    console.log(props.regionOptions)
    return (
         <Field 
         name="scirenRegion"
@@ -148,7 +146,7 @@ export const SciRENRegion = (props: {regionOptions: string[]}) => {
         className={styles.inputBorder}
         label="SciREN Region"
         options={props.regionOptions}
-        getOptionLabel={(option: string) => { capitalizeField(option)}}
+        getOptionLabel={(option: string) => capitalizeField(option)}
         renderInput={(params: AutocompleteRenderInputParams) => (
             <MaterialTextField
                 {...params}
@@ -158,7 +156,8 @@ export const SciRENRegion = (props: {regionOptions: string[]}) => {
                 variant="outlined"
             />
         )}
-        />
+        >
+        </Field>
    )
 }
 
