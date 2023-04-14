@@ -123,7 +123,7 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
     >
       {({status}) => (
       <Form className={styles.formLayout}>
-        <Container className={styles.formContainer}>
+        <Container>
           <h1 className={styles.loginTitle}>Edit Profile</h1>
           <UserType userTypes={userTypes}></UserType>
           <FirstName/>

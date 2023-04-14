@@ -80,7 +80,7 @@ const loginForm = (mutateUser: KeyedMutator<GetUserResponse>) =>{
     >
       {({status}) => (
       <Form className={styles.formLayout}>
-        <Container className={styles.formContainer}>
+        <Container>
           <h1 className={styles.loginTitle}> SCIRen - Login </h1>
           <Email/>
           <Password/>
