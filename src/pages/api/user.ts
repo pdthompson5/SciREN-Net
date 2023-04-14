@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "@/pages/api/userSession";
-import { establishMongoConnection, getMongoUser, getProfileInformation } from "@/lib/database";
+import { USER_COLLECTION_NAME, establishMongoConnection, getMongoUser, getProfileInformation } from "@/lib/database";
 
 export interface PostUserResponse {
   message: string;
@@ -40,7 +40,7 @@ export default async function postUser(
   if(req.method === "POST"){
     const reqBody: PostUserRequest = JSON.parse(await req.body);
     const mclient = await establishMongoConnection();
-    const userCollection = mclient.db("sciren").collection("users");
+    const userCollection = mclient.db("sciren").collection(USER_COLLECTION_NAME);
     if (
       (await userCollection.countDocuments({
         email: reqBody.email,

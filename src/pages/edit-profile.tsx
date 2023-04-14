@@ -96,7 +96,11 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
         .max(80, 'Too Long!')
         .required('Required'),
     academicInterest: Yup.array(),
-    gradeRange: Yup.array()
+    gradeRange: Yup.array(),
+    textBio: Yup.string(),
+    organizations: Yup.array(),
+    position: Yup.string(),
+    scirenRegion: Yup.string()
   });
 
   return (
@@ -109,9 +113,11 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
         lastName: user.lastName,
         academicInterest: user.academicInterest,
         gradeRange: user.gradeRange,
-        organizations: [],
+        // TODO: Replace defaults with real user values
         textBio: "",
-
+        organizations: [],
+        position: "",
+        scirenRegion: "Alabama"
       }}
       onSubmit={async (values, actions) => {    
           // TODO: impl this
@@ -121,7 +127,7 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
             ...values
           }    
           
-          alert(valuesWithID)
+          console.log(valuesWithID)
           return;
 
           await fetch("/api/editUser", {

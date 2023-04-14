@@ -4,6 +4,7 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import { sessionOptions } from "@/lib/session";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoClient } from "mongodb";
+import { USER_COLLECTION_NAME } from "@/lib/database";
 
 // Login API Endpoint
 
@@ -25,7 +26,7 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
     // TODO: Add error catching for mongo document
     const client = new MongoClient(mongoURI);
     console.log("Connected to MongoDB");
-    const userCollection = client.db("sciren").collection("users");
+    const userCollection = client.db("sciren").collection(USER_COLLECTION_NAME);
     const userCursor = await userCollection.find(
       //TODO: Replace with findone
       {

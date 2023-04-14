@@ -47,6 +47,10 @@ const Register: React.FC = () => {
         .required('Required'),
     academicInterest: Yup.array(),
     gradeRange: Yup.array(),
+    textBio: Yup.string(),
+    organizations: Yup.array(),
+    position: Yup.string(),
+    scirenRegion: Yup.string(),
     email: Yup.string()
       .matches(EMAIL_REGEX, "Invalid email format")
       .required("Required"),

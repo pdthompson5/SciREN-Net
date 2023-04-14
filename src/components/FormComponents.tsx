@@ -133,7 +133,7 @@ export const Organization = (props: {organizationOptions: string[]} ) => {
 export const Position = () => {
     return (
         <div className={styles.inputBorder}>
-            <Field name="position" component={TextField} className={styles.formInput} type="text" label="Position at Organization(s)"/>
+            <Field name="position" component={TextField} className={styles.formInput} type="text" label="Position(s) at Organization(s)"/>
         </div>
     )
 }

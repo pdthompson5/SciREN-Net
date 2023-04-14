@@ -23,7 +23,7 @@ export interface Lesson {
   gradeLevel: number[];
 }
 
-export const foo = "bar";
+export const USER_COLLECTION_NAME = "usersv2";
 
 export const establishMongoConnection = async () => {
   const mongoURI = process.env.MONGO_URI;
@@ -46,7 +46,7 @@ export const establishMongoConnection = async () => {
 
 export const getUserCollection = (client: MongoClient) => {
   const mongoDB = process.env.DB_NAME;
-  return client.db(mongoDB).collection("users");
+  return client.db(mongoDB).collection(USER_COLLECTION_NAME);
 };
 
 export interface UserWithID extends WithId<Document> {
