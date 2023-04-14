@@ -4,7 +4,7 @@ import { withIronSessionApiRoute } from "iron-session/next";
 import { sessionOptions } from "@/lib/session";
 import { NextApiRequest, NextApiResponse } from "next";
 import { MongoClient } from "mongodb";
-import { USER_COLLECTION_NAME } from "@/lib/database";
+import { UserWithID, getUserCollection } from "@/lib/database";
 
 // Login API Endpoint
 
@@ -26,7 +26,7 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
     // TODO: Add error catching for mongo document
     const client = new MongoClient(mongoURI);
     console.log("Connected to MongoDB");
-    const userCollection = client.db("sciren").collection(USER_COLLECTION_NAME);
+    const userCollection = getUserCollection(client);
     const userCursor = await userCollection.find(
       //TODO: Replace with findone
       {
@@ -49,7 +49,7 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
         },
       }
     );
-    const userDoc = await userCursor.next();
+    const userDoc = (await userCursor.next()) as UserWithID;
     const multipleMatches = await userCursor.hasNext();
     if (userDoc == null) {
       throw new Error("No user associated with the provided email.");
@@ -68,16 +68,9 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
 
     // Save retrieved user
     const user: GetUserResponse = {
-      // Could use ... to unpack?
       isLoggedIn: true,
-      email: userDoc.email,
-      firstName: userDoc.firstName,
-      lastName: userDoc.lastName,
-      userType: userDoc.userType,
       userID: userDoc._id.toString(),
-      joinDate: userDoc.joinDate,
-      academicInterest: userDoc.academicInterest,
-      gradeRange: userDoc.gradeRange,
+      ...userDoc
     };
     req.session.user = user;
     await req.session.save();

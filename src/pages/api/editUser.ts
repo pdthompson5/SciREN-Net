@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import { USER_COLLECTION_NAME, establishMongoConnection } from "@/lib/database";
+import { establishMongoConnection, getUserCollection } from "@/lib/database";
 import { PostUserRequest, PostUserResponse } from "./user";
-import { FetchError } from "@/lib/fetchJson";
+
 
 
 
@@ -12,7 +12,7 @@ export default async function postEditUser(
 ) {
     const reqBody: PostUserRequestWithID = await JSON.parse(req.body);
     const mclient = await establishMongoConnection();
-    const userCollection = mclient.db("sciren").collection(USER_COLLECTION_NAME);
+    const userCollection = getUserCollection(mclient)
 
     if (
         (await userCollection.countDocuments({

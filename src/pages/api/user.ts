@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "@/pages/api/userSession";
-import { USER_COLLECTION_NAME, establishMongoConnection, getMongoUser, getProfileInformation } from "@/lib/database";
+import { establishMongoConnection, getMongoUser, getProfileInformation, getUserCollection } from "@/lib/database";
 
 export interface PostUserResponse {
   message: string;
@@ -8,15 +8,10 @@ export interface PostUserResponse {
 
 
 
-export type PostUserRequest = Pick<
+export type PostUserRequest = Omit<
   User,
-  | "email"
-  | "password"
-  | "userType"
-  | "firstName"
-  | "lastName"
-  | "academicInterest"
-  | "gradeRange"
+  | "joinDate"
+  | "userID"
 >;
 
 export type GetUserRequest = {
@@ -40,7 +35,7 @@ export default async function postUser(
   if(req.method === "POST"){
     const reqBody: PostUserRequest = JSON.parse(await req.body);
     const mclient = await establishMongoConnection();
-    const userCollection = mclient.db("sciren").collection(USER_COLLECTION_NAME);
+    const userCollection = getUserCollection(mclient)
     if (
       (await userCollection.countDocuments({
         email: reqBody.email,
@@ -55,7 +50,7 @@ export default async function postUser(
     // Insert the new user, push profile page
     userCollection.insertOne({
       ...reqBody,
-      joinDate: new Date(),
+      joinDate: new Date().toISOString(),
     });
     console.log("api/registerUser : added a new user successfully");
     res.status(200).json({
