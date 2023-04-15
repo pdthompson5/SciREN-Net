@@ -56,26 +56,33 @@ export const LastName = () => {
     )
 }
 
-export const AcademicInterests = (props: {academicInterestOptions: string[], label: string, freeSolo: boolean}) => {
+export const AcademicInterests = (props: {academicInterestOptions: string[], label: string}) => {
     return (
-    <Field 
-        name="academicInterest"
-        component={Autocomplete}
-        className={styles.inputBorder}
-        label={props.label}
-        options={props.academicInterestOptions}
-        multiple
-        freeSolo={props.freeSolo}
-        renderInput={(params: AutocompleteRenderInputParams) => (
-          <MaterialTextField
-            {...params}
-            className={styles.formInput}
-            name="academicInterest"
-            label={props.label}
-            variant="outlined"
-          />
-        )}
-    />
+        <Tooltip 
+        disableHoverListener 
+        placement="top"
+        title="If your subject is not listed, type its name then press enter."
+        >
+            <Field 
+                name="academicInterest"
+                component={Autocomplete}
+                className={styles.inputBorder}
+                label={props.label}
+                options={props.academicInterestOptions}
+                multiple
+                getOptionLabel={(option: string) => capitalizeField(option)}
+                freeSolo
+                renderInput={(params: AutocompleteRenderInputParams) => (
+                <MaterialTextField
+                    {...params}
+                    className={styles.formInput}
+                    name="academicInterest"
+                    label={props.label}
+                    variant="outlined"
+                />
+                )}
+            />
+        </Tooltip>
     )
 }
 
@@ -103,11 +110,13 @@ export const GradeRange = (props: {gradeRangeOptions: string[]}) => {
 }
 
 // TODO: Figure out a way to indicate to the user that they can add their own options
-// TODO: Why are entries being deleted when I click in and out?
 export const Organization = (props: {organizationOptions: string[]} ) => {
     return (
-        // TODO: Tooltip should only pop up when typing
-        <Tooltip disableHoverListener disableFocusListener title="Press enter to add new organizations if yours is not listed">
+        <Tooltip 
+            disableHoverListener 
+            placement="top"
+            title="If your organization is not listed, type its name then press enter."
+        >
             <Field 
                 name="organizations"
                 component={Autocomplete}

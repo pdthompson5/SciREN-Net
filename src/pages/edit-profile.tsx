@@ -166,8 +166,8 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
           <FirstName/>
           <LastName/>
           {props.values["userType"] === "teacher" ? 
-                <AcademicInterests academicInterestOptions={academicInterestOptions} label="Subjects Taught" freeSolo={false}/>
-                :<AcademicInterests academicInterestOptions={academicInterestOptions} label="Research Areas" freeSolo/>
+                <AcademicInterests academicInterestOptions={academicInterestOptions} label="Subjects Taught"/>
+                :<AcademicInterests academicInterestOptions={academicInterestOptions} label="Research Areas"/>
           }
           {props.values["userType"] === "teacher" && <GradeRange gradeRangeOptions={gradeRangeOptions}/>}
           <Organization organizationOptions={organizationOptions}/>

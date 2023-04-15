@@ -134,8 +134,8 @@ const Register: React.FC = () => {
               <LastName/>
               {/* TODO: Determine what categories we want to choose from, we might just want to separate these */}
               {props.values["userType"] === "teacher" ? 
-                <AcademicInterests academicInterestOptions={academicInterestOptions} label="Subjects Taught" freeSolo={false}/>
-                :<AcademicInterests academicInterestOptions={academicInterestOptions} label="Research Areas" freeSolo/>
+                <AcademicInterests academicInterestOptions={academicInterestOptions} label="Subjects Taught"/>
+                :<AcademicInterests academicInterestOptions={academicInterestOptions} label="Research Areas"/>
               }
               {props.values["userType"] === "teacher" && <GradeRange gradeRangeOptions={gradeRangeOptions}/>}
               <Organization organizationOptions={organizationOptions}/>
