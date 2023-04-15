@@ -27,26 +27,11 @@ async function loginRoute(req: NextApiRequest, res: NextApiResponse) {
     const client = new MongoClient(mongoURI);
     console.log("Connected to MongoDB");
     const userCollection = getUserCollection(client);
+
+
     const userCursor = await userCollection.find(
-      //TODO: Replace with findone
       {
-        // Filter
         email: email,
-      },
-      {
-        // Projection
-        limit: 1,
-        projection: {
-          _id: 1,
-          firstName: 1,
-          lastName: 1,
-          email: 1,
-          password: 1,
-          userType: 1,
-          joinDate: 1,
-          academicInterest: 1,
-          gradeRange: 1,
-        },
       }
     );
     const userDoc = (await userCursor.next()) as UserWithID;

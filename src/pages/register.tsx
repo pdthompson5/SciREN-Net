@@ -1,7 +1,7 @@
 import React from "react";
 import Head from "next/head";
 import styles from "@/styles/Form.module.css";
-import { PostUserResponse } from "./api/user";
+import { PostUserRequest, PostUserResponse } from "./api/user";
 import { useRouter } from "next/router";
 import { Field, Form, Formik, FormikProps} from "formik";
 import {TextField} from "formik-mui"
@@ -90,7 +90,7 @@ const Register: React.FC = () => {
         // TODO: Impl this
         console.log(values)
         actions.setSubmitting(false)
-        return
+        
         if(values.password !== values.verifyPassword){
           actions.setStatus({
             severity: "error",

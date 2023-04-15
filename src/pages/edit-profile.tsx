@@ -33,7 +33,7 @@ export const gradeRangeOptions = [
   "College",
 ];
 
-export const academicInterestOptions = ["mathematics", "biology", "chemistry", "social studies", "history", "sociology"];
+export const academicInterestOptions = ["Mathematics", "Biology", "Chemistry", "Social Studies", "History", "Sociology"];
 export const userTypes = ["researcher", "teacher", "student", "admin"];
 
 export const organizationOptions = [
@@ -62,6 +62,7 @@ const EditProfile = () => {
     const { mutate } = useSWRConfig()
 
     const {user, mutateUser} = useUser((user) => "/login")
+    console.log(user)
     return (
         <>
           <div>
@@ -113,22 +114,17 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
         lastName: user.lastName,
         academicInterest: user.academicInterest,
         gradeRange: user.gradeRange,
-        // TODO: Replace defaults with real user values
-        textBio: "",
-        organizations: [],
-        position: "",
-        scirenRegion: "Alabama"
+        textBio: user.textBio,
+        organizations: user.organizations,
+        position: user.position,
+        scirenRegion: user.scirenRegion
       }}
       onSubmit={async (values, actions) => {    
-          // TODO: impl this
           const valuesWithID = {
             userID: user.userID,
             email: user.email,
             ...values
           }    
-          
-          console.log(valuesWithID)
-          return;
 
           await fetch("/api/editUser", {
             method: "POST",
