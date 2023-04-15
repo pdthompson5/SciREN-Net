@@ -87,10 +87,6 @@ const Register: React.FC = () => {
       }} 
       validationSchema={RegistrationSchema} 
       onSubmit={async (values, actions) => {
-        // TODO: Impl this
-        console.log(values)
-        actions.setSubmitting(false)
-        
         if(values.password !== values.verifyPassword){
           actions.setStatus({
             severity: "error",

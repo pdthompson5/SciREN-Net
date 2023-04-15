@@ -69,10 +69,7 @@ export const getMongoUser = async (userID: string) => {
   const collection = getUserCollection(client);
   const userInfoCursor = collection.findOne({ _id: new ObjectId(userID) }, {});
 
-  //TODO: There is probably a better way to translate the mongo response
-  //TODO: A significant issue is that we are strictly reliant on all fields being present in the DB
   const userInfo = await userInfoCursor;
-  //TODO: we probably don't want to return password here
   if(userInfo === null) {
     client.close();
     throw new Error(`User not found with id ${userID}`)

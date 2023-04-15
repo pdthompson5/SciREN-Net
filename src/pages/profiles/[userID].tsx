@@ -21,8 +21,6 @@ const UserProfile: React.FC<ProfileInformation> = (
   const title = `${props.firstName} ${props.lastName} | SciREN-Net`;
   const isCurrentUser = user && user.isLoggedIn && user.email === props.email;
 
-  console.log(props)
-
   return (
     <>
       <Head>

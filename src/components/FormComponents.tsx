@@ -109,7 +109,6 @@ export const GradeRange = (props: {gradeRangeOptions: string[]}) => {
     )
 }
 
-// TODO: Figure out a way to indicate to the user that they can add their own options
 export const Organization = (props: {organizationOptions: string[]} ) => {
     return (
         <Tooltip 

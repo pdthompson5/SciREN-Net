@@ -62,7 +62,6 @@ const EditProfile = () => {
     const { mutate } = useSWRConfig()
 
     const {user, mutateUser} = useUser((user) => "/login")
-    console.log(user)
     return (
         <>
           <div>
@@ -124,7 +123,7 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
             userID: user.userID,
             email: user.email,
             ...values
-          }    
+          }
 
           await fetch("/api/editUser", {
             method: "POST",
