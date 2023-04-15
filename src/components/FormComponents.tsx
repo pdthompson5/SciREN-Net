@@ -1,14 +1,12 @@
 import React from "react";
 import styles from "@/styles/Form.module.css";
 import {TextField, Autocomplete, AutocompleteRenderInputParams} from "formik-mui"
-import {Alert, Button, TextField as MaterialTextField} from "@mui/material"
+import {Alert, Button, TextField as MaterialTextField, Tooltip} from "@mui/material"
 import { Field } from "formik";
 import { regionOptions, userTypes } from "@/pages/edit-profile";
 
 const capitalizeField = (field: string) => {
-    // TODO: I'm getting an empty string. Why?
     const words = field.includes(" ") ? field.split(" "): [field]
-    // console.log(words)
     return words.map((word) => { 
         return word[0].toUpperCase() + word.substring(1); 
     }).join(" ");
@@ -68,7 +66,6 @@ export const AcademicInterests = (props: {academicInterestOptions: string[], lab
         options={props.academicInterestOptions}
         multiple
         freeSolo={props.freeSolo}
-        getOptionLabel={(option: string) => capitalizeField(option)}
         renderInput={(params: AutocompleteRenderInputParams) => (
           <MaterialTextField
             {...params}
@@ -106,27 +103,30 @@ export const GradeRange = (props: {gradeRangeOptions: string[]}) => {
 }
 
 // TODO: Figure out a way to indicate to the user that they can add their own options
+// TODO: Why are entries being deleted when I click in and out?
 export const Organization = (props: {organizationOptions: string[]} ) => {
     return (
-        <Field 
-            name="organizations"
-            component={Autocomplete}
-            className={styles.inputBorder}
-            label="Organization(s)"
-            options={props.organizationOptions}
-            freeSolo
-            multiple
-            getOptionLabel={(option: string) => capitalizeField(option)}
-            renderInput={(params: AutocompleteRenderInputParams) => (
-              <MaterialTextField
-                {...params}
-                className={styles.formInput}
+        // TODO: Tooltip should only pop up when typing
+        <Tooltip disableHoverListener disableFocusListener title="Press enter to add new organizations if yours is not listed">
+            <Field 
                 name="organizations"
+                component={Autocomplete}
+                className={styles.inputBorder}
                 label="Organization(s)"
-                variant="outlined"
-              />
-            )}
-        />
+                options={props.organizationOptions}
+                freeSolo
+                multiple
+                renderInput={(params: AutocompleteRenderInputParams) => (
+                <MaterialTextField
+                    {...params}
+                    className={styles.formInput}
+                    name="organizations"
+                    label="Organization(s)"
+                    variant="outlined"
+                />
+                )}
+            />
+        </Tooltip>
         )
 }
 
@@ -146,7 +146,6 @@ export const SciRENRegion = (props: {regionOptions: string[]}) => {
         className={styles.inputBorder}
         label="SciREN Region"
         options={props.regionOptions}
-        getOptionLabel={(option: string) => capitalizeField(option)}
         renderInput={(params: AutocompleteRenderInputParams) => (
             <MaterialTextField
                 {...params}
