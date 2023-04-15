@@ -6,8 +6,6 @@ export interface PostUserResponse {
   message: string;
 }
 
-
-
 export type PostUserRequest = Omit<
   User,
   | "joinDate"

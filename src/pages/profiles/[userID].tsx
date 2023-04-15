@@ -20,6 +20,8 @@ const UserProfile: React.FC<ProfileInformation> = (
   const title = `${props.firstName} ${props.lastName} | SciREN-Net`;
   const isCurrentUser = user && user.isLoggedIn && user.email === props.email;
 
+  console.log(props)
+
   return (
     <>
       <Head>
@@ -55,6 +57,13 @@ const UserProfile: React.FC<ProfileInformation> = (
           <ul>
             <li>Profile Type: {props.userType}</li>
             <li>UserID: {props.userID}</li>
+            <li>Academic Interests: {props.academicInterest.toString()}</li>
+            <li>Grade Range: {props.gradeRange.toString()}</li>
+            <li>User Type: {props.userType}</li>
+            <li>Organization(s): {props.organizations.toString()}</li>
+            <li>Position(s): {props.position}</li>
+            <li>SciREN Region: {props.scirenRegion}</li>
+            <li>TextBio: {props.textBio}</li>
             {(user && user.isLoggedIn) && 
             <li>
               <Link href={`/contact?user=${props.userID}`} passHref>
