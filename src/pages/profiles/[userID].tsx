@@ -11,6 +11,7 @@ import {
 import { GetStaticPropsContext } from "next";
 import styles from "@/styles/Profile.module.css";
 import { Button } from "@mui/material";
+import { gradeRangeOptions } from "../edit-profile";
 
 const UserProfile: React.FC<ProfileInformation> = (
   props: ProfileInformation
@@ -57,8 +58,8 @@ const UserProfile: React.FC<ProfileInformation> = (
           <ul>
             <li>Profile Type: {props.userType}</li>
             <li>UserID: {props.userID}</li>
-            <li>Academic Interests: {props.academicInterest.toString()}</li>
-            <li>Grade Range: {props.gradeRange.toString()}</li>
+            <li>{props.userType === "researcher" ? "Research Areas" : "Subjects Taught"}: {props.academicInterest.toString()}</li>
+            {props.userType === "teacher" && <li>Grade Range: {props.gradeRange.map((val) => gradeRangeOptions[val]).toString()}</li>}
             <li>User Type: {props.userType}</li>
             <li>Organization(s): {props.organizations.toString()}</li>
             <li>Position(s): {props.position}</li>
