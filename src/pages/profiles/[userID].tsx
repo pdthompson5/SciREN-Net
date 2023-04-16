@@ -63,10 +63,21 @@ const UserProfile: React.FC<ProfileInformation> = (
             </li>}
           </ul>
         </div>
+        <button
+            onClick={handleDelete}
+            className={styles.loginSubmit}
+            type="submit"
+          >
+            Delete User
+          </button>
       </div>
     </>
   );
 };
+// Write handleDelete to delete user
+const handleDelete = (event: any) => {
+  event.preventDefault();
+}
 
 //Return props for each page
 export const getStaticProps = async ({

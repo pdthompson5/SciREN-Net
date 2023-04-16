@@ -52,6 +52,7 @@ export default async function postUser(
       return;
     }
   
+  
     // Insert the new user, push profile page
     userCollection.insertOne({
       ...reqBody,
@@ -60,6 +61,19 @@ export default async function postUser(
     console.log("api/registerUser : added a new user successfully");
     res.status(200).json({
       message: "Successfully added user.",
+    });
+    return;
+  }
+
+  if(req.method === "DELETE"){
+    const mclient = await establishMongoConnection();
+    const userCollection = mclient.db("sciren").collection("users");
+  
+    // delete user, push profile page
+    userCollection.deleteOne({});
+    console.log("api/registerUser : deleted a user successfully");
+    res.status(200).json({
+      message: "Successfully deleted user.",
     });
     return;
   }
