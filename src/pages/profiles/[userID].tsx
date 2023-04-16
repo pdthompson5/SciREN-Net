@@ -63,13 +63,14 @@ const UserProfile: React.FC<ProfileInformation> = (
             </li>}
           </ul>
         </div>
-        <button
-            onClick={handleDelete}
-            className={styles.loginSubmit}
-            type="submit"
-          >
-            Delete User
-          </button>
+        <Button
+          variant="contained"
+          onClick={handleDelete}
+          className={styles.deleteUser}
+          type="submit"
+        >
+          Delete User
+        </Button>
       </div>
     </>
   );
