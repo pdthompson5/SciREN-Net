@@ -22,6 +22,7 @@
     "eslint": "8.34.0",
     "eslint-config-next": "13.1.6",
     "formik": "^2.2.9",
+    "formik-material-ui": "^4.0.0-alpha.2",
     "formik-mui": "^5.0.0-alpha.0",
     "iron-session": "^6.3.1",
     "mongodb": "^5.0.1",
