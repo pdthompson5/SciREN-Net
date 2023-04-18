@@ -55,7 +55,8 @@ export const regionOptions = [
   "Triangle",
   "Georgia",
   "George Mason",
-  "San Diego"
+  "San Diego",
+  "None"
 ];
 
 const EditProfile = () => {
@@ -118,13 +119,14 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
         position: user.position,
         scirenRegion: user.scirenRegion
       }}
-      onSubmit={async (values, actions) => {    
+      onSubmit={async (values, actions) => {
+          values["gradeRange"] = values.gradeRange.sort()    
           const valuesWithID = {
             userID: user.userID,
             email: user.email,
             ...values
           }
-
+          
           await fetch("/api/editUser", {
             method: "POST",
             body: JSON.stringify(valuesWithID),

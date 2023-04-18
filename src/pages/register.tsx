@@ -96,6 +96,7 @@ const Register: React.FC = () => {
           return
         }
 
+        values["gradeRange"] = values.gradeRange.sort()
         const {verifyPassword: _, ...postUser} = values;
 
         const resp = await fetch("/api/user", {
