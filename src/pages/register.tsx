@@ -50,7 +50,8 @@ const Register: React.FC = () => {
     textBio: Yup.string(),
     organizations: Yup.array(),
     position: Yup.string(),
-    scirenRegion: Yup.string(),
+    scirenRegion: Yup.string()
+      .required("Required"),
     email: Yup.string()
       .matches(EMAIL_REGEX, "Invalid email format")
       .required("Required"),
@@ -96,7 +97,7 @@ const Register: React.FC = () => {
           return
         }
 
-        values["gradeRange"] = values.gradeRange.sort()
+        values["gradeRange"] = values.gradeRange.sort();
         const {verifyPassword: _, ...postUser} = values;
 
         const resp = await fetch("/api/user", {
@@ -126,7 +127,7 @@ const Register: React.FC = () => {
           <Form>
             <Container>
               <h1 className={styles.loginTitle}>SciREN - Signup</h1>
-              <UserType userTypes={userTypes}/>
+              <UserType userTypes={userTypes} touched={props.touched} errors={props.errors}/>
               <FirstName/>
               <LastName/>
               {/* TODO: Determine what categories we want to choose from, we might just want to separate these */}
@@ -138,7 +139,7 @@ const Register: React.FC = () => {
               <Organization organizationOptions={organizationOptions}/>
               <Position/>
               <TextBio/>
-              <SciRENRegion regionOptions={regionOptions}/>
+              <SciRENRegion regionOptions={regionOptions} touched={props.touched} errors={props.errors}/>
               <Email/>
               <Password/>
               <VerifyPassword/>

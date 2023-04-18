@@ -102,6 +102,7 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
     organizations: Yup.array(),
     position: Yup.string(),
     scirenRegion: Yup.string()
+      .required("Required")
   });
 
   return (
@@ -163,7 +164,7 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
       <Form className={styles.formLayout}>
         <Container>
           <h1 className={styles.loginTitle}>Edit Profile</h1>
-          <UserType userTypes={userTypes}></UserType>
+          <UserType userTypes={userTypes} touched={props.touched} errors={props.errors}/>
           <FirstName/>
           <LastName/>
           {props.values["userType"] === "teacher" ? 
@@ -174,7 +175,7 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
           <Organization organizationOptions={organizationOptions}/>
           <Position/>
           <TextBio/>
-          <SciRENRegion regionOptions={regionOptions}/>
+          <SciRENRegion regionOptions={regionOptions} touched={props.touched} errors={props.errors}/>
           <StatusAlert status={props.status}/>
           <SubmitButton/>
         </Container>

@@ -2,7 +2,7 @@ import React from "react";
 import styles from "@/styles/Form.module.css";
 import {TextField, Autocomplete, AutocompleteRenderInputParams} from "formik-mui"
 import {Alert, Button, TextField as MaterialTextField, Tooltip} from "@mui/material"
-import { Field } from "formik";
+import { Field, FormikErrors, FormikTouched } from "formik";
 import { regionOptions, userTypes } from "@/pages/edit-profile";
 
 const capitalizeField = (field: string) => {
@@ -17,7 +17,7 @@ export type FormStatus = {
     message: string;
 }
 
-export const UserType = (props: {userTypes: string[]}) => {
+export const UserType = (props: {userTypes: string[], touched: FormikTouched<any>, errors: any}) => {
     return (
         <Field 
             name="userType"
@@ -29,6 +29,8 @@ export const UserType = (props: {userTypes: string[]}) => {
             renderInput={(params: AutocompleteRenderInputParams) => (
             <MaterialTextField
                 {...params}
+                error={props.touched['userType'] && !!props.errors['userType']}
+                helperText={props.errors['userType']}
                 className={styles.formInput}
                 name="userType"
                 label="User Type"
@@ -146,7 +148,7 @@ export const Position = () => {
     )
 }
 
-export const SciRENRegion = (props: {regionOptions: string[]}) => {
+export const SciRENRegion = (props: {regionOptions: string[], touched: FormikTouched<any>, errors: any}) => {
    return (
         <Field 
         name="scirenRegion"
@@ -158,6 +160,8 @@ export const SciRENRegion = (props: {regionOptions: string[]}) => {
             <MaterialTextField
                 {...params}
                 className={styles.formInput}
+                error={props.touched['scirenRegion'] && !!props.errors['scirenRegion']}
+                helperText={props.errors['scirenRegion']}
                 name="scirenRegion"
                 label="SciREN Region"
                 variant="outlined"
