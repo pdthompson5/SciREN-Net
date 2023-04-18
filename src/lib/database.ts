@@ -1,3 +1,4 @@
+import { User } from "@/pages/api/userSession";
 import { MongoClient, ObjectId, WithId } from "mongodb";
 
 export interface LessonLink {
@@ -23,7 +24,7 @@ export interface Lesson {
   gradeLevel: number[];
 }
 
-export const foo = "bar";
+export const USER_COLLECTION_NAME = "usersv2";
 
 export const establishMongoConnection = async () => {
   const mongoURI = process.env.MONGO_URI;
@@ -40,13 +41,12 @@ export const establishMongoConnection = async () => {
     );
   }
 
-  // const client = await MongoClient.connect(mongoURI);
   return new MongoClient(mongoURI);
 };
 
 export const getUserCollection = (client: MongoClient) => {
   const mongoDB = process.env.DB_NAME;
-  return client.db(mongoDB).collection("users");
+  return client.db(mongoDB).collection<Omit<User, "userID">>(USER_COLLECTION_NAME);
 };
 
 export interface UserWithID extends WithId<Document> {
@@ -55,9 +55,13 @@ export interface UserWithID extends WithId<Document> {
   firstName: string;
   lastName: string;
   gradeRange: Array<number>;
-  joinDate: Date;
+  joinDate: string;
   userType: string;
   academicInterest: Array<string>;
+  organizations: Array<string>;
+  position: string;
+  textBio: string;
+  scirenRegion: string;
 }
 
 export const getMongoUser = async (userID: string) => {
@@ -65,29 +69,22 @@ export const getMongoUser = async (userID: string) => {
   const collection = getUserCollection(client);
   const userInfoCursor = collection.findOne({ _id: new ObjectId(userID) }, {});
 
-  //TODO: There is probably a better way to translate the mongo response
-  //TODO: A significant issue is that we are strictly reliant on all fields being present in the DB
-  const userInfo = (await userInfoCursor) as UserWithID;
-  //TODO: we probably don't want to return password here
+  const userInfo = await userInfoCursor;
+  if(userInfo === null) {
+    client.close();
+    throw new Error(`User not found with id ${userID}`)
+  }
+
   const userInfoSerializable = {
     ...userInfo,
-    _id: userInfo._id.toString(),
-    joinDate: userInfo.joinDate.toISOString(),
+    _id: userInfo._id.toString()
   };
 
   client.close();
   return userInfoSerializable;
 };
 
-export interface ProfileInformation {
-  userID: string;
-  email: string;
-  firstName: string;
-  lastName: string;
-  userType: string;
-  gradeRange: Array<number>;
-  academicInterest: Array<string>;
-}
+export type ProfileInformation = Omit<User, "password" | "joinDate"> 
 
 export const getProfileInformation = async (
   userID: string
@@ -95,12 +92,7 @@ export const getProfileInformation = async (
   const rawUser = await getMongoUser(userID);
   return {
     userID: rawUser._id,
-    email: rawUser.email,
-    firstName: rawUser.firstName,
-    lastName: rawUser.lastName,
-    userType: rawUser.userType,
-    gradeRange: rawUser.gradeRange,
-    academicInterest: rawUser.academicInterest,
+    ...rawUser
   };
 };
 

@@ -1,13 +1,13 @@
 import React from "react";
 import Head from "next/head";
 import styles from "@/styles/Form.module.css";
-import { PostUserResponse } from "./api/user";
+import { PostUserRequest, PostUserResponse } from "./api/user";
 import { useRouter } from "next/router";
 import { Field, Form, Formik, FormikProps} from "formik";
 import {TextField} from "formik-mui"
 import * as Yup from 'yup';
-import { gradeRangeOptions, academicInterestOptions, userTypes } from "./edit-profile";
-import { AcademicInterests, Email, FirstName, GradeRange, LastName, Password, StatusAlert, SubmitButton, UserType, VerifyPassword } from "@/components/FormComponents";
+import { gradeRangeOptions, academicInterestOptions, userTypes, regionOptions, organizationOptions } from "./edit-profile";
+import { AcademicInterests, Email, FirstName, GradeRange, LastName, Organization, Password, Position, SciRENRegion, StatusAlert, SubmitButton, TextBio, UserType, VerifyPassword } from "@/components/FormComponents";
 import { Alert, Container } from "@mui/material";
 
 const EMAIL_REGEX = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -47,6 +47,11 @@ const Register: React.FC = () => {
         .required('Required'),
     academicInterest: Yup.array(),
     gradeRange: Yup.array(),
+    textBio: Yup.string(),
+    organizations: Yup.array(),
+    position: Yup.string(),
+    scirenRegion: Yup.string()
+      .required("Required"),
     email: Yup.string()
       .matches(EMAIL_REGEX, "Invalid email format")
       .required("Required"),
@@ -67,7 +72,20 @@ const Register: React.FC = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Formik enableReinitialize 
-      initialValues={{userType: "researcher", firstName: "", lastName: "", academicInterest: [], gradeRange: [], email: "", password: "", verifyPassword: ""}} 
+      initialValues={{
+        userType: "researcher",
+        firstName: "",
+        lastName: "",
+        academicInterest: [],
+        gradeRange: [],
+        textBio: "",
+        organizations: [],
+        position: "",
+        scirenRegion: "Alabama",
+        email: "",
+        password: "",
+        verifyPassword: ""
+      }} 
       validationSchema={RegistrationSchema} 
       onSubmit={async (values, actions) => {
         if(values.password !== values.verifyPassword){
@@ -79,6 +97,7 @@ const Register: React.FC = () => {
           return
         }
 
+        values["gradeRange"] = values.gradeRange.sort();
         const {verifyPassword: _, ...postUser} = values;
 
         const resp = await fetch("/api/user", {
@@ -108,11 +127,19 @@ const Register: React.FC = () => {
           <Form>
             <Container>
               <h1 className={styles.loginTitle}>SciREN - Signup</h1>
-              <UserType userTypes={userTypes} ></UserType>
+              <UserType userTypes={userTypes} touched={props.touched} errors={props.errors}/>
               <FirstName/>
               <LastName/>
-              <AcademicInterests academicInterestOptions={academicInterestOptions}/>
-              <GradeRange gradeRangeOptions={gradeRangeOptions}/>
+              {/* TODO: Determine what categories we want to choose from, we might just want to separate these */}
+              {props.values["userType"] === "teacher" ? 
+                <AcademicInterests academicInterestOptions={academicInterestOptions} label="Subjects Taught"/>
+                :<AcademicInterests academicInterestOptions={academicInterestOptions} label="Research Areas"/>
+              }
+              {props.values["userType"] === "teacher" && <GradeRange gradeRangeOptions={gradeRangeOptions}/>}
+              <Organization organizationOptions={organizationOptions}/>
+              <Position/>
+              <TextBio/>
+              <SciRENRegion regionOptions={regionOptions} touched={props.touched} errors={props.errors}/>
               <Email/>
               <Password/>
               <VerifyPassword/>

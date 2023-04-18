@@ -1,11 +1,12 @@
 import React from "react";
 import styles from "@/styles/Form.module.css";
 import {TextField, Autocomplete, AutocompleteRenderInputParams} from "formik-mui"
-import {Alert, Button, TextField as MaterialTextField} from "@mui/material"
-import { Field } from "formik";
+import {Alert, Button, TextField as MaterialTextField, Tooltip} from "@mui/material"
+import { Field, FormikErrors, FormikTouched } from "formik";
+import { regionOptions, userTypes } from "@/pages/edit-profile";
 
 const capitalizeField = (field: string) => {
-    const words = field.split(" ");
+    const words = field.includes(" ") ? field.split(" "): [field]
     return words.map((word) => { 
         return word[0].toUpperCase() + word.substring(1); 
     }).join(" ");
@@ -16,7 +17,7 @@ export type FormStatus = {
     message: string;
 }
 
-export const UserType = (props: {userTypes: string[]}) => {
+export const UserType = (props: {userTypes: string[], touched: FormikTouched<any>, errors: any}) => {
     return (
         <Field 
             name="userType"
@@ -28,6 +29,8 @@ export const UserType = (props: {userTypes: string[]}) => {
             renderInput={(params: AutocompleteRenderInputParams) => (
             <MaterialTextField
                 {...params}
+                error={props.touched['userType'] && !!props.errors['userType']}
+                helperText={props.errors['userType']}
                 className={styles.formInput}
                 name="userType"
                 label="User Type"
@@ -55,26 +58,33 @@ export const LastName = () => {
     )
 }
 
-export const AcademicInterests = (props: {academicInterestOptions: string[]}) => {
+export const AcademicInterests = (props: {academicInterestOptions: string[], label: string}) => {
     return (
-    <Field 
-        name="academicInterest"
-        component={Autocomplete}
-        className={styles.inputBorder}
-        label="Academic Interests"
-        options={props.academicInterestOptions}
-        multiple
-        getOptionLabel={(option: string) => capitalizeField(option)}
-        renderInput={(params: AutocompleteRenderInputParams) => (
-          <MaterialTextField
-            {...params}
-            className={styles.formInput}
-            name="academicInterest"
-            label="Academic Interests"
-            variant="outlined"
-          />
-        )}
-    />
+        <Tooltip 
+        disableHoverListener 
+        placement="top"
+        title="If your subject is not listed, type its name then press enter."
+        >
+            <Field 
+                name="academicInterest"
+                component={Autocomplete}
+                className={styles.inputBorder}
+                label={props.label}
+                options={props.academicInterestOptions}
+                multiple
+                getOptionLabel={(option: string) => capitalizeField(option)}
+                freeSolo
+                renderInput={(params: AutocompleteRenderInputParams) => (
+                <MaterialTextField
+                    {...params}
+                    className={styles.formInput}
+                    name="academicInterest"
+                    label={props.label}
+                    variant="outlined"
+                />
+                )}
+            />
+        </Tooltip>
     )
 }
 
@@ -100,6 +110,76 @@ export const GradeRange = (props: {gradeRangeOptions: string[]}) => {
     />
     )
 }
+
+export const Organization = (props: {organizationOptions: string[]} ) => {
+    return (
+        <Tooltip 
+            disableHoverListener 
+            placement="top"
+            title="If your organization is not listed, type its name then press enter."
+        >
+            <Field 
+                name="organizations"
+                component={Autocomplete}
+                className={styles.inputBorder}
+                label="Organization(s)"
+                options={props.organizationOptions}
+                freeSolo
+                multiple
+                renderInput={(params: AutocompleteRenderInputParams) => (
+                <MaterialTextField
+                    {...params}
+                    className={styles.formInput}
+                    name="organizations"
+                    label="Organization(s)"
+                    variant="outlined"
+                />
+                )}
+            />
+        </Tooltip>
+        )
+}
+
+export const Position = () => {
+    return (
+        <div className={styles.inputBorder}>
+            <Field name="position" component={TextField} className={styles.formInput} type="text" label="Position(s) at Organization(s)"/>
+        </div>
+    )
+}
+
+export const SciRENRegion = (props: {regionOptions: string[], touched: FormikTouched<any>, errors: any}) => {
+   return (
+        <Field 
+        name="scirenRegion"
+        component={Autocomplete}
+        className={styles.inputBorder}
+        label="SciREN Region"
+        options={props.regionOptions}
+        renderInput={(params: AutocompleteRenderInputParams) => (
+            <MaterialTextField
+                {...params}
+                className={styles.formInput}
+                error={props.touched['scirenRegion'] && !!props.errors['scirenRegion']}
+                helperText={props.errors['scirenRegion']}
+                name="scirenRegion"
+                label="SciREN Region"
+                variant="outlined"
+            />
+        )}
+        >
+        </Field>
+   )
+}
+
+export const TextBio = () => {
+    return (
+        <div className={styles.inputBorder}>
+            <Field name="textBio" component={TextField} className={styles.formInput} multiline type="text" label="About You"/>
+        </div>
+    )
+}
+
 
 export const SubmitButton = () => {
     return (

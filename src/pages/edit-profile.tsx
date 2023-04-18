@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "@/styles/Form.module.css";
-import { Form, Formik} from "formik";
+import { Form, Formik, FormikProps} from "formik";
 
 import useUser from "@/lib/useUser";
 import {Container} from "@mui/material"
@@ -12,7 +12,7 @@ import { ScopedMutator } from "swr/_internal";
 import fetchJson from "@/lib/fetchJson";
 import Router from "next/router";
 import Head from "next/head";
-import { AcademicInterests, FirstName, GradeRange, LastName, StatusAlert, SubmitButton, UserType } from "@/components/FormComponents";
+import { AcademicInterests, FirstName, GradeRange, LastName, Organization, Position, SciRENRegion, StatusAlert, SubmitButton, TextBio, UserType } from "@/components/FormComponents";
 
 
 export const gradeRangeOptions = [
@@ -33,9 +33,32 @@ export const gradeRangeOptions = [
   "College",
 ];
 
-export const academicInterestOptions = ["mathematics", "biology", "chemistry", "social studies", "history", "sociology"];
-export const userTypes = ["researcher", "teacher", "student", "admin"]
- 
+export const academicInterestOptions = ["Mathematics", "Biology", "Chemistry", "Social Studies", "History", "Sociology"];
+export const userTypes = ["researcher", "teacher", "student", "admin"];
+
+export const organizationOptions = [
+  "The University of Alabama",
+  "University of Georgia",
+  "U.S. Navy",
+  "Scripps Institution of Oceanography",
+  "University of California San Diego",
+  "San Diego State University",
+  "Salk Institute for Biological Sciences",
+  "UNC Chapel Hill",
+  "Duke University",
+  "George Mason University",
+];
+
+export const regionOptions = [
+  "Alabama", 
+  "Coast",
+  "Triangle",
+  "Georgia",
+  "George Mason",
+  "San Diego",
+  "None"
+];
+
 const EditProfile = () => {
     const { mutate } = useSWRConfig()
 
@@ -74,21 +97,37 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
         .max(80, 'Too Long!')
         .required('Required'),
     academicInterest: Yup.array(),
-    gradeRange: Yup.array()
+    gradeRange: Yup.array(),
+    textBio: Yup.string(),
+    organizations: Yup.array(),
+    position: Yup.string(),
+    scirenRegion: Yup.string()
+      .required("Required")
   });
 
   return (
     <Formik
       enableReinitialize
       validationSchema={EditUserSchema}
-      initialValues={{userType: user.userType, firstName: user.firstName, lastName: user.lastName, academicInterest: user.academicInterest, gradeRange: user.gradeRange}}
-      onSubmit={async (values, actions) => {    
+      initialValues={{
+        userType: user.userType,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        academicInterest: user.academicInterest,
+        gradeRange: user.gradeRange,
+        textBio: user.textBio,
+        organizations: user.organizations,
+        position: user.position,
+        scirenRegion: user.scirenRegion
+      }}
+      onSubmit={async (values, actions) => {
+          values["gradeRange"] = values.gradeRange.sort()    
           const valuesWithID = {
             userID: user.userID,
             email: user.email,
             ...values
-          }          
-
+          }
+          
           await fetch("/api/editUser", {
             method: "POST",
             body: JSON.stringify(valuesWithID),
@@ -121,16 +160,23 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
           )
         }}
     >
-      {({status}) => (
+      {(props: FormikProps<any>) => (
       <Form className={styles.formLayout}>
         <Container>
           <h1 className={styles.loginTitle}>Edit Profile</h1>
-          <UserType userTypes={userTypes}></UserType>
+          <UserType userTypes={userTypes} touched={props.touched} errors={props.errors}/>
           <FirstName/>
           <LastName/>
-          <AcademicInterests academicInterestOptions={academicInterestOptions}/>
-          <GradeRange gradeRangeOptions={gradeRangeOptions}/>
-          <StatusAlert status={status}/>
+          {props.values["userType"] === "teacher" ? 
+                <AcademicInterests academicInterestOptions={academicInterestOptions} label="Subjects Taught"/>
+                :<AcademicInterests academicInterestOptions={academicInterestOptions} label="Research Areas"/>
+          }
+          {props.values["userType"] === "teacher" && <GradeRange gradeRangeOptions={gradeRangeOptions}/>}
+          <Organization organizationOptions={organizationOptions}/>
+          <Position/>
+          <TextBio/>
+          <SciRENRegion regionOptions={regionOptions} touched={props.touched} errors={props.errors}/>
+          <StatusAlert status={props.status}/>
           <SubmitButton/>
         </Container>
       </Form>
