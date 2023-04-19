@@ -6,8 +6,6 @@ export interface PostUserResponse {
   message: string;
 }
 
-
-
 export type PostUserRequest = Pick<
   User,
   | "email"
@@ -68,9 +66,13 @@ export default async function postUser(
   if(req.method === "DELETE"){
     const mclient = await establishMongoConnection();
     const userCollection = mclient.db("sciren").collection("users");
-  
+    const idToFetch = req.query.userID
+    if(idToFetch === undefined || Array.isArray(idToFetch)){
+      return res.status(400)
+    }
+    const user = await getProfileInformation(idToFetch)
     // delete user, push profile page
-    userCollection.deleteOne({});
+    userCollection.deleteOne({"_id": user});
     console.log("api/registerUser : deleted a user successfully");
     res.status(200).json({
       message: "Successfully deleted user.",

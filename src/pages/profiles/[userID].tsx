@@ -77,7 +77,10 @@ const UserProfile: React.FC<ProfileInformation> = (
 };
 // Write handleDelete to delete user
 const handleDelete = (event: any) => {
-  event.preventDefault();
+  fetch("/api/logout", {
+    method: "DELETE",
+    body: JSON.stringify("test"),
+  })
 }
 
 //Return props for each page
