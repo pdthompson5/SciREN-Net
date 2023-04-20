@@ -1,6 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "@/pages/api/userSession";
 import { establishMongoConnection, getMongoUser, getProfileInformation } from "@/lib/database";
+import { ObjectId } from "mongodb";
 
 export interface PostUserResponse {
   message: string;
@@ -64,15 +65,16 @@ export default async function postUser(
   }
 
   if(req.method === "DELETE"){
+    console.log("test2")
     const mclient = await establishMongoConnection();
     const userCollection = mclient.db("sciren").collection("users");
     const idToFetch = req.query.userID
+    console.log(idToFetch)
     if(idToFetch === undefined || Array.isArray(idToFetch)){
       return res.status(400)
     }
-    const user = await getProfileInformation(idToFetch)
     // delete user, push profile page
-    userCollection.deleteOne({"_id": user});
+    userCollection.deleteOne({"_id": new ObjectId(idToFetch)});
     console.log("api/registerUser : deleted a user successfully");
     res.status(200).json({
       message: "Successfully deleted user.",
