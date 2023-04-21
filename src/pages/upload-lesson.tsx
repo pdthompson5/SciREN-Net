@@ -1,49 +1,50 @@
 import AWS from "aws-sdk";
 import Image from "next/image";
 import { useState } from "react";
-
-AWS.config.update({
-  accessKeyId: "<Access-Key-ID>",
-  secretAccessKey: "<Access-Key-Secret>",
-  region: "us-east-1",
-  signatureVersion: "v4",
-});
+import { uploadToS3 } from "@/lib/s3tools";
+import fetchJson from "@/lib/fetchJson";
+import AwsUploader from "@/components/AwsUploader";
 
 export default function ImageUploader() {
-  const s3 = new AWS.S3();
-  const [imageUrl, setImageUrl] = useState(null);
-  const [file, setFile] = useState(null);
-
+  const [imageUrl, setImageUrl] = useState<string | undefined>(undefined);
+  const [file, setFile] = useState<File | undefined>(undefined); // <--- typing this makes it fail
   const handleFileSelect = (e: any) => {
     setFile(e.target.files[0]);
   };
-  const uploadToS3 = async () => {
-    if (!file) {
+  const handleUploadClick = async () => {
+    console.log("CLIENT: uploading the following file...");
+    console.log(file);
+    // bytestream will scale better than buffer
+    const fileBytes = await file?.arrayBuffer();
+    const uploadedUrl = fetch("/api/awsFile", {
+      method: "POST",
+      headers: { "Content-Type": "application/octet-stream" },
+      body: file,
+    });
+    if (uploadedUrl == undefined) {
+      console.log("Error uploading to S3");
       return;
     }
-    const params = {
-      Bucket: "My-Bucket-Name",
-      Key: `${Date.now()}.${file.name}`,
-      Body: file,
-    };
-    const { Location } = await s3.upload(params).promise();
-    setImageUrl(Location);
-    console.log("uploading to s3", Location);
+    console.log("UPLOADED URL: ", uploadedUrl);
+    // setImageUrl(uploadedUrl as string);
   };
+
   return (
-    <div style={{ marginTop: "150px" }}>
-      <h1>Test Image Upload</h1>
-      <input type="file" onChange={handleFileSelect} />
-      {file && (
-        <div style={{ marginTop: "10px" }}>
-          <button onClick={uploadToS3}>Upload</button>
-        </div>
-      )}
-      {imageUrl && (
-        <div style={{ marginTop: "10px" }}>
-          <img src={imageUrl} alt="uploaded" />
-        </div>
-      )}
+    <div>
+      <div style={{ marginTop: "150px" }}>
+        <h1>Test Image Upload</h1>
+        <input type="file" onChange={handleFileSelect} />
+        {file && (
+          <div style={{ marginTop: "10px" }}>
+            <button onClick={handleUploadClick}>Upload</button>
+          </div>
+        )}
+        {imageUrl && (
+          <div style={{ marginTop: "10px" }}>
+            <Image src={imageUrl} alt="uploaded" />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

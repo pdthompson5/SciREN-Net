@@ -1,34 +1,43 @@
 import AWS from "aws-sdk";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState } from "react";
 
 AWS.config.update({
-  accessKeyId: "<Access-Key-ID>",
-  secretAccessKey: "<Access-Key-Secret>",
-  region: "us-east-1",
+  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  region: "us-east-2",
   signatureVersion: "v4",
 });
 
-export default function ImageUploader() {
+export default function AwsUploader() {
   const s3 = new AWS.S3();
-  const [imageUrl, setImageUrl] = useState(null);
-  const [file, setFile] = useState(null);
+  const [imageUrl, setImageUrl] = useState("");
+  const [file, setFile] = useState<File | undefined>(undefined); // <--- typing this makes it fail
+
+  console.log("Hello, aws: ", AWS.config);
+  console.log("region: ", AWS.config.region);
+  console.log("credentials: ", AWS.config.credentials);
+  console.log("s3 credentials: ", s3.config.credentials);
 
   const handleFileSelect = (e: any) => {
     setFile(e.target.files[0]);
   };
   const uploadToS3 = async () => {
+    console.log("uploading the following file...");
+    console.log(file);
     if (!file) {
+      console.log("No file selected");
       return;
     }
+
     const params = {
-      Bucket: "My-Bucket-Name",
-      Key: `${Date.now()}.${file.name}`,
+      Bucket: "sciren",
+      Key: `${Date.now()}.${(file as File).name}`,
       Body: file,
     };
     const { Location } = await s3.upload(params).promise();
     setImageUrl(Location);
-    console.log("uploading to s3", Location);
+    console.log("uploading to s3: ", Location);
   };
   return (
     <div style={{ marginTop: "150px" }}>
@@ -41,7 +50,7 @@ export default function ImageUploader() {
       )}
       {imageUrl && (
         <div style={{ marginTop: "10px" }}>
-          <img src={imageUrl} alt="uploaded" />
+          <Image src={imageUrl} alt="uploaded" />
         </div>
       )}
     </div>
