@@ -10,8 +10,7 @@ import {
 } from "@/lib/database";
 import { GetStaticPropsContext } from "next";
 import styles from "@/styles/Profile.module.css";
-import { Box, Button, Container, Divider, List, ListItem, capitalize } from "@mui/material";
-import { gradeRangeOptions, userTypes } from "../edit-profile";
+import { Box, Button, Divider, List, ListItem, capitalize } from "@mui/material";
 
 const UserProfile: React.FC<ProfileInformation> = (
   props: ProfileInformation
@@ -117,8 +116,6 @@ const UserProfile: React.FC<ProfileInformation> = (
     </>
   );
 };
-
-
 
 const getAcademicInterestElements = (academicInterest: string[]) => {
   return academicInterest.map(
