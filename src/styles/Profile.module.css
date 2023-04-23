@@ -38,6 +38,7 @@
 }
 
 .deleteUser {
+    padding: 1rem;
     width: 8%;
     background: #e02121;
   }

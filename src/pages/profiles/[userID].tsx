@@ -3,6 +3,8 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import useUser from "@/lib/useUser";
+import fetchJson from "@/lib/fetchJson";
+import { useRouter} from "next/router";
 import {
   ProfileInformation,
   getAllUserIDs,
@@ -15,8 +17,8 @@ import { Button } from "@mui/material";
 const UserProfile: React.FC<ProfileInformation> = (
   props: ProfileInformation
 ) => {
-  const { user } = useUser();
-
+  const { user, mutateUser } = useUser();
+  const router = useRouter();
   const title = `${props.firstName} ${props.lastName} | SciREN-Net`;
   const isCurrentUser = user && user.isLoggedIn && user.email === props.email;
 
@@ -69,6 +71,8 @@ const UserProfile: React.FC<ProfileInformation> = (
             e.preventDefault();
             fetch(`/api/user?userID=${user?.userID}`, { method: "DELETE" }), false;
             console.log("test")
+            mutateUser(await fetchJson("/api/logout", { method: "POST" }), false);
+            router.replace("/login");
           }}
           className={styles.deleteUser}
           type="submit"
