@@ -4,16 +4,16 @@ import Link from "next/link";
 import Image from "next/image";
 import useUser from "@/lib/useUser";
 import {
-  ProfileInformation,
+  Profile,
   getAllUserIDs,
-  getProfileInformation,
+  getProfile,
 } from "@/lib/database";
 import { GetStaticPropsContext } from "next";
 import styles from "@/styles/Profile.module.css";
 import { Box, Button, Divider, List, ListItem, capitalize } from "@mui/material";
 
-const UserProfile: React.FC<ProfileInformation> = (
-  props: ProfileInformation
+const UserProfile: React.FC<Profile> = (
+  props: Profile
 ) => {
   const { user } = useUser();
 
@@ -134,7 +134,7 @@ export const getStaticProps = async ({
   userID: string;
 }>) => {
   const { userID } = params as { userID: string };
-  const user = await getProfileInformation(userID).catch((reason) => {console.log(reason); return undefined});
+  const user = await getProfile(userID).catch((reason) => {console.log(reason); return undefined});
   const notFound = !user;
   return { props: user, notFound };
 };

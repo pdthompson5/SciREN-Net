@@ -5,14 +5,14 @@ import {Button, Container, Stack} from "@mui/material"
 import {TextField} from "formik-mui"
 import * as Yup from 'yup';
 import { GetUserResponse } from "@/pages/api/userSession";
-import { ProfileInformation } from "@/lib/database";
+import { Profile } from "@/lib/database";
 import Router from "next/router";
 import { StatusAlert, SubmitButton } from "./FormComponents";
 
 
 const MESSAGE_CHARACTER_LIMIT = 3000;
 
-const Contact = (props: {user: GetUserResponse, userToContact: ProfileInformation}) => {
+const Contact = (props: {user: GetUserResponse, userToContact: Profile}) => {
   const ContactUserSchema = Yup.object().shape({
     message: Yup.string()
         .min(2, 'Too Short!')

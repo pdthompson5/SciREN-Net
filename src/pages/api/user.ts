@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "@/pages/api/userSession";
-import { establishMongoConnection, getMongoUser, getProfileInformation, getUserCollection } from "@/lib/database";
+import { establishMongoConnection, getMongoUser, getProfile, getUserCollection } from "@/lib/database";
 
 export interface PostUserResponse {
   message: string;
@@ -25,7 +25,7 @@ export default async function postUser(
     if(idToFetch === undefined || Array.isArray(idToFetch)){
       return res.status(400)
     }
-    const user = await getProfileInformation(idToFetch)
+    const user = await getProfile(idToFetch)
 
     return res.status(200).json(user);
   }
