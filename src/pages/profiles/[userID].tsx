@@ -117,8 +117,9 @@ const getAvatar = (firstName: string, lastName: string) => {
         height: "50px",
         width: "50px"
     }}
-      children={`${firstName[0]}${lastName[0]}`}
-    />
+    >
+      {`${firstName[0]}${lastName[0]}`}
+    </Avatar>
   )
 }
 
