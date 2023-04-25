@@ -17,7 +17,6 @@ const UserProfile: React.FC<Profile> = (
   props: Profile
 ) => {
   const { user } = useUser();
-
   const title = `${props.firstName} ${props.lastName} | SciREN-Net`;
   const isCurrentUser = user && user.isLoggedIn && user.email === props.email;
   const multipleOrgs = props.organizations.length > 1;
@@ -105,6 +104,8 @@ const UserProfile: React.FC<Profile> = (
 
 
 
+
+
 export const commaSeparateList = (list: string[]) => {
   return (list.map(
     (val, i) => (
@@ -129,6 +130,8 @@ const editButton = () => {
   </Link> 
   )
 }
+
+
 
 export const getAvatar = (firstName: string, lastName: string) => {
   return (

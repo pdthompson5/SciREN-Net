@@ -54,3 +54,12 @@
   color: brown;
   margin: 1rem 0 0;
 }
+
+.deleteUserContainer {
+  padding-top: 20px;
+  padding-bottom: 50px;
+}
+
+.deleteUserButton {
+  width: 100%;
+}
