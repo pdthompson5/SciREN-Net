@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import useUser from "@/lib/useUser";
 import fetchJson from "@/lib/fetchJson";
-import { useRouter} from "next/router";
+import { NextRouter, useRouter} from "next/router";
 import {
   Profile,
   getAllUserIDs,
@@ -14,12 +14,13 @@ import { GetStaticPropsContext } from "next";
 import styles from "@/styles/Profile.module.css";
 import { Avatar, Box, Button, Divider, Stack, capitalize } from "@mui/material";
 import { gradeRangeOptions } from "../edit-profile";
+import { GetUserResponse } from "../api/userSession";
+import { KeyedMutator } from "swr";
 
 const UserProfile: React.FC<Profile> = (
   props: Profile
 ) => {
   const { user, mutateUser } = useUser();
-  const router = useRouter();
   const title = `${props.firstName} ${props.lastName} | SciREN-Net`;
   const isCurrentUser = user && user.isLoggedIn && user.email === props.email;
   const multipleOrgs = props.organizations.length > 1;
@@ -99,26 +100,12 @@ const UserProfile: React.FC<Profile> = (
             <Button variant="contained">Contact User</Button>
           </Link>
         }
-        {(user && user.isLoggedIn) &&   
-        <Button
-          variant="contained"
-          onClick={async (e) => {
-            e.preventDefault();
-            fetch(`/api/user?userID=${user?.userID}`, { method: "DELETE" }), false;
-            console.log("test")
-            mutateUser(await fetchJson("/api/logout", { method: "POST" }), false);
-            router.replace("/login");
-          }}
-          className={styles.deleteUser}
-          type="submit"
-        >
-          Delete User
-        </Button>
-        }
       </div>
     </>
   );
 };
+
+
 
 
 
@@ -147,6 +134,8 @@ const editButton = () => {
   </Link> 
   )
 }
+
+
 
 export const getAvatar = (firstName: string, lastName: string) => {
   return (
