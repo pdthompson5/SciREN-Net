@@ -9,6 +9,7 @@ import { GetUserResponse } from "./api/userSession";
 import { Stack, capitalize } from "@mui/material";
 import Link from "next/link";
 import { commaSeparateList, getAvatar } from "./profiles/[userID]";
+import { gradeRangeOptions } from "./edit-profile";
 
 interface ProfileListProps {
   profiles: Profile[];
@@ -37,8 +38,6 @@ const ProfileList: React.FC<ProfileListProps> = (props: ProfileListProps) => {
     </>
   );
 };
-
-
 
 export const getStaticProps: GetStaticProps = async (
   context: GetStaticPropsContext
@@ -81,6 +80,13 @@ const ProfileCard: React.FC<Profile> = (profile: Profile) => {
           <p>
             Region: {profile.scirenRegion}
           </p>
+          {profile.userType === "teacher" &&
+          <p>
+            Grades Taught: {commaSeparateList(profile.gradeRange.map(
+              (value) => gradeRangeOptions[value]
+            ))}
+          </p>
+          }
         </div>
 
         <div className={styles.linkContainer}>

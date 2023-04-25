@@ -44,4 +44,5 @@ export default async function postEditUser(
                 }
             )
     )
+    res.revalidate("/profile-search")
 }

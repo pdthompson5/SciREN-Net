@@ -11,6 +11,7 @@ import {
 import { GetStaticPropsContext } from "next";
 import styles from "@/styles/Profile.module.css";
 import { Avatar, Box, Button, Divider, Stack, capitalize } from "@mui/material";
+import { gradeRangeOptions } from "../edit-profile";
 
 const UserProfile: React.FC<Profile> = (
   props: Profile
@@ -56,6 +57,19 @@ const UserProfile: React.FC<Profile> = (
           <p className={styles.profileParagraph}>
             {commaSeparateList(props.academicInterest)}
           </p>
+
+          {props.userType === "teacher" && 
+          <div>
+            <h3 className={styles.profileHeading}>Grades Taught</h3>
+            <Divider></Divider>
+            <p className={styles.profileParagraph}>
+              {commaSeparateList(props.gradeRange.map(
+                (value) => gradeRangeOptions[value]
+              ))}
+            </p>
+          </div>
+          }
+
           <h3 className={styles.profileHeading}>
             Affiliated Organization{multipleOrgs ? "s": ""}
             <Divider></Divider>

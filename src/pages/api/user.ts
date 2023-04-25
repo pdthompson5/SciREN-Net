@@ -54,6 +54,7 @@ export default async function postUser(
     res.status(200).json({
       message: "Successfully added user.",
     });
+    res.revalidate("/profile-search")
     return;
   }
 }
