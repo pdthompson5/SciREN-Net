@@ -10,7 +10,7 @@ import { GetUserResponse } from "./api/userSession";
 import { KeyedMutator, useSWRConfig } from "swr";
 import { ScopedMutator } from "swr/_internal";
 import fetchJson from "@/lib/fetchJson";
-import Router from "next/router";
+import Router, { NextRouter, useRouter } from "next/router";
 import Head from "next/head";
 import {
   AcademicInterests,
@@ -116,37 +116,30 @@ export const regionOptions = [
 ];
 
 const EditProfile = () => {
-  const { mutate } = useSWRConfig();
+    const { mutate } = useSWRConfig()
+    const router = useRouter();
 
-  const { user, mutateUser } = useUser((user) => "/login");
-  return (
-    <>
-      <div>
-        <Head>
-          <title>Edit Profile - SciREN</title>
-          <meta name="description" content="Edit User Profile" />
-          <meta name="viewport" content="width=device-width, initial-scale=1" />
-          <link rel="icon" href="/favicon.ico" />
-        </Head>
-        {user ? (
-          user.isLoggedIn ? (
-            editProfileForm(user, mutateUser, mutate)
-          ) : (
-            <h1>Loading</h1>
-          )
-        ) : (
-          <h1>Loading</h1>
-        )}
+    const {user, mutateUser} = useUser((user) => "/login")
+    return (
+        <>
+          <div>
+            <Head>
+              <title>Edit Profile - SciREN</title>
+              <meta name="description" content="Edit User Profile" />
+              <meta name="viewport" content="width=device-width, initial-scale=1" />
+              <link rel="icon" href="/favicon.ico" />
+            </Head>
+            {user ? 
+              user.isLoggedIn ? editProfileForm(user, mutateUser, mutate, router):
+                <h1>Loading</h1>
+              :<h1>Loading</h1>  
+            }
       </div>
-    </>
-  );
+      </>
+    )
 };
 
-const editProfileForm = (
-  user: GetUserResponse,
-  mutateUser: KeyedMutator<GetUserResponse>,
-  mutate: ScopedMutator
-) => {
+const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUserResponse>, mutate: ScopedMutator, router: NextRouter) =>{
   const EditUserSchema = Yup.object().shape({
     userType: Yup.string().required("Required"),
     firstName: Yup.string()
@@ -254,7 +247,29 @@ const editProfileForm = (
         </Form>
       )}
     </Formik>
-  );
-};
+  )
+}
+
+
+const deleteProfileButton = (mutateUser: KeyedMutator<GetUserResponse>, user: GetUserResponse, router: NextRouter) => {
+  return (
+    <div className={styles.deleteUserContainer}>
+      <Button
+        variant="contained"
+        color="error"
+        className={styles.deleteUserButton}
+        onClick={async (e) => {
+          e.preventDefault();
+          fetch(`/api/user?userID=${user?.userID}`, { method: "DELETE" }), false;
+          mutateUser(await fetchJson("/api/logout", { method: "POST" }), false);
+          router.replace("/login");
+        }}
+        type="submit"
+      >
+        Delete Account
+      </Button>
+    </div>
+  )
+}
 
 export default EditProfile;
