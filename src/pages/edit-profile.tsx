@@ -252,6 +252,7 @@ const editProfileForm = (
             />
             <StatusAlert status={props.status} />
             <SubmitButton />
+            {deleteProfileButton(mutateUser, user, router)}
           </Container>
         </Form>
       )}
