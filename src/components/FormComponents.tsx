@@ -92,7 +92,7 @@ export const AcademicInterests = (props: {
     <Tooltip
       disableHoverListener
       placement="top"
-      title="If your subject is not listed, type its name then press enter."
+      title="If your subject is not listed, type its name then press enter. You can add as many subjects as you like."
     >
       <Field
         name="academicInterest"

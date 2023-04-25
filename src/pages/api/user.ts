@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "@/pages/api/userSession";
 import { establishMongoConnection, getMongoUser, getProfile, getUserCollection } from "@/lib/database";
-
+import { ObjectId } from "mongodb";
 export interface PostUserResponse {
   message: string;
 }
@@ -45,6 +45,7 @@ export default async function postUser(
       return;
     }
   
+  
     // Insert the new user, push profile page
     userCollection.insertOne({
       ...reqBody,
@@ -55,6 +56,23 @@ export default async function postUser(
       message: "Successfully added user.",
     });
     res.revalidate("/profile-search")
+    return;
+  }
+
+  if(req.method === "DELETE"){
+    const client = await establishMongoConnection();
+    const userCollection = getUserCollection(client);
+    const idToFetch = req.query.userID
+    console.log(idToFetch)
+    if(idToFetch === undefined || Array.isArray(idToFetch)){
+      return res.status(400)
+    }
+    // delete user, push profile page
+    userCollection.deleteOne({"_id": new ObjectId(idToFetch)});
+    console.log("api/registerUser : deleted a user successfully");
+    res.status(200).json({
+      message: "Successfully deleted user.",
+    });
     return;
   }
 }
