@@ -41,10 +41,10 @@ const Footer: React.FC = () => {
   return (
     <>
       <div className={styles.lessonFooter}>
-        <text>
+        <p>
           For more information on lesson plans, contact your region&apos;s
           SciREN Organization.
-        </text>
+        </p>
       </div>
     </>
   );
@@ -70,14 +70,14 @@ const LessonCard: React.FC<Lesson> = (lesson: Lesson) => {
           {lesson.year ? " - " + lesson.year : ""}
         </h2>
 
-        <text className={styles.authorText}>
+        <p className={styles.authorText}>
           {lesson.authors.map((author, i) => (
-            <a href={`mailto:${author.contact}`} key={author.contact}>
+            <a href={`mailto:${author.contact}`} key={`${author.contact}-${i}`}>
               {author.name}
               {i < lesson.authors.length - 1 ? ", " : ""}
             </a>
           ))}
-        </text>
+        </p>
 
         <hr className={styles.divider} />
         <div
@@ -135,8 +135,8 @@ const LessonFragment: React.FC<{
     <>
       {
         // Wrapped in a fragment to satisfy type checks
-        props.lessons.map((lesson: Lesson) => (
-          <LessonCard key={lesson._id} {...lesson} />
+        props.lessons.map((lesson: Lesson, index) => (
+          <LessonCard key={`lesson-plan${index}`} {...lesson} />
         ))
       }
     </>

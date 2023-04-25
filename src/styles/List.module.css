@@ -5,6 +5,7 @@
   padding: 10px 20vw 10px 10vw;
 }
 
+
 .lessonContainer {
   background: aliceblue;
   color: black;
@@ -12,6 +13,18 @@
   margin: 25px 0;
   border-radius: 5px;
   max-width: 80vw;
+  margin: auto auto;
+  margin-top: 20px;
+  box-shadow: #1c1c1c81 4px 4px 2px;
+}
+
+.profileContainer {
+  background: aliceblue;
+  color: black;
+  padding: 25px;
+  margin: 25px 0;
+  border-radius: 5px;
+  max-width: 60vw;
   margin: auto auto;
   margin-top: 20px;
   box-shadow: #1c1c1c81 4px 4px 2px;
@@ -31,6 +44,12 @@
 
 .listTitle {
   color: aliceblue;
+}
+
+.profileListTitle {
+  color: aliceblue;
+  margin: auto auto;
+  max-width: 60vw;
 }
 
 .lessonFooter {

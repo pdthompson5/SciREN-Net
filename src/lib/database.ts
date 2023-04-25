@@ -151,12 +151,10 @@ export const getProfiles = async (
   sortKey?: string, // Fields to sort by, TODO: make this an enum
   sortDirection?: number // 1 for ascending, -1 for descending
 ) => {
-  // Get Lesson Plans for listing page
   const client = await establishMongoConnection();
   const collection = getUserCollection(client)
   const profiles = await collection.find({}).toArray();
   client.close();
-  // TODO: exclude email, password and _id
   const typedProfiles: Profile[] = profiles.map(
     (profile) => (getLimitedProfile(profile))
   );

@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Head from "next/head";
 import { GetStaticProps, GetStaticPropsContext } from "next";
-import { Lesson, Profile, getProfiles } from "@/lib/database";
+import { Profile, getProfiles } from "@/lib/database";
 import styles from "@/styles/List.module.css";
 import Button from "@mui/material/Button";
 import useUser from "@/lib/useUser";
-import { gradeRangeOptions } from "./edit-profile";
 import { GetUserResponse } from "./api/userSession";
-import { capitalize } from "@mui/material";
+import { Stack, capitalize } from "@mui/material";
 import Link from "next/link";
+import { commaSeparateList, getAvatar } from "./profiles/[userID]";
 
 interface ProfileListProps {
   profiles: Profile[];
@@ -29,9 +29,8 @@ const ProfileList: React.FC<ProfileListProps> = (props: ProfileListProps) => {
       </Head>
       {user && user.isLoggedIn ? 
         <main className={styles.mainContainer}>
-          <h1 className={styles.listTitle}>SciREN Profiles</h1>
+          <h1 className={styles.profileListTitle}>SciREN Profiles</h1>
           <ProfileFragment profiles={props.profiles} />
-          <Footer />
         </main>:
         <h1>Loading...</h1>
       }
@@ -39,18 +38,7 @@ const ProfileList: React.FC<ProfileListProps> = (props: ProfileListProps) => {
   );
 };
 
-const Footer: React.FC = () => {
-  return (
-    <>
-      <div className={styles.lessonFooter}>
-        <text>
-          For more information on lesson plans, contact your region&apos;s
-          SciREN Organization.
-        </text>
-      </div>
-    </>
-  );
-};
+
 
 export const getStaticProps: GetStaticProps = async (
   context: GetStaticPropsContext
@@ -64,14 +52,16 @@ const ProfileCard: React.FC<Profile> = (profile: Profile) => {
   const [isCollapsed, setIsCollapsed] = useState(true);
   return (
     <div>
-      <div className={styles.lessonContainer}>
-        <h2 className="lessonTitle">
-          {profile.firstName} {profile.lastName}
-        </h2>
-        <h3>
-            {capitalize(profile.userType)} {profile.organizations.length > 0 && `at ${profile.organizations[0]}`}
-        </h3>
-
+      <div className={styles.profileContainer}>
+          <Stack direction="row" spacing={1} alignItems="center">
+            {getAvatar(profile.firstName, profile.lastName)}
+            <Stack direction="column">
+              <h2 className="lessonTitle"> {profile.firstName} {profile.lastName} </h2>
+              <p className={styles.authorText}>
+              {capitalize(profile.userType)} {profile.organizations.length > 0 && `at ${profile.organizations[0]}`}
+              </p>
+            </Stack>
+          </Stack>
         <hr className={styles.divider} />
         <div
           onMouseEnter={() => setIsCollapsed(false)}
@@ -83,12 +73,15 @@ const ProfileCard: React.FC<Profile> = (profile: Profile) => {
           {profile.textBio}
         </div>
 
-        {/* <div className={styles.gradeBox}>
+        <div className={styles.gradeBox}>
           <p className={styles.categoryText}>
-            Research Areas: {lesson.gradeLevel.map((gi) => gradeRangeOptions[gi]).join(", ")}
+            {profile.userType === "teacher" ? "Subjects Taught: " : "Research Areas: "}
+            {commaSeparateList(profile.academicInterest)}
           </p>
-          <p className={styles.categoryText}>Subject: {lesson.subject}</p>
-        </div> */}
+          <p>
+            Region: {profile.scirenRegion}
+          </p>
+        </div>
 
         <div className={styles.linkContainer}>
           <Link href={`/profiles/${profile.userID}`} passHref>

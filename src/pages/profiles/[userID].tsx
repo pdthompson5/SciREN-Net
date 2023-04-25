@@ -90,7 +90,8 @@ const UserProfile: React.FC<Profile> = (
 
 
 
-const commaSeparateList = (list: string[]) => {
+
+export const commaSeparateList = (list: string[]) => {
   return (list.map(
     (val, i) => (
       <>
@@ -115,7 +116,7 @@ const editButton = () => {
   )
 }
 
-const getAvatar = (firstName: string, lastName: string) => {
+export const getAvatar = (firstName: string, lastName: string) => {
   return (
     <Avatar  
       sx={{
