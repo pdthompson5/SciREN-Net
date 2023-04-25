@@ -37,13 +37,13 @@ const UserProfile: React.FC<ProfileInformation> = (
             {isCurrentUser && editButton()}
           </Stack>
           <Divider></Divider>
-          <h3 className={styles.profileHeading}>
+          <h4 className={styles.profileHeading}>
               {capitalize(props.userType)}  
               {props.organizations.length > 0 ? ` at ${props.organizations[0]}`: ""}
-          </h3>
-          <h3 className={styles.profileHeading}>
+          </h4>
+          <h4 className={styles.profileHeading}>
             Region: {props.scirenRegion}  
-          </h3>
+          </h4>
 
           <h3 className={styles.profileHeading}>About</h3>
           <Divider></Divider>
@@ -53,24 +53,30 @@ const UserProfile: React.FC<ProfileInformation> = (
 
           <h3 className={styles.profileHeading}>{props.userType === "teacher" ? "Subjects Taught" : "Research Areas"}</h3>
           <Divider></Divider>
-          {commaSeparateList(props.academicInterest)}
+          <p className={styles.profileParagraph}>
+            {commaSeparateList(props.academicInterest)}
+          </p>
           <h3 className={styles.profileHeading}>
             Affiliated Organization{multipleOrgs ? "s": ""}
             <Divider></Divider>
           </h3>
-          {commaSeparateList(props.organizations)}
+          <p className={styles.profileParagraph}>
+            {commaSeparateList(props.organizations)}
+          </p>
           <h3 className={styles.profileHeading}>Position{multipleOrgs ? "s": ""} at Organization{multipleOrgs ? "s": ""}</h3>
           <Divider></Divider>
           <p className={styles.profileParagraph}>{props.position}</p>
         </Box>
 
-        <Box className={styles.profileElement}>
+        {/* TODO: Add external links and lesson plan links */}
+        {/* <Box className={styles.profileElement}>
             <h3 className={styles.profileHeading}>Lesson Plans</h3>
             <Divider></Divider>
             <p className={styles.profileParagraph}>This is where the linked lesson plans will be</p>
             <h3 className={styles.profileHeading}>External Links</h3>
+            <Divider></Divider>
             <p className={styles.profileParagraph}>This is where external links will go once that is implemented</p>
-        </Box>
+        </Box> */}
 
         {(user && user.isLoggedIn) &&               
           <Link href={`/contact?user=${props.userID}`} passHref>
