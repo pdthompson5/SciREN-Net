@@ -12,6 +12,10 @@ export const EmptyUserResponse: GetUserResponse = {
   joinDate: "", // ISO string always
   academicInterest: [],
   gradeRange: [],
+  organizations: [],
+  position: "",
+  textBio: "",
+  scirenRegion: ""
 };
 
 export interface User {
@@ -24,6 +28,10 @@ export interface User {
   joinDate: string; // ISO string always
   academicInterest: Array<string>;
   gradeRange: Array<number>;
+  organizations: Array<string>;
+  position: string;
+  textBio: string;
+  scirenRegion: string;
 }
 
 export type ErrorResponse = {

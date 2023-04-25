@@ -18,23 +18,40 @@
     background: rgb(40, 73, 150);
 }
 
-.profileBox{
-    display: flex;
-    flex-direction: column;
-    /* justify-content: space-between; */
-    align-items: left;
-    padding: 0.6rem;
-    min-height: 100vh;
-    min-width: 100vw;
-    background: rgb(219, 225, 240);
+.profileBox  {
+    min-height: 100%;
+    align-self: center;
+    width: 100%;
+    max-width: 800px;
+    margin-top: 10px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+.profileElement {
+    background: aliceblue;
+    border-radius: 15px;
+    padding: 12px;
+    margin-bottom: 10px;
+}
+
+.profileParagraph {
+    margin-top: 10px;
+}
+
+.textBio {
+    white-space: pre-line;
+    margin-top: 10px;
 }
 
 .userName {
-
   margin-bottom: 8px;
   display: flex;
   align-items: center;
+}
 
+.profileHeading{
+    margin-top: 10px
 }
 
 .deleteUser {

@@ -7,17 +7,31 @@
 }
 
 .formLayout {
-  min-width: 100%;
   min-height: 100%;
+  align-self: center;
+  width: 100%;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
 }
+
 
 .loginPrompt {
   font-weight: 600;
 }
 
 .formInput {
-  padding: 8px;
-  margin: 0.5rem 0 1rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+  background-color: aliceblue;
+  background: aliceblue;
+  z-index: 1000;
+}
+
+.inputBorder {
+  padding: 10px;
+  margin: 0.5rem 0 1.2rem;
   border: 1px solid #ccc;
   border-radius: 4px;
   width: 100%;
@@ -26,14 +40,14 @@
 }
 
 .loginTitle {
-  margin: 0.5rem 1rem 1rem;
+  margin: 0.5rem 0rem 1rem;
   text-align: center;
   color:aliceblue;
 }
 
 .loginSubmit {
   width: 100%;
-  background: #2196f3;
+  margin-bottom: 50px;
 }
 
 .error {

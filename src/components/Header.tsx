@@ -13,7 +13,7 @@ const Header: React.FC = () => {
   const router = useRouter();
   return (
     <>
-      <Sticky enabled={true}>
+      <Sticky enabled={true} innerZ={9999}>
         <div className={styles.header}>
           <Link href="/" className={styles.headerElement}>
             SciRenNet
@@ -35,6 +35,9 @@ const logged_in_header_elements = (
   return [
     <Link href="/lessons" className={styles.headerElement} key="login">
       Lesson Plans
+    </Link>,
+    <Link href="/profile-search" className={styles.headerElement} key="profile-search">
+      User Profiles    
     </Link>,
     <Link
       href={`/profiles/${user.userID}`}

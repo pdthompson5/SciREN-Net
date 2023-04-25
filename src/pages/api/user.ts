@@ -1,21 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { User } from "@/pages/api/userSession";
-import { establishMongoConnection, getMongoUser, getProfileInformation } from "@/lib/database";
+import { establishMongoConnection, getMongoUser, getProfile, getUserCollection } from "@/lib/database";
 import { ObjectId } from "mongodb";
-
 export interface PostUserResponse {
   message: string;
 }
 
-export type PostUserRequest = Pick<
+export type PostUserRequest = Omit<
   User,
-  | "email"
-  | "password"
-  | "userType"
-  | "firstName"
-  | "lastName"
-  | "academicInterest"
-  | "gradeRange"
+  | "joinDate"
+  | "userID"
 >;
 
 export type GetUserRequest = {
@@ -31,7 +25,7 @@ export default async function postUser(
     if(idToFetch === undefined || Array.isArray(idToFetch)){
       return res.status(400)
     }
-    const user = await getProfileInformation(idToFetch)
+    const user = await getProfile(idToFetch)
 
     return res.status(200).json(user);
   }
@@ -39,7 +33,7 @@ export default async function postUser(
   if(req.method === "POST"){
     const reqBody: PostUserRequest = JSON.parse(await req.body);
     const mclient = await establishMongoConnection();
-    const userCollection = mclient.db("sciren").collection("users");
+    const userCollection = getUserCollection(mclient)
     if (
       (await userCollection.countDocuments({
         email: reqBody.email,
@@ -55,12 +49,13 @@ export default async function postUser(
     // Insert the new user, push profile page
     userCollection.insertOne({
       ...reqBody,
-      joinDate: new Date(),
+      joinDate: new Date().toISOString(),
     });
     console.log("api/registerUser : added a new user successfully");
     res.status(200).json({
       message: "Successfully added user.",
     });
+    res.revalidate("/profile-search")
     return;
   }
 

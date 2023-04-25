@@ -1,12 +1,10 @@
 import React from "react";
 import styles from "@/styles/Form.module.css";
-import { Field, Form, Formik} from "formik";
+import { Form, Formik, FormikProps} from "formik";
 
 import useUser from "@/lib/useUser";
-import {Button, Container} from "@mui/material"
+import {Container} from "@mui/material"
 
-import {TextField, Autocomplete, AutocompleteRenderInputParams} from "formik-mui"
-import {TextField as MaterialTextField} from "@mui/material"
 import * as Yup from 'yup';
 import { GetUserResponse } from "./api/userSession";
 import { KeyedMutator, useSWRConfig } from "swr";
@@ -14,6 +12,7 @@ import { ScopedMutator } from "swr/_internal";
 import fetchJson from "@/lib/fetchJson";
 import Router from "next/router";
 import Head from "next/head";
+import { AcademicInterests, FirstName, GradeRange, LastName, Organization, Position, SciRENRegion, StatusAlert, SubmitButton, TextBio, UserType } from "@/components/FormComponents";
 
 
 export const gradeRangeOptions = [
@@ -34,17 +33,32 @@ export const gradeRangeOptions = [
   "College",
 ];
 
-export const academicInterestOptions = ["mathematics", "biology", "chemistry", "social studies", "history", "sociology"];
-export const userTypes = ["researcher", "teacher", "student", "admin"]
+export const academicInterestOptions = ["Mathematics", "Biology", "Chemistry", "Social Studies", "History", "Sociology"];
+export const userTypes = ["researcher", "teacher", "student", "admin"];
 
-const capitalizeField = (field: string) => {
-    const words = field.split(" ");
-    return words.map((word) => { 
-        return word[0].toUpperCase() + word.substring(1); 
-    }).join(" ");
-}
+export const organizationOptions = [
+  "The University of Alabama",
+  "University of Georgia",
+  "U.S. Navy",
+  "Scripps Institution of Oceanography",
+  "University of California San Diego",
+  "San Diego State University",
+  "Salk Institute for Biological Sciences",
+  "UNC Chapel Hill",
+  "Duke University",
+  "George Mason University",
+];
 
- 
+export const regionOptions = [
+  "Alabama", 
+  "Coast",
+  "Triangle",
+  "Georgia",
+  "George Mason",
+  "San Diego",
+  "None"
+];
+
 const EditProfile = () => {
     const { mutate } = useSWRConfig()
 
@@ -76,39 +90,57 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
         .required("Required"),
     firstName: Yup.string()
         .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
+        .max(80, 'Too Long!')
         .required('Required'),
     lastName: Yup.string()
         .min(2, 'Too Short!')
-        .max(50, 'Too Long!')
+        .max(80, 'Too Long!')
         .required('Required'),
     academicInterest: Yup.array(),
-    gradeRange: Yup.array()
+    gradeRange: Yup.array(),
+    textBio: Yup.string(),
+    organizations: Yup.array(),
+    position: Yup.string(),
+    scirenRegion: Yup.string()
+      .required("Required")
   });
 
   return (
     <Formik
       enableReinitialize
       validationSchema={EditUserSchema}
-      initialValues={{userType: user.userType, firstName: user.firstName, lastName: user.lastName, academicInterest: user.academicInterest, gradeRange: user.gradeRange}}
-      onSubmit={async (values, actions) => {    
+      initialValues={{
+        userType: user.userType,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        academicInterest: user.academicInterest,
+        gradeRange: user.gradeRange,
+        textBio: user.textBio,
+        organizations: user.organizations,
+        position: user.position,
+        scirenRegion: user.scirenRegion
+      }}
+      onSubmit={async (values, actions) => {
+          values["gradeRange"] = values.gradeRange.sort()    
           const valuesWithID = {
             userID: user.userID,
             email: user.email,
             ...values
-          }          
-
+          }
+          
           await fetch("/api/editUser", {
             method: "POST",
             body: JSON.stringify(valuesWithID),
           }).then(
             (resp) => {
-              if(resp.status != 200){
-                actions.setStatus({message: resp.statusText});
+              if(resp.status !== 200){
+                actions.setStatus({
+                  severity: "error",
+                  message: resp.statusText
+                });
                 actions.setSubmitting(false);
-                return;
               }
-              else{
+              else {
                 Router.push(`/profiles/${user.userID}`).then(
                   () => {
                     mutateUser(
@@ -128,76 +160,24 @@ const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUser
           )
         }}
     >
-      {({status}) => (
+      {(props: FormikProps<any>) => (
       <Form className={styles.formLayout}>
         <Container>
           <h1 className={styles.loginTitle}>Edit Profile</h1>
-          <Field 
-              name="userType"
-              className={styles.formInput}
-              component={Autocomplete}
-              label="User Type"
-              options={userTypes}
-              getOptionLabel={(option: string) => capitalizeField(option)}
-              renderInput={(params: AutocompleteRenderInputParams) => (
-                <MaterialTextField
-                  {...params}
-                  name="userType"
-                  label="User Type"
-                  variant="outlined"
-                />
-              )}
-              >
-          </Field>
-          <div className={styles.formInput}>
-            <Field name="firstName" className={styles.formInput} component={TextField} type="text" label="First Name"/>
-          </div>
-          <div className={styles.formInput}>
-            <Field name="lastName" className={styles.formInput} component={TextField} type="text" label="Last Name"/>
-          </div>
-          <Field 
-              name="academicInterest"
-              className={styles.formInput}
-              component={Autocomplete}
-              label="Academic Interests"
-              options={academicInterestOptions}
-              multiple
-              getOptionLabel={(option: string) => capitalizeField(option)}
-              renderInput={(params: AutocompleteRenderInputParams) => (
-                <MaterialTextField
-                  {...params}
-                  name="academicInterest"
-                  label="Academic Interests"
-                  variant="outlined"
-                />
-              )}
-              >
-          </Field>
-
-
-          <Field 
-              name="gradeRange"
-              className={styles.formInput}
-              component={Autocomplete}
-              label="Grade Range"
-              options={gradeRangeOptions.map((x, i) => i)}
-              getOptionLabel={(option: number) => gradeRangeOptions[option]}
-              multiple
-              renderInput={(params: AutocompleteRenderInputParams) => (
-                <MaterialTextField
-                  {...params}
-                  name="gradeRange"
-                  label="Grade Range"
-                  variant="outlined"
-                />
-              )}
-              >
-          </Field>
-
-          <Button variant="contained" type="submit" className={styles.loginSubmit}>Submit</Button>
-
-
-          { status && <p className={styles.error}>{status.message}</p>}
+          <UserType userTypes={userTypes} touched={props.touched} errors={props.errors}/>
+          <FirstName/>
+          <LastName/>
+          {props.values["userType"] === "teacher" ? 
+                <AcademicInterests academicInterestOptions={academicInterestOptions} label="Subjects Taught"/>
+                :<AcademicInterests academicInterestOptions={academicInterestOptions} label="Research Areas"/>
+          }
+          {props.values["userType"] === "teacher" && <GradeRange gradeRangeOptions={gradeRangeOptions}/>}
+          <Organization organizationOptions={organizationOptions}/>
+          <Position/>
+          <TextBio/>
+          <SciRENRegion regionOptions={regionOptions} touched={props.touched} errors={props.errors}/>
+          <StatusAlert status={props.status}/>
+          <SubmitButton/>
         </Container>
       </Form>
       )}
