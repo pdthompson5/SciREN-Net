@@ -4,14 +4,14 @@ import useSWR from "swr";
 import Head from "next/head";
 import Contact from "@/components/Contact";
 import { useRouter } from 'next/router'
-import { ProfileInformation } from "@/lib/database";
+import { Profile } from "@/lib/database";
 
  
 const ContactPage = () => {
     const router = useRouter()
     const userToContactID = router.query.user
 
-    const { data: userToContact, error} = useSWR<ProfileInformation>(`/api/user?userID=${userToContactID}`);
+    const { data: userToContact, error} = useSWR<Profile>(`/api/user?userID=${userToContactID}`);
     if(error){
         console.error(error)
     }

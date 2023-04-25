@@ -4,16 +4,17 @@ import Link from "next/link";
 import Image from "next/image";
 import useUser from "@/lib/useUser";
 import {
-  ProfileInformation,
+  Profile,
   getAllUserIDs,
-  getProfileInformation,
+  getProfile,
 } from "@/lib/database";
 import { GetStaticPropsContext } from "next";
 import styles from "@/styles/Profile.module.css";
 import { Avatar, Box, Button, Divider, Stack, capitalize } from "@mui/material";
+import { gradeRangeOptions } from "../edit-profile";
 
-const UserProfile: React.FC<ProfileInformation> = (
-  props: ProfileInformation
+const UserProfile: React.FC<Profile> = (
+  props: Profile
 ) => {
   const { user } = useUser();
 
@@ -56,6 +57,19 @@ const UserProfile: React.FC<ProfileInformation> = (
           <p className={styles.profileParagraph}>
             {commaSeparateList(props.academicInterest)}
           </p>
+
+          {props.userType === "teacher" && 
+          <div>
+            <h3 className={styles.profileHeading}>Grades Taught</h3>
+            <Divider></Divider>
+            <p className={styles.profileParagraph}>
+              {commaSeparateList(props.gradeRange.map(
+                (value) => gradeRangeOptions[value]
+              ))}
+            </p>
+          </div>
+          }
+
           <h3 className={styles.profileHeading}>
             Affiliated Organization{multipleOrgs ? "s": ""}
             <Divider></Divider>
@@ -90,7 +104,8 @@ const UserProfile: React.FC<ProfileInformation> = (
 
 
 
-const commaSeparateList = (list: string[]) => {
+
+export const commaSeparateList = (list: string[]) => {
   return (list.map(
     (val, i) => (
       <>
@@ -115,7 +130,7 @@ const editButton = () => {
   )
 }
 
-const getAvatar = (firstName: string, lastName: string) => {
+export const getAvatar = (firstName: string, lastName: string) => {
   return (
     <Avatar  
       sx={{
@@ -157,7 +172,7 @@ export const getStaticProps = async ({
   userID: string;
 }>) => {
   const { userID } = params as { userID: string };
-  const user = await getProfileInformation(userID).catch((reason) => {console.log(reason); return undefined});
+  const user = await getProfile(userID).catch((reason) => {console.log(reason); return undefined});
   const notFound = !user;
   return { props: user, notFound };
 };

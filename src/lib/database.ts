@@ -84,11 +84,11 @@ export const getMongoUser = async (userID: string) => {
   return userInfoSerializable;
 };
 
-export type ProfileInformation = Omit<User, "password" | "joinDate"> 
+export type Profile = Omit<User, "password" | "joinDate"> 
 
-export const getProfileInformation = async (
+export const getProfile = async (
   userID: string
-): Promise<ProfileInformation> => {
+): Promise<Profile> => {
   const rawUser = await getMongoUser(userID);
   return {
     userID: rawUser._id,
@@ -136,6 +136,27 @@ export const getLessonPlans = async (
       subject: lesson.subject,
     })
   );
-
   return TypedLessonPlans;
 };
+
+const getLimitedProfile = (profile: WithId<Omit<User, "userID">>) => {
+  const {_id, password, joinDate, ...limitedProfile} = profile;
+  return {
+    userID: profile._id.toString(),
+    ...limitedProfile
+  }
+}
+
+export const getProfiles = async (
+  sortKey?: string, // Fields to sort by, TODO: make this an enum
+  sortDirection?: number // 1 for ascending, -1 for descending
+) => {
+  const client = await establishMongoConnection();
+  const collection = getUserCollection(client)
+  const profiles = await collection.find({}).toArray();
+  client.close();
+  const typedProfiles: Profile[] = profiles.map(
+    (profile) => (getLimitedProfile(profile))
+  );
+  return typedProfiles;
+}

@@ -36,6 +36,9 @@ const logged_in_header_elements = (
     <Link href="/lessons" className={styles.headerElement} key="login">
       Lesson Plans
     </Link>,
+    <Link href="/profile-search" className={styles.headerElement} key="profile-search">
+      User Profiles    
+    </Link>,
     <Link
       href={`/profiles/${user.userID}`}
       className={styles.headerElement}
