@@ -1,5 +1,6 @@
 import AWS from "aws-sdk";
 import { NextApiRequest, NextApiResponse } from "next";
+import fs from "fs";
 
 AWS.config.update({
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -19,10 +20,13 @@ export default async function uploadToS3(
   console.log("Reached api call...");
   const s3 = new AWS.S3();
   const reqBody = await req.body;
-  console.log(reqBody);
-  console.log(reqBody.constructor.name);
+
+  // const fileObj = new File(reqBody, "temp_filename", {
+  //   type: "mimeType",
+  // });
+  console.log("reqBody 1: ", reqBody.constructor.name);
+  // console.log(reqBody);
   console.log("--------------------");
-  const reader = new FileReader();
   // const parsedFile = new File(reqBody, "temp_filename");
   // console.log(parsedFile);
 
