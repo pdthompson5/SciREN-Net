@@ -60,9 +60,8 @@ export default async function postUser(
   }
 
   if(req.method === "DELETE"){
-    console.log("test2")
-    const mclient = await establishMongoConnection();
-    const userCollection = mclient.db("sciren").collection("users");
+    const client = await establishMongoConnection();
+    const userCollection = getUserCollection(client);
     const idToFetch = req.query.userID
     console.log(idToFetch)
     if(idToFetch === undefined || Array.isArray(idToFetch)){
