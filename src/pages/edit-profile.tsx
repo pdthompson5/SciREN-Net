@@ -74,21 +74,13 @@ const EditProfile = () => {
               <link rel="icon" href="/favicon.ico" />
             </Head>
             {user ? 
-              user.isLoggedIn ?
-              (
-                <>
-                  {editProfileForm(user, mutateUser, mutate, router)}
-                </>
-              )
-                :
+              user.isLoggedIn ? editProfileForm(user, mutateUser, mutate, router):
                 <h1>Loading</h1>
               :<h1>Loading</h1>  
             }
-            
       </div>
       </>
     )
-  
 };
 
 const editProfileForm = (user: GetUserResponse, mutateUser: KeyedMutator<GetUserResponse>, mutate: ScopedMutator, router: NextRouter) =>{
@@ -205,7 +197,6 @@ const deleteProfileButton = (mutateUser: KeyedMutator<GetUserResponse>, user: Ge
         onClick={async (e) => {
           e.preventDefault();
           fetch(`/api/user?userID=${user?.userID}`, { method: "DELETE" }), false;
-          console.log("test")
           mutateUser(await fetchJson("/api/logout", { method: "POST" }), false);
           router.replace("/login");
         }}
